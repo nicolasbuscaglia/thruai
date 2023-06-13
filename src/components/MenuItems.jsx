@@ -19,14 +19,13 @@ const MenuItems = ({ menuItems = [] }) => {
             <ListItemButton
               sx={{
                 minHeight: 48,
-                justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
             >
               <ListItemIcon
                 sx={{
                   minWidth: 0,
-                  mr: open ? 3 : "auto",
+                  mr: 3,
                   justifyContent: "center",
                   color:
                     pathname === menu.pathname
@@ -43,7 +42,6 @@ const MenuItems = ({ menuItems = [] }) => {
                     pathname === menu.pathname
                       ? theme.palette.secondary.main
                       : theme.palette.gray.light,
-                  opacity: open ? 1 : 0,
                 }}
                 primaryTypographyProps={{
                   fontSize: 12,
