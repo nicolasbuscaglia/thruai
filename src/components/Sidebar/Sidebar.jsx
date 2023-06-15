@@ -8,43 +8,41 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-const openedMixin = (theme, drawerWidth, position) => ({
-  position: "absolute",
+const drawerMixin = (theme, position, direction) => ({
+  position: position,
   top: 0,
-  left: position === "left" ? 0 : "inherit",
-  right: position === "right" ? 0 : "inherit",
+  left: direction === "left" ? 0 : "inherit",
+  right: direction === "right" ? 0 : "inherit",
   bottom: 0,
   backgroundColor: theme.palette.primary.main,
+  overflowX: "hidden",
+});
+
+const openedMixin = (theme, drawerWidth) => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
-  overflowX: "hidden",
 });
 
-const closedMixin = (theme, position, hidden) => ({
-  position: "absolute",
-  top: 0,
-  left: position === "left" ? 0 : "inherit",
-  right: position === "right" ? 0 : "inherit",
-  bottom: 0,
-  backgroundColor: theme.palette.primary.main,
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
+const closedMixin = (theme, hidden) => ({
   width: hidden ? 0 : `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
     width: hidden ? 0 : `calc(${theme.spacing(8)} + 1px)`,
   },
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
 });
 
-const DrawerHeader = styled("div")(({ theme }) => ({
+const DrawerHeader = styled("div", {
+  shouldForwardProp: (prop) => prop !== "direction",
+})(({ theme, direction }) => ({
   display: "flex",
   alignItems: "center",
-  justifyContent: "flex-end",
+  justifyContent: direction === "left" ? "flex-end" : "flex-start",
   padding: theme.spacing(0, 1),
 }));
 
@@ -53,28 +51,38 @@ const Drawer = styled(MuiDrawer, {
     prop !== "open" &&
     prop !== "drawerWidth" &&
     prop !== "position" &&
+    prop !== "direction" &&
     prop !== "hidden",
-})(({ theme, open, drawerWidth, position, hidden }) => ({
+})(({ theme, open, drawerWidth, position, direction, hidden }) => ({
+  ...drawerMixin(theme, position, direction),
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
   ...(open && {
-    ...openedMixin(theme, drawerWidth, position),
-    "& .MuiDrawer-paper": openedMixin(theme, drawerWidth, position),
+    ...openedMixin(theme, drawerWidth),
+    "& .MuiDrawer-paper": {
+      ...drawerMixin(theme, position, direction),
+      ...openedMixin(theme, drawerWidth),
+    },
   }),
   ...(!open && {
-    ...closedMixin(theme, position, hidden),
-    "& .MuiDrawer-paper": closedMixin(theme, position, hidden),
+    ...closedMixin(theme, hidden),
+    "& .MuiDrawer-paper": {
+      ...drawerMixin(theme, position, direction),
+      ...closedMixin(theme, hidden),
+    },
   }),
 }));
 
 const Sidebar = ({
   children,
-  drawerWidth = 180,
-  position = "left",
-  header = true,
-  hidden = false,
   openSidebar = false,
+  position = "absolute",
+  direction = "left",
+  drawerWidth = 180,
+  header = true,
+  headerComponent,
+  hidden = false,
 }) => {
   const theme = useTheme();
   const [open, setOpen] = useState(openSidebar);
@@ -96,23 +104,35 @@ const Sidebar = ({
         open={open}
         drawerWidth={drawerWidth}
         position={position}
+        direction={direction}
         hidden={hidden}
       >
         {header && (
           <>
-            <DrawerHeader>
+            <DrawerHeader direction={direction}>
+              {headerComponent && (
+                <Box sx={{ opacity: open ? 1 : 0, width: "100%" }}>
+                  {headerComponent}
+                </Box>
+              )}
               <IconButton onClick={open ? handleDrawerClose : handleDrawerOpen}>
                 {open ? (
-                  <ChevronLeftIcon color="icon" />
-                ) : (
+                  direction === "left" ? (
+                    <ChevronLeftIcon color="icon" />
+                  ) : (
+                    <ChevronRightIcon color="icon" />
+                  )
+                ) : direction === "left" ? (
                   <ChevronRightIcon color="icon" />
+                ) : (
+                  <ChevronLeftIcon color="icon" />
                 )}
               </IconButton>
             </DrawerHeader>
             <Divider sx={{ backgroundColor: theme.palette.gray.light }} />
           </>
         )}
-        {children}
+        <Box sx={{ minWidth: drawerWidth }}>{children}</Box>
       </Drawer>
     </Box>
   );

@@ -28,6 +28,7 @@ const theme = createTheme({
     },
     lightGray: {
       main: "#FAFAFB",
+      dark: "#292932",
     },
     icon: {
       main: "#92929D",

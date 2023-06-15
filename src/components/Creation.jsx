@@ -4,6 +4,16 @@ import { FormSelect } from "./Forms/FormSelect";
 import { FormCheckbox } from "./Forms/FormCheckbox";
 import { FormFileUpload } from "./Forms/FormFileUpload";
 
+const FORM_TITLE = "MODEL SELECTION";
+
+const FORM_SELECT_ITEMS = [
+  {
+    id: 1,
+    label: "OpenAI ChatGPT 3.5 (Default)",
+  },
+  { id: 2, label: "OpenAI ChatGPT 4" },
+];
+
 const Creation = ({ handleCancel, handleCreate }) => {
   const theme = useTheme();
 
@@ -17,7 +27,9 @@ const Creation = ({ handleCancel, handleCreate }) => {
       <Divider sx={{ backgroundColor: theme.palette.border.main }} />
       <FormFileUpload />
       <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-      <FormSelect />
+      <Box p={2}>
+        <FormSelect title={FORM_TITLE} items={FORM_SELECT_ITEMS} />
+      </Box>
       <Divider sx={{ backgroundColor: theme.palette.border.main }} />
       <FormCheckbox />
 

@@ -8,48 +8,46 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-const FORM_TITLE = "MODEL SELECTION";
-
-const FORM_SELECT_ITEMS = [
-  {
-    id: 1,
-    label: "OpenAI ChatGPT 3.5 (Default)",
-  },
-  { id: 2, label: "OpenAI ChatGPT 4" },
-];
-
 const StyledSelect = styled(Select)(({ theme }) => ({
   color: theme.palette.icon.main,
   fontSize: "0.8rem",
   fontWeight: 300,
+  borderRadius: "0.6rem",
+  borderColor: theme.palette.border.main,
   "& svg": {
     color: theme.palette.icon.main,
   },
-  "&::before, ::after": {
-    borderColor: theme.palette.icon.main,
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: `${theme.palette.border.main} !important`,
+  },
+  "& .MuiSelect-select": {
+    paddingTop: 8,
+    paddingBottom: 8,
   },
 }));
 
-const FormSelect = ({ title = FORM_TITLE, items = FORM_SELECT_ITEMS }) => {
+const FormSelect = ({ title, items = [], handleSelectedChange = () => {} }) => {
   const theme = useTheme();
-  const [model, setModel] = useState("OpenAI ChatGPT 3.5 (Default)");
+  const [selected, setSelected] = useState(items[0].label);
 
-  const handleModelChange = (event) => {
-    setModel(event.target.value);
+  const handleChange = (event) => {
+    setSelected(event.target.value);
+    handleSelectedChange(event.target.value);
   };
 
   return (
-    <Box p={2} display="flex" flexDirection="column">
-      <Typography variant="overline" color="secondary">
-        {title}
-      </Typography>
+    <Box display="flex" flexDirection="column">
+      {title && (
+        <Typography variant="overline" color="secondary">
+          {title}
+        </Typography>
+      )}
       <StyledSelect
-        labelId="select-model"
-        id="select-model"
-        value={model}
-        onChange={handleModelChange}
-        label="Model"
-        variant="filled"
+        labelId="select-option"
+        id="select-option"
+        value={selected}
+        onChange={handleChange}
+        variant="outlined"
         MenuProps={{
           PaperProps: {
             sx: {
@@ -64,9 +62,19 @@ const FormSelect = ({ title = FORM_TITLE, items = FORM_SELECT_ITEMS }) => {
             <MenuItem
               key={item.id}
               value={item.label}
-              sx={{ fontSize: "0.8rem" }}
+              sx={{
+                fontSize: "0.8rem",
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+              }}
             >
-              {item.label}
+              <Box display="flex" gap={1} alignItems="center">
+                {item.icon}
+                <Typography color="icon" variant="body2">
+                  {item.label}
+                </Typography>
+              </Box>
             </MenuItem>
           );
         })}
