@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata = {
-  title: "ThruAI",
-  description: "By ThruAI team",
+  title: "ThruAi",
+  description: "By ThruAi team",
 };
 
 export default function RootLayout({ children }) {

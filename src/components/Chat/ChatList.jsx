@@ -71,11 +71,6 @@ const CHAT_LIST = [
   },
 ];
 
-const StyledMainBox = styled(Box)(() => ({
-  height: "calc(100vh - 64px - 41px)",
-  overflow: "scroll",
-}));
-
 const ChatList = () => {
   const theme = useTheme();
   const [chatList, setChatList] = useState([]);
@@ -93,7 +88,7 @@ const ChatList = () => {
   }, []);
 
   return (
-    <StyledMainBox p={2}>
+    <Box p={2}>
       <Box mb={2}>
         <Typography
           variant="body2"
@@ -120,7 +115,7 @@ const ChatList = () => {
           })
         )}
       </Box>
-    </StyledMainBox>
+    </Box>
   );
 };
 

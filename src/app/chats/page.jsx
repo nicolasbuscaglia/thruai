@@ -1,12 +1,13 @@
 "use client";
 import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import { TabHeader } from "@/components/Tab/TabHeader";
 import { ChatList } from "@/components/Chat/ChatList";
+import { Chat } from "@/components/Chat/Chat";
 
 const FORM_SELECT_ITEMS = [
   {
@@ -21,8 +22,16 @@ const FORM_SELECT_ITEMS = [
   },
 ];
 
+const StyledHeightContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  borderLeft: "2px solid",
+  borderColor: theme.palette.border.main,
+  height: "calc(100vh - 64px)",
+  overflow: "scroll",
+  width: "100%",
+}));
+
 const Chats = () => {
-  const theme = useTheme();
   const [selectedItem, setSelectedItem] = useState(FORM_SELECT_ITEMS[0].label);
 
   const handleSelectedItem = (item) => {
@@ -30,14 +39,8 @@ const Chats = () => {
   };
 
   return (
-    <Box display="flex" flex={1} gap={2}>
-      <div
-        style={{
-          display: "flex",
-          borderLeft: "2px solid",
-          borderColor: theme.palette.border.main,
-        }}
-      >
+    <Box display="flex" flex={1}>
+      <StyledHeightContainer>
         <Sidebar
           openSidebar
           position="relative"
@@ -56,24 +59,24 @@ const Chats = () => {
             <Typography color="secondary">Notes</Typography>
           )}
         </Sidebar>
-      </div>
-      <Box p={2} sx={{ flexGrow: 1 }}>
-        {selectedItem === "Chats" ? (
-          <Typography color="secondary">Chats</Typography>
-        ) : (
-          <Typography color="secondary">Notes</Typography>
-        )}
-      </Box>
-      <Sidebar
-        openSidebar
-        position="relative"
-        direction="right"
-        drawerWidth={240}
-      >
-        <Box p={2}>
-          <AttachFileOutlinedIcon color="icon" />
+        <Box sx={{ overflow: "scroll", flex: 1 }}>
+          {selectedItem === "Chats" ? (
+            <Chat />
+          ) : (
+            <Typography color="secondary">Notes</Typography>
+          )}
         </Box>
-      </Sidebar>
+        <Sidebar
+          openSidebar
+          position="relative"
+          direction="right"
+          drawerWidth={240}
+        >
+          <Box p={2}>
+            <AttachFileOutlinedIcon color="icon" />
+          </Box>
+        </Sidebar>
+      </StyledHeightContainer>
     </Box>
   );
 };

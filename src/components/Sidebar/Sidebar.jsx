@@ -16,6 +16,11 @@ const drawerMixin = (theme, position, direction) => ({
   bottom: 0,
   backgroundColor: theme.palette.primary.main,
   overflowX: "hidden",
+  border: "1px solid",
+  borderColor: theme.palette.lightGray.dark,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
 });
 
 const openedMixin = (theme, drawerWidth) => ({
@@ -44,6 +49,8 @@ const DrawerHeader = styled("div", {
   alignItems: "center",
   justifyContent: direction === "left" ? "flex-end" : "flex-start",
   padding: theme.spacing(0, 1),
+  borderBottom: "1px solid",
+  borderBottomColor: theme.palette.lightGray.dark,
 }));
 
 const Drawer = styled(MuiDrawer, {
@@ -55,9 +62,6 @@ const Drawer = styled(MuiDrawer, {
     prop !== "hidden",
 })(({ theme, open, drawerWidth, position, direction, hidden }) => ({
   ...drawerMixin(theme, position, direction),
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-  boxSizing: "border-box",
   ...(open && {
     ...openedMixin(theme, drawerWidth),
     "& .MuiDrawer-paper": {
@@ -72,6 +76,13 @@ const Drawer = styled(MuiDrawer, {
       ...closedMixin(theme, hidden),
     },
   }),
+}));
+
+const StyledStickyBox = styled(Box)(({ theme }) => ({
+  position: "sticky",
+  top: 0,
+  backgroundColor: theme.palette.primary.main,
+  zIndex: 1,
 }));
 
 const Sidebar = ({
@@ -108,7 +119,7 @@ const Sidebar = ({
         hidden={hidden}
       >
         {header && (
-          <>
+          <StyledStickyBox>
             <DrawerHeader direction={direction}>
               {headerComponent && (
                 <Box sx={{ opacity: open ? 1 : 0, width: "100%" }}>
@@ -129,8 +140,7 @@ const Sidebar = ({
                 )}
               </IconButton>
             </DrawerHeader>
-            <Divider sx={{ backgroundColor: theme.palette.gray.light }} />
-          </>
+          </StyledStickyBox>
         )}
         <Box sx={{ minWidth: drawerWidth }}>{children}</Box>
       </Drawer>

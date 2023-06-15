@@ -3,8 +3,7 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 import { FormSelect } from "./Forms/FormSelect";
 import { FormCheckbox } from "./Forms/FormCheckbox";
 import { FormFileUpload } from "./Forms/FormFileUpload";
-
-const FORM_TITLE = "MODEL SELECTION";
+import { FormInputText } from "./Forms/FormInputText";
 
 const FORM_SELECT_ITEMS = [
   {
@@ -25,10 +24,16 @@ const Creation = ({ handleCancel, handleCreate }) => {
         </Typography>
       </Box>
       <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-      <FormFileUpload />
+      <Box p={2}>
+        <FormFileUpload />
+      </Box>
       <Divider sx={{ backgroundColor: theme.palette.border.main }} />
       <Box p={2}>
-        <FormSelect title={FORM_TITLE} items={FORM_SELECT_ITEMS} />
+        <FormInputText label="CASE NAME" />
+      </Box>
+      <Divider sx={{ backgroundColor: theme.palette.border.main }} />
+      <Box p={2}>
+        <FormSelect label="MODEL SELECTION" items={FORM_SELECT_ITEMS} />
       </Box>
       <Divider sx={{ backgroundColor: theme.palette.border.main }} />
       <FormCheckbox />

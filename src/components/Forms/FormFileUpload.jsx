@@ -26,7 +26,7 @@ const UPLOAD_FROM = [
 
 const FormFileUpload = () => {
   return (
-    <Box p={2}>
+    <Box>
       <Typography variant="subtitle2" color="secondary">
         FILE UPLOAD
       </Typography>

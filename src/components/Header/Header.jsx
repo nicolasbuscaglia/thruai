@@ -183,7 +183,7 @@ export default function Header() {
             color="secondary"
             sx={{ display: { sm: "block" } }}
           >
-            ThruAI
+            ThruAi
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box
