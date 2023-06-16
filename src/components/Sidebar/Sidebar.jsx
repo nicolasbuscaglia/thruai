@@ -43,11 +43,16 @@ const closedMixin = (theme, hidden) => ({
 });
 
 const DrawerHeader = styled("div", {
-  shouldForwardProp: (prop) => prop !== "direction",
-})(({ theme, direction }) => ({
+  shouldForwardProp: (prop) => prop !== "open" && prop !== "direction",
+})(({ theme, direction, open }) => ({
   display: "flex",
+  flexDirection: direction === "left" ? "row" : "row-reverse",
   alignItems: "center",
-  justifyContent: direction === "left" ? "flex-end" : "flex-start",
+  justifyContent: open
+    ? direction === "left"
+      ? "flex-end"
+      : "flex-start"
+    : "center",
   padding: theme.spacing(0, 1),
   borderBottom: "1px solid",
   borderBottomColor: theme.palette.lightGray.dark,
@@ -95,7 +100,6 @@ const Sidebar = ({
   headerComponent,
   hidden = false,
 }) => {
-  const theme = useTheme();
   const [open, setOpen] = useState(openSidebar);
 
   useEffect(() => setOpen(openSidebar), [openSidebar]);
@@ -120,9 +124,9 @@ const Sidebar = ({
       >
         {header && (
           <StyledStickyBox>
-            <DrawerHeader direction={direction}>
+            <DrawerHeader open={open} direction={direction}>
               {headerComponent && (
-                <Box sx={{ opacity: open ? 1 : 0, width: "100%" }}>
+                <Box sx={{ display: open ? "block" : "none", width: "100%" }}>
                   {headerComponent}
                 </Box>
               )}

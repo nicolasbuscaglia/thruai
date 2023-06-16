@@ -33,11 +33,12 @@ const FormFileUpload = () => {
       <Box display="flex" flexDirection="column" alignItems="flex-start">
         {UPLOAD_FROM.map((from) => {
           return (
-            <Box mt={2} mb={1} key={from.id}>
+            <Box mt={2} key={from.id}>
               <Button
                 component="label"
                 variant="outlined"
                 startIcon={from.icon}
+                sx={{ paddingLeft: 0 }}
               >
                 <Typography
                   variant="body2"

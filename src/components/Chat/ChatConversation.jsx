@@ -43,7 +43,11 @@ const ChatConversation = ({ conversation }) => {
                 backgroundColor: theme.palette.lightGray.dark,
               }}
             >
-              <Typography variant="body2" color="secondary">
+              <Typography
+                variant="body2"
+                color="secondary"
+                sx={{ overflowWrap: "anywhere" }}
+              >
                 {message.content}
               </Typography>
             </Box>

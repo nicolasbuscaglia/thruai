@@ -40,7 +40,7 @@ const CHAT_LIST = [
     attachments: true,
   },
   {
-    id: 1,
+    id: 4,
     user: "John Doe",
     title: "Summarize Case",
     type: "DNA Visit - Dev",
@@ -50,7 +50,7 @@ const CHAT_LIST = [
     attachments: true,
   },
   {
-    id: 2,
+    id: 5,
     user: "Bill Doe",
     title: "Genetic test summary",
     type: "DNA Visit - Clinical",
@@ -60,7 +60,7 @@ const CHAT_LIST = [
     attachments: true,
   },
   {
-    id: 3,
+    id: 6,
     user: "Tim Doe",
     title: "Patient Visit Summary",
     type: "DNA Visit - Dev",

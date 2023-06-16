@@ -5,9 +5,11 @@ import { Box, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
-import { TabHeader } from "@/components/Tab/TabHeader";
+import { ChatSidebarHeader } from "@/components/Chat/ChatSidebarHeader";
 import { ChatList } from "@/components/Chat/ChatList";
 import { Chat } from "@/components/Chat/Chat";
+import { FileSidebarHeader } from "@/components/File/FileSidebar";
+import { FileList } from "@/components/File/FileList";
 
 const FORM_SELECT_ITEMS = [
   {
@@ -47,7 +49,7 @@ const Chats = () => {
           direction="left"
           drawerWidth={320}
           headerComponent={
-            <TabHeader
+            <ChatSidebarHeader
               items={FORM_SELECT_ITEMS}
               handleSelectedItem={handleSelectedItem}
             />
@@ -70,11 +72,10 @@ const Chats = () => {
           openSidebar
           position="relative"
           direction="right"
-          drawerWidth={240}
+          drawerWidth={280}
+          headerComponent={<FileSidebarHeader />}
         >
-          <Box p={2}>
-            <AttachFileOutlinedIcon color="icon" />
-          </Box>
+          <FileList />
         </Sidebar>
       </StyledHeightContainer>
     </Box>
