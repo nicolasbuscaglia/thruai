@@ -146,7 +146,9 @@ const Sidebar = ({
             </DrawerHeader>
           </StyledStickyBox>
         )}
-        <Box sx={{ minWidth: drawerWidth }}>{children}</Box>
+        <Box sx={{ display: "flex", flex: 1, minWidth: drawerWidth }}>
+          {children}
+        </Box>
       </Drawer>
     </Box>
   );

@@ -1,5 +1,4 @@
 "use client";
-import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -10,15 +9,16 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
+// import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
+// import MailIcon from "@mui/icons-material/Mail";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { Button } from "@mui/material";
+import { useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -65,8 +65,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -199,22 +199,22 @@ export default function Header() {
                 inputProps={{ "aria-label": "find" }}
               />
             </Search>
-            <Button
+            {/* <Button
               startIcon={<SettingsIcon />}
               color="gray"
               variant="contained"
               sx={{ borderRadius: "0.6rem" }}
             >
               API Keys
-            </Button>
-            <Button
+            </Button> */}
+            {/* <Button
               startIcon={<AddOutlinedIcon />}
               color="blue"
               variant="contained"
               sx={{ borderRadius: "0.6rem" }}
             >
               New
-            </Button>
+            </Button> */}
             <IconButton
               size="large"
               aria-label="show new notifications"

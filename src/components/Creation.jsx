@@ -1,17 +1,10 @@
 import { useTheme } from "@emotion/react";
 import { Box, Button, Divider, Typography } from "@mui/material";
-import { FormSelect } from "./Forms/FormSelect";
 import { FormCheckbox } from "./Forms/FormCheckbox";
 import { FormFileUpload } from "./Forms/FormFileUpload";
 import { FormInputText } from "./Forms/FormInputText";
-
-const FORM_SELECT_ITEMS = [
-  {
-    id: 1,
-    label: "OpenAI ChatGPT 3.5 (Default)",
-  },
-  { id: 2, label: "OpenAI ChatGPT 4" },
-];
+import { ModelSelection } from "./ModelSelection";
+import { DataSecurityPolicies } from "./DataSecurityPolicies";
 
 const Creation = ({ handleCancel, handleCreate }) => {
   const theme = useTheme();
@@ -33,11 +26,12 @@ const Creation = ({ handleCancel, handleCreate }) => {
       </Box>
       <Divider sx={{ backgroundColor: theme.palette.border.main }} />
       <Box p={2}>
-        <FormSelect label="MODEL SELECTION" items={FORM_SELECT_ITEMS} />
+        <ModelSelection />
       </Box>
       <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-      <FormCheckbox />
-
+      <Box p={2}>
+        <DataSecurityPolicies />
+      </Box>
       <Box
         display="flex"
         justifyContent="space-between"

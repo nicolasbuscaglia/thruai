@@ -9,7 +9,7 @@ import { Creation } from "@/components/Creation";
 const CASES = [
   {
     id: 1,
-    title: "Patient ID #34512",
+    title: "Case ID #34512",
     type: "DNAVisit - Dev",
     filesCount: 13,
     daysLeft: 7,
@@ -18,7 +18,7 @@ const CASES = [
   },
   {
     id: 2,
-    title: "Patient ID #34512",
+    title: "Case ID #34512",
     type: "DNAVisit - Clinical",
     filesCount: 5,
     daysLeft: 1,
@@ -27,7 +27,7 @@ const CASES = [
   },
   {
     id: 3,
-    title: "Patient ID #34512",
+    title: "Case ID #34512",
     type: "DNAVisit - Clinical",
     filesCount: 3,
     daysLeft: 8,
@@ -36,7 +36,7 @@ const CASES = [
   },
   {
     id: 4,
-    title: "Patient ID #456",
+    title: "Case ID #456",
     type: "DNAVisit - Clinical",
     filesCount: 1,
     daysLeft: 10,
@@ -45,7 +45,7 @@ const CASES = [
   },
   {
     id: 5,
-    title: "Patient ID #34512",
+    title: "Case ID #34512",
     type: "DNAVisit - Dev",
     filesCount: 2,
     daysLeft: 14,
@@ -54,7 +54,7 @@ const CASES = [
   },
 ];
 
-const Home = () => {
+const Dashboard = () => {
   const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [openRightSidebar, setOpenRightSidebar] = useState(false);
@@ -75,7 +75,7 @@ const Home = () => {
   const handleCreate = () => {
     const payload = {
       id: 6,
-      title: "Patient ID #34513",
+      title: "Case ID #34513",
       type: "Test - Dev",
       filesCount: 1,
       daysLeft: 14,
@@ -124,4 +124,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

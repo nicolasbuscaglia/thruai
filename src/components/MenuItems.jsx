@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation";
 const MenuItems = ({ menuItems = [] }) => {
   const pathname = usePathname();
   const theme = useTheme();
+
   return (
     <List>
       {menuItems.map((menu, index) => {
@@ -30,10 +31,9 @@ const MenuItems = ({ menuItems = [] }) => {
                     minWidth: 0,
                     mr: 3,
                     justifyContent: "center",
-                    color:
-                      pathname === menu.path
-                        ? theme.palette.secondary.main
-                        : theme.palette.gray.light,
+                    color: pathname.startsWith(menu.path)
+                      ? theme.palette.secondary.main
+                      : theme.palette.gray.light,
                   }}
                 >
                   <Badge badgeContent={menu.notifications} color="blue">
@@ -43,10 +43,9 @@ const MenuItems = ({ menuItems = [] }) => {
                 <ListItemText
                   primary={menu.title}
                   sx={{
-                    color:
-                      pathname === menu.path
-                        ? theme.palette.secondary.main
-                        : theme.palette.gray.light,
+                    color: pathname.startsWith(menu.path)
+                      ? theme.palette.secondary.main
+                      : theme.palette.gray.light,
                   }}
                   primaryTypographyProps={{
                     fontSize: 12,

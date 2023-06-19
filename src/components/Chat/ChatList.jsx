@@ -1,12 +1,6 @@
-import {
-  Box,
-  CircularProgress,
-  Typography,
-  styled,
-  useTheme,
-} from "@mui/material";
-import { ChatCard } from "./ChatCard";
 import { useEffect, useState } from "react";
+import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
+import { ChatCard } from "./ChatCard";
 
 const CHAT_LIST = [
   {
@@ -74,16 +68,10 @@ const CHAT_LIST = [
 const ChatList = () => {
   const theme = useTheme();
   const [chatList, setChatList] = useState([]);
-  const [selected, setSelected] = useState();
   const [isLoading, setIsLoading] = useState(true);
-
-  const handleSelected = (chat) => {
-    setSelected(chat);
-  };
 
   useEffect(() => {
     setChatList(CHAT_LIST);
-    setSelected(CHAT_LIST[0]);
     setIsLoading(false);
   }, []);
 
@@ -105,11 +93,7 @@ const ChatList = () => {
           chatList.map((chat) => {
             return (
               <Box mb={1} key={chat.id}>
-                <ChatCard
-                  item={chat}
-                  selected={selected}
-                  handleSelected={handleSelected}
-                />
+                <ChatCard item={chat} />
               </Box>
             );
           })

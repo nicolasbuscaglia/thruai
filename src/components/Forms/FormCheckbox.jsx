@@ -7,13 +7,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-const FORM_TITLE = "DATA SECURITY POLICIES";
-const FORM_CHECKBOXES = [
-  { id: "hipaa", label: "HIPAA (Default)", checked: false },
-  { id: "data-retention-30", label: "Data Retention 30 Days", checked: false },
-];
-
-const FormCheckbox = ({ title = FORM_TITLE, checkboxes = FORM_CHECKBOXES }) => {
+const FormCheckbox = ({ title = "", checkboxes = [] }) => {
   const theme = useTheme();
   const [state, setState] = useState(checkboxes);
 
@@ -25,7 +19,7 @@ const FormCheckbox = ({ title = FORM_TITLE, checkboxes = FORM_CHECKBOXES }) => {
   };
 
   return (
-    <Box p={2}>
+    <Box>
       <Typography variant="overline" color="secondary">
         {title}
       </Typography>

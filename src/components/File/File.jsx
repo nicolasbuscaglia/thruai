@@ -1,33 +1,5 @@
-import { Box, Typography, alpha, styled, useTheme } from "@mui/material";
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import SmartDisplayOutlinedIcon from "@mui/icons-material/SmartDisplayOutlined";
-import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
-
-const fileIcon = (type) => {
-  switch (type) {
-    case ".doc":
-      return <DescriptionOutlinedIcon color="secondary" size="large" />;
-    case ".mov":
-      return <SmartDisplayOutlinedIcon color="secondary" size="large" />;
-    case ".opus":
-      return <VolumeUpOutlinedIcon color="secondary" size="large" />;
-    default:
-      "";
-  }
-};
-
-const fileBgIconColor = (type) => {
-  switch (type) {
-    case ".doc":
-      return "#50B5FF";
-    case ".mov":
-      return "#FFC542";
-    case ".opus":
-      return "#82C43C";
-    default:
-      "";
-  }
-};
+import { Box, Typography, styled, useTheme } from "@mui/material";
+import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 
 const StyledMainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -37,13 +9,10 @@ const StyledMainContainer = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.lightGray.dark,
 }));
 
-const StyledIconContainer = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "type",
-})(({ type }) => ({
+const StyledIconContainer = styled(Box)(() => ({
   display: "flex",
   alignItems: "center",
   width: "fit-content",
-  backgroundColor: fileBgIconColor(type),
   padding: "1rem",
   borderRadius: "1rem",
 }));
@@ -53,7 +22,9 @@ const File = ({ file }) => {
   const theme = useTheme();
   return (
     <StyledMainContainer>
-      <StyledIconContainer type={type}>{fileIcon(type)}</StyledIconContainer>
+      <StyledIconContainer>
+        <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 20 }} />
+      </StyledIconContainer>
       <Box p={1} sx={{ overflow: "hidden" }}>
         <Typography
           variant="body1"
@@ -62,9 +33,14 @@ const File = ({ file }) => {
         >
           {name}
         </Typography>
-        <Typography variant="body2" color={theme.palette.gray.light}>
-          {size}
-        </Typography>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Typography variant="body2" color={theme.palette.gray.light}>
+            {size}
+          </Typography>
+          <Typography variant="body2" color={theme.palette.gray.light}>
+            {type}
+          </Typography>
+        </Box>
       </Box>
     </StyledMainContainer>
   );

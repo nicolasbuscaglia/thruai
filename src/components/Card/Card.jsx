@@ -11,7 +11,7 @@ const Card = ({ card }) => {
   const { id, title, type, filesCount, daysLeft, uploadStatus, team } = card;
   const theme = useTheme();
   return (
-    <Link href={`/case/${id}`}>
+    <Link href={`/chats/${id}`}>
       <Box
         sx={{
           backgroundColor: theme.palette.primary.main,

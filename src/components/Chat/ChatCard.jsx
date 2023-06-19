@@ -1,5 +1,7 @@
+import { useRouter, useParams } from "next/navigation";
 import { Avatar, Box, Grid, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
+import { useEffect, useRef } from "react";
 
 const StyledCenteredBox = styled(Box)(() => ({
   display: "flex",
@@ -8,34 +10,45 @@ const StyledCenteredBox = styled(Box)(() => ({
 }));
 
 const StyledMainBox = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "selected" && prop !== "item",
-})(({ theme, item, selected }) => ({
+  shouldForwardProp: (prop) => prop !== "id" && prop !== "itemId",
+})(({ theme, id, itemId }) => ({
   cursor: "pointer",
   padding: "1rem",
   borderRadius: "1rem",
   backgroundColor:
-    selected === item ? theme.palette.blue.main : theme.palette.lightGray.dark,
+    Number(id) === itemId
+      ? theme.palette.blue.main
+      : theme.palette.lightGray.dark,
 }));
 
 const StyledTypographyBox = styled(Box)(() => ({
   display: "-webkit-box",
-  "-webkit-line-clamp": "2",
-  "-webkit-box-orient": "vertical",
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: "vertical",
   overflow: "hidden",
   textOverflow: "ellipsis",
   textWrap: "wrap",
 }));
 
-const ChatCard = ({ item = {}, selected, handleSelected = () => {} }) => {
+const ChatCard = ({ item = {} }) => {
+  const router = useRouter();
+  const params = useParams();
+  const ref = useRef();
   const theme = useTheme();
-  const { title, type, user, time, description, attachments } = item;
+  const { id, title, type, user, time, description, attachments } = item;
 
   const handleClick = () => {
-    handleSelected(item);
+    router.push(`/chats/${id}`);
   };
 
+  useEffect(() => {
+    if (id === Number(params.id)) {
+      ref.current.scrollIntoView(false);
+    }
+  }, []);
+
   return (
-    <StyledMainBox onClick={handleClick} selected={selected} item={item}>
+    <StyledMainBox onClick={handleClick} id={params.id} itemId={id} ref={ref}>
       <Grid container spacing={1}>
         <Grid item>
           <StyledCenteredBox>
@@ -52,7 +65,9 @@ const ChatCard = ({ item = {}, selected, handleSelected = () => {} }) => {
             <Grid item xs>
               <Typography
                 color={
-                  selected === item ? "secondary" : theme.palette.blue.main
+                  Number(params.id) === id
+                    ? "secondary"
+                    : theme.palette.blue.main
                 }
                 variant="body2"
                 fontSize={12}

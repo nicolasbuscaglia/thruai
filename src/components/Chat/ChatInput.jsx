@@ -32,7 +32,10 @@ const ChatInput = ({ onSubmit }) => {
         <Box>
           <FormSelect
             background="dark"
-            items={[{ label: "Chat" }, { label: "Note" }]}
+            items={[
+              { id: 1, label: "Chat" },
+              { id: 2, label: "Note" },
+            ]}
           />
         </Box>
         <Box sx={{ flexGrow: 1 }}>
