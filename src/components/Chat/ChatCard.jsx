@@ -3,6 +3,8 @@ import { Avatar, Box, Grid, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { useEffect, useRef, useState } from "react";
 import { getDatePart, getTimePart } from "@/utils/date";
+import { useSelector } from "react-redux";
+import { selectLastMessageById } from "@/redux/features/chats/chatsSlice";
 
 const StyledCenteredBox = styled(Box)(() => ({
   display: "flex",
@@ -32,37 +34,25 @@ const StyledTypographyBox = styled(Box)(() => ({
 const ChatCard = ({ chat = {} }) => {
   const router = useRouter();
   const params = useParams();
+  const { id } = params;
   const ref = useRef();
   const theme = useTheme();
-  const { caseId, name, type, attachments, messages } = chat;
+  const { caseId, name, type, attachments } = chat;
 
-  const [lastMessage, setLastMessage] = useState({});
-
-  useEffect(() => {
-    if (messages.length > 0) {
-      const sortedMessages = [...messages];
-      sortedMessages.sort((a, b) => b.createdOn - a.createdOn);
-      setLastMessage(sortedMessages[0]);
-    }
-  }, [messages]);
+  const lastMessage = useSelector(selectLastMessageById(caseId));
 
   const handleClick = () => {
     router.push(`/chats/${caseId}`);
   };
 
   useEffect(() => {
-    if (caseId === params.id) {
+    if (caseId === id) {
       ref.current.scrollIntoView(false);
     }
   }, []);
 
   return (
-    <StyledMainBox
-      onClick={handleClick}
-      id={params.id}
-      itemId={caseId}
-      ref={ref}
-    >
+    <StyledMainBox onClick={handleClick} id={id} itemId={caseId} ref={ref}>
       <Grid container spacing={1}>
         <Grid item>
           <StyledCenteredBox>
@@ -89,8 +79,8 @@ const ChatCard = ({ chat = {} }) => {
             </Grid>
             <Grid item>
               <Typography color="secondary" variant="body2" fontSize={12}>
-                {`${getDatePart(lastMessage.createdOn)} ${getTimePart(
-                  lastMessage.createdOn
+                {`${getDatePart(lastMessage?.createdOn)} ${getTimePart(
+                  lastMessage?.createdOn
                 )}`}
               </Typography>
             </Grid>

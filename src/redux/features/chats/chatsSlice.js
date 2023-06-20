@@ -176,4 +176,13 @@ export const selectChatById = (id) => (state) =>
 
 export const selectAllChats = (state) => state.chats.value;
 
+export const selectLastMessageById = (id) => (state) => {
+  const messages = state.chats.value.find(
+    (chats) => chats.caseId === id
+  )?.messages;
+  const sortedMessages = [...messages];
+  sortedMessages.sort((a, b) => b.createdOn - a.createdOn);
+  return sortedMessages[0];
+};
+
 export default chatsSlice.reducer;
