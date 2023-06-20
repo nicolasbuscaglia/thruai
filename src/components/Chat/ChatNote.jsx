@@ -1,3 +1,4 @@
+import { getDatePart, getTimePart } from "@/utils/date";
 import { Avatar, Box, Grid, Typography, styled, useTheme } from "@mui/material";
 
 const StyledCenteredBox = styled(Box)(() => ({
@@ -15,7 +16,7 @@ const StyledMainBox = styled(Box)(({ theme }) => ({
 
 const StyledTypographyBox = styled(Box)(() => ({
   display: "-webkit-box",
-  WebkitLineClamp: 2,
+  WebkitLineClamp: 1,
   WebkitBoxOrient: "vertical",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -24,7 +25,7 @@ const StyledTypographyBox = styled(Box)(() => ({
 
 const ChatNote = ({ note = {} }) => {
   const theme = useTheme();
-  const { uploadedOn, user, content } = note;
+  const { createdOn, user, content } = note;
 
   return (
     <StyledMainBox>
@@ -35,22 +36,23 @@ const ChatNote = ({ note = {} }) => {
           </StyledCenteredBox>
         </Grid>
         <Grid item xs>
-          <Grid container>
-            <Grid item xs>
-              <Typography
-                color={theme.palette.blue.main}
-                variant="body2"
-                fontSize={12}
-              >
-                {user}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography color="secondary" variant="body2" fontSize={12}>
-                {uploadedOn}
-              </Typography>
-            </Grid>
-          </Grid>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <StyledTypographyBox
+              color={theme.palette.blue.main}
+              variant="body2"
+              fontSize={12}
+            >
+              {user}
+            </StyledTypographyBox>
+
+            <Typography color="secondary" variant="body2" fontSize={12}>
+              {`${getDatePart(createdOn)} ${getTimePart(createdOn)}`}
+            </Typography>
+          </Box>
           <StyledTypographyBox>
             <Typography color="secondary" variant="body2" fontSize={12}>
               {content}

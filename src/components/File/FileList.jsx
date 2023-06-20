@@ -1,14 +1,12 @@
 import { Box, Divider, IconButton, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
 import { File } from "./File";
 import { FileCategories } from "./FileCategories";
 import { useTheme } from "@emotion/react";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { GoogleDriveIcon } from "@/assets/GoogleDriveIcon";
 import { DropboxIcon } from "@/assets/DropboxIcon";
-import { ButtonManageCase } from "../ButtonMgmtCase";
 
-const FileList = ({ data = [] }) => {
+const FileList = ({ files = [] }) => {
   const theme = useTheme();
 
   return (
@@ -63,7 +61,7 @@ const FileList = ({ data = [] }) => {
           </Typography>
         </Box>
         <Box mb={4}>
-          {data.map((file) => {
+          {files.map((file) => {
             return (
               <Box mb={2} key={file.id}>
                 <File file={file} />

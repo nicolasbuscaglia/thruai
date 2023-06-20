@@ -1,78 +1,15 @@
+import { useParams } from "next/navigation";
 import { Box } from "@mui/material";
 import { ChatHeader } from "./ChatHeader";
 import styled from "@emotion/styled";
 import { ChatInput } from "./ChatInput";
 import { ChatDetails } from "./ChatDetails";
 import { ChatConversation } from "./ChatConversation";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-const CHAT_CONVERSATION = {
-  summary: [
-    {
-      id: 1,
-      title: "Summary",
-      description:
-        "“Pushing pixels and experiences in digital products for Sebostudio”",
-      items: [
-        {
-          id: 1,
-          label: "Nominal",
-        },
-        {
-          id: 2,
-          label: "Blood Pressure",
-        },
-        {
-          id: 3,
-          label: "Joined June 2012",
-        },
-        {
-          id: 4,
-          label: "Genetic Test completed",
-        },
-        {
-          id: 5,
-          label: "Some Other Medical",
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "Recommended Actions",
-      description:
-        "Based on your teams previous chats we recommend the following actions",
-      items: [
-        {
-          id: 1,
-          label: "Ask Patient A",
-        },
-        {
-          id: 2,
-          label: "Follow up with patient",
-        },
-        {
-          id: 3,
-          label: "Joined June 2012",
-        },
-        {
-          id: 4,
-          label: "Genetic Test Completed",
-        },
-        {
-          id: 5,
-          label: "Some Other Medical",
-        },
-      ],
-    },
-  ],
-  messages: [
-    {
-      id: 1,
-      content: "This is a test message",
-    },
-  ],
-};
+import { useDispatch, useSelector } from "react-redux";
+import { addNote } from "@/redux/features/chats/notesSlice";
+import { addMessage, selectChatById } from "@/redux/features/chats/chatsSlice";
 
 const StyledStickyBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "sticky",
@@ -90,26 +27,35 @@ const StyledContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
+  height: "100%",
 }));
 
 const Chat = () => {
-  const [chat, setChat] = useState();
+  const params = useParams();
+  const { id } = params;
   const chatRef = useRef();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    setChat(CHAT_CONVERSATION);
-  }, []);
+  const chat = useSelector(selectChatById(id));
 
-  const onSubmit = (value) => {
+  const onSubmit = (value, type) => {
     const payload = {
-      id: uuidv4(),
-      content: value,
+      caseId: id,
+      message: {
+        id: uuidv4(),
+        createdOn: Date.now(),
+        user: "Jhon Doe",
+        content: value,
+      },
     };
-    const messages = [...chat.messages, payload];
-    setChat({ ...chat, messages });
-    chatRef.current.scrollIntoView({
-      behavior: "smooth",
-    });
+    if (type === "Chat") {
+      dispatch(addMessage(payload));
+      chatRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+    } else if (type === "Note") {
+      dispatch(addNote(payload));
+    }
   };
 
   return (
@@ -121,7 +67,7 @@ const Chat = () => {
         <Box mb={2}>
           <ChatDetails />
         </Box>
-        <ChatConversation conversation={chat} />
+        <ChatConversation chat={chat} />
       </Box>
       <Box ref={chatRef} mb={6} />
       <StyledStickyBox sticky="bottom">

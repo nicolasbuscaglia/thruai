@@ -7,41 +7,61 @@ const StyledMainContainer = styled(Box)(({ theme }) => ({
   gap: 1,
   borderRadius: "1rem",
   backgroundColor: theme.palette.lightGray.dark,
+  padding: "1rem",
 }));
 
 const StyledIconContainer = styled(Box)(() => ({
   display: "flex",
   alignItems: "center",
   width: "fit-content",
-  padding: "1rem",
   borderRadius: "1rem",
+  marginRight: "1rem",
+}));
+
+const StyledTypographyBox = styled(Box)(() => ({
+  display: "-webkit-box",
+  WebkitLineClamp: 1,
+  WebkitBoxOrient: "vertical",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
 }));
 
 const File = ({ file }) => {
-  const { name, type, size } = file;
+  const { fileName, type, size } = file;
   const theme = useTheme();
   return (
     <StyledMainContainer>
       <StyledIconContainer>
-        <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 20 }} />
+        <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 16 }} />
       </StyledIconContainer>
-      <Box p={1} sx={{ overflow: "hidden" }}>
+
+      <StyledTypographyBox>
         <Typography
-          variant="body1"
+          variant="body2"
           color="secondary"
-          sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+          fontSize={12}
+          sx={{ textOverflow: "ellipsis", overflow: "hidden" }}
         >
-          {name}
+          {fileName}asdasdsdas
         </Typography>
+
         <Box display="flex" alignItems="center" gap={2}>
-          <Typography variant="body2" color={theme.palette.gray.light}>
+          <Typography
+            variant="body2"
+            color={theme.palette.gray.light}
+            fontSize={12}
+          >
             {size}
           </Typography>
-          <Typography variant="body2" color={theme.palette.gray.light}>
+          <Typography
+            variant="body2"
+            color={theme.palette.gray.light}
+            fontSize={12}
+          >
             {type}
           </Typography>
         </Box>
-      </Box>
+      </StyledTypographyBox>
     </StyledMainContainer>
   );
 };

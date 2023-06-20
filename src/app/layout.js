@@ -3,6 +3,7 @@ import "./globals.css";
 import { Poppins } from "next/font/google";
 import { Theme } from "@/components/Theme";
 import { MainContainer } from "@/components/MainContainer";
+import { Providers } from "@/redux/provider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,10 +19,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Theme>
-          <Header />
-          <MainContainer>{children}</MainContainer>
-        </Theme>
+        <Providers>
+          <Theme>
+            <Header />
+            <MainContainer>{children}</MainContainer>
+          </Theme>
+        </Providers>
       </body>
     </html>
   );

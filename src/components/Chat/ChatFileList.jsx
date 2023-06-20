@@ -1,28 +1,13 @@
+import { useSelector } from "react-redux";
 import { FileList } from "../File/FileList";
-
-const FILES = [
-  {
-    id: 1,
-    name: "Project Overview",
-    type: ".doc",
-    size: "146.5 Kb",
-  },
-  {
-    id: 2,
-    name: "What's Bons...",
-    type: ".mov",
-    size: "50.3 Mb",
-  },
-  {
-    id: 3,
-    name: "Testimonial",
-    type: ".opus",
-    size: "32.6 Mb",
-  },
-];
+import { selectCleanedFilesById } from "@/redux/features/cases/filesSlice";
+import { useParams } from "next/navigation";
 
 const ChatFileList = () => {
-  return <FileList data={FILES} />;
+  const params = useParams();
+  const { id } = params;
+  const files = useSelector(selectCleanedFilesById(id));
+  return <FileList files={files} />;
 };
 
 export { ChatFileList };

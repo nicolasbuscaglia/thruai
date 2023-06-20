@@ -5,6 +5,11 @@ import SendIcon from "@mui/icons-material/Send";
 import { FormSelect } from "../Forms/FormSelect";
 import { useState } from "react";
 
+const MESSAGE_TYPES = [
+  { id: 1, label: "Chat" },
+  { id: 2, label: "Note" },
+];
+
 const StyledMainBox = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -16,14 +21,19 @@ const StyledMainBox = styled(Box)(({ theme }) => ({
 const ChatInput = ({ onSubmit }) => {
   const theme = useTheme();
   const [value, setValue] = useState("");
+  const [messageType, setMessageType] = useState(MESSAGE_TYPES[0].label);
 
   const handleSubmit = () => {
-    onSubmit(value);
+    onSubmit(value, messageType);
     setValue("");
   };
 
   const handleChange = (text) => {
     setValue(text);
+  };
+
+  const handleMsgTypeChange = (msgType) => {
+    setMessageType(msgType);
   };
 
   return (
@@ -32,10 +42,8 @@ const ChatInput = ({ onSubmit }) => {
         <Box>
           <FormSelect
             background="dark"
-            items={[
-              { id: 1, label: "Chat" },
-              { id: 2, label: "Note" },
-            ]}
+            items={MESSAGE_TYPES}
+            handleSelectedChange={handleMsgTypeChange}
           />
         </Box>
         <Box sx={{ flexGrow: 1 }}>

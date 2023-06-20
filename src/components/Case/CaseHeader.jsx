@@ -24,7 +24,7 @@ const CaseHeader = ({ caseDetails }) => {
     <StyledBox>
       <Box>
         <Typography variant="h6" color="secondary">
-          {`Case #${caseDetails.id}`}
+          {`Case #${params.id}`}
         </Typography>
         <Typography
           variant="body2"
@@ -32,7 +32,7 @@ const CaseHeader = ({ caseDetails }) => {
           fontWeight={300}
           color={theme.palette.gray.light}
         >
-          {`Last Updated on ${caseDetails.lastUpdated}`}
+          {`Last Updated on ${caseDetails?.lastUpdated}`}
         </Typography>
       </Box>
       <Box display="flex" alignItems="center" gap={2}>

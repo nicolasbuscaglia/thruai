@@ -1,34 +1,15 @@
-import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Typography, useTheme } from "@mui/material";
 import { ChatNote } from "./ChatNote";
-
-const NOTES = [
-  {
-    id: 1,
-    uploadedOn: "12:48PM",
-    user: "Jhon Doe",
-    content: "This is a test note",
-  },
-  {
-    id: 2,
-    uploadedOn: "09/12/23 12:23PM",
-    user: "Jane Doe",
-    content: "This is a test note",
-  },
-  {
-    id: 1,
-    uploadedOn: "08/12/23 10:23AM",
-    user: "Jhon Doe",
-    content: "This is a test note",
-  },
-];
+import { useSelector } from "react-redux";
+import { selectNotesById } from "@/redux/features/chats/notesSlice";
+import { useParams } from "next/navigation";
 
 const ChatNotes = () => {
-  const [notes, setNotes] = useState([]);
+  const params = useParams();
+  const { id } = params;
+  const theme = useTheme();
 
-  useEffect(() => {
-    setNotes(NOTES);
-  }, []);
+  const notes = useSelector(selectNotesById(id));
 
   return (
     <Box p={2}>
@@ -38,13 +19,25 @@ const ChatNotes = () => {
         </Typography>
       </Box>
       <Box>
-        {notes.map((note) => {
-          return (
-            <Box key={note.id} mb={1}>
-              <ChatNote note={note} />
-            </Box>
-          );
-        })}
+        {notes?.length > 0 ? (
+          notes.map((note) => {
+            return (
+              <Box key={note.id} mb={1}>
+                <ChatNote note={note} />
+              </Box>
+            );
+          })
+        ) : (
+          <Typography
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            variant="overline"
+            color={theme.palette.gray.main}
+          >
+            No notes yet
+          </Typography>
+        )}
       </Box>
     </Box>
   );

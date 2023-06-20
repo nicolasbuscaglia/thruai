@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { ChatSummaryCard } from "./ChatSummaryCard";
 
-const ChatConversation = ({ conversation }) => {
+const ChatConversation = ({ chat }) => {
   const theme = useTheme();
 
   return (
@@ -14,7 +14,7 @@ const ChatConversation = ({ conversation }) => {
         </Typography>
       </Box>
       <Grid container spacing={2} mb={2}>
-        {conversation?.summary?.map((summary) => {
+        {chat?.summary?.map((summary) => {
           return (
             <Grid
               key={summary.id}
@@ -30,7 +30,7 @@ const ChatConversation = ({ conversation }) => {
         })}
       </Grid>
       <Box>
-        {conversation?.messages?.map((message) => {
+        {chat?.messages?.map((message) => {
           return (
             <Box
               key={message.id}
