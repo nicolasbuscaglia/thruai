@@ -24,7 +24,6 @@ const Creation = ({ handleCancel }) => {
     formState: { errors },
   } = useForm();
   const [files, setFiles] = useState([]);
-  console.log(errors);
 
   const dispatch = useDispatch();
 
@@ -82,12 +81,13 @@ const Creation = ({ handleCancel }) => {
     dispatch(addNewCaseNotes({ caseId: payload.caseId, notes: payload.notes }));
     dispatch(addFiles({ caseId: payload.caseId, files: payload.files }));
     reset({ caseName: "" });
+    setFiles([]);
     handleCancel();
   });
 
   return (
-    <form onSubmit={onSubmit}>
-      <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%" }}>
+      <form onSubmit={onSubmit}>
         <Box p={2}>
           <Typography variant="body1" color="secondary">
             Case Creation
@@ -149,8 +149,8 @@ const Creation = ({ handleCancel }) => {
             Create Case
           </Button>
         </Box>
-      </Box>
-    </form>
+      </form>
+    </Box>
   );
 };
 
