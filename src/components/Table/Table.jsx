@@ -15,6 +15,7 @@ import { visuallyHidden } from "@mui/utils";
 import { useMemo, useState } from "react";
 import { Button, LinearProgress, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
+import { getDatePart, getTimePart } from "@/utils/date";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -50,7 +51,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: "fileName",
+    id: "name",
     label: "File Name",
   },
   {
@@ -253,7 +254,7 @@ const EnhancedTable = ({ title, data = [] }) => {
                     <StyledTableCell id={labelId} align="left" scope="row">
                       <StyledCenteredBox>
                         <AttachFileOutlinedIcon fontSize="small" color="icon" />
-                        {row.fileName}
+                        {row.name}
                       </StyledCenteredBox>
                     </StyledTableCell>
                     <StyledTableCell>
@@ -265,7 +266,11 @@ const EnhancedTable = ({ title, data = [] }) => {
                         sx={{ borderRadius: "1rem" }}
                       />
                     </StyledTableCell>
-                    <StyledTableCell>{row.uploadedOn}</StyledTableCell>
+                    <StyledTableCell>
+                      {`${getDatePart(row.uploadedOn)} ${getTimePart(
+                        row.uploadedOn
+                      )}`}
+                    </StyledTableCell>
                     <StyledTableCell>
                       <StyledButton variant="contained">View</StyledButton>
                     </StyledTableCell>

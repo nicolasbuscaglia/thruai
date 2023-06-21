@@ -1,5 +1,6 @@
 import { Box, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
+import { formatBytes } from "@/utils/bytes";
 
 const StyledMainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -18,51 +19,45 @@ const StyledIconContainer = styled(Box)(() => ({
   marginRight: "1rem",
 }));
 
-const StyledTypographyBox = styled(Box)(() => ({
-  display: "-webkit-box",
-  WebkitLineClamp: 1,
-  WebkitBoxOrient: "vertical",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-}));
-
 const File = ({ file }) => {
-  const { fileName, type, size } = file;
+  const { name, type, size, file: fileURL } = file;
   const theme = useTheme();
   return (
-    <StyledMainContainer>
-      <StyledIconContainer>
-        <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 16 }} />
-      </StyledIconContainer>
+    <a href={fileURL} download>
+      <StyledMainContainer>
+        <StyledIconContainer>
+          <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 16 }} />
+        </StyledIconContainer>
 
-      <StyledTypographyBox>
-        <Typography
-          variant="body2"
-          color="secondary"
-          fontSize={12}
-          sx={{ textOverflow: "ellipsis", overflow: "hidden" }}
-        >
-          {fileName}asdasdsdas
-        </Typography>
-
-        <Box display="flex" alignItems="center" gap={2}>
+        <Box overflow="hidden">
           <Typography
             variant="body2"
-            color={theme.palette.gray.light}
+            color="secondary"
             fontSize={12}
+            sx={{ textOverflow: "ellipsis", overflow: "hidden" }}
           >
-            {size}
+            {name}
           </Typography>
-          <Typography
-            variant="body2"
-            color={theme.palette.gray.light}
-            fontSize={12}
-          >
-            {type}
-          </Typography>
+
+          <Box display="flex" alignItems="center" gap={2}>
+            <Typography
+              variant="body2"
+              color={theme.palette.gray.light}
+              fontSize={12}
+            >
+              {formatBytes(Number(size))}
+            </Typography>
+            <Typography
+              variant="body2"
+              color={theme.palette.gray.light}
+              fontSize={12}
+            >
+              {type}
+            </Typography>
+          </Box>
         </Box>
-      </StyledTypographyBox>
-    </StyledMainContainer>
+      </StyledMainContainer>
+    </a>
   );
 };
 

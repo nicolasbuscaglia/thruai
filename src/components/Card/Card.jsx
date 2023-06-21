@@ -43,7 +43,6 @@ const Card = ({ card }) => {
               Case ID #{caseId}
             </Typography>
           </StyledTypographyBox>
-
           <IconButton
             size="small"
             aria-label="show more"

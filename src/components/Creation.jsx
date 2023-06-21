@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
-import { FormFileUpload } from "./Forms/FormFileUpload";
 import { FormInputText } from "./Forms/FormInputText";
 import { ModelSelection } from "./ModelSelection";
 import { DataSecurityPolicies } from "./DataSecurityPolicies";
@@ -9,21 +8,45 @@ import { addCase } from "@/redux/features/cases/caseSlice";
 import { addNewCaseMessages } from "@/redux/features/chats/chatsSlice";
 import { addNewCaseNotes } from "@/redux/features/chats/notesSlice";
 import { v4 as uuidv4 } from "uuid";
+import { addFiles } from "@/redux/features/cases/filesSlice";
+import { FileDropZone } from "./File/FileDropZone";
+import { FileUploaded } from "./File/FileUploaded";
+import { Controller, useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+import { FormErrorMessage } from "./Forms/FormErrorMessage";
 
 const Creation = ({ handleCancel }) => {
   const theme = useTheme();
-  const [newCase, setNewCase] = useState({});
+  const {
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm();
+  const [files, setFiles] = useState([]);
+  console.log(errors);
 
   const dispatch = useDispatch();
 
-  const handleCaseNameChange = (data) => {
-    setNewCase({ ...newCase, name: data });
+  const handleAddFiles = (data) => {
+    const filesArray = Object.keys(data).map((index) => {
+      return {
+        id: uuidv4(),
+        name: data[index].name,
+        type: data[index].type,
+        size: data[index].size,
+        uploadedOn: new Date(),
+        cleaningStatus: 100,
+        file: URL.createObjectURL(data[index]),
+      };
+    });
+    setFiles(filesArray);
   };
 
-  const handleCreate = () => {
+  const onSubmit = handleSubmit((data) => {
     const payload = {
       caseId: uuidv4(),
-      name: newCase.name,
+      name: data.caseName,
       type: "Test - Dev",
       filesCount: 1,
       daysLeft: 14,
@@ -33,6 +56,7 @@ const Creation = ({ handleCancel }) => {
       summary: [],
       messages: [],
       notes: [],
+      files: files,
     };
     dispatch(
       addCase({
@@ -56,56 +80,77 @@ const Creation = ({ handleCancel }) => {
       })
     );
     dispatch(addNewCaseNotes({ caseId: payload.caseId, notes: payload.notes }));
+    dispatch(addFiles({ caseId: payload.caseId, files: payload.files }));
+    reset({ caseName: "" });
     handleCancel();
-  };
+  });
 
   return (
-    <Box>
-      <Box p={2}>
-        <Typography variant="body1" color="secondary">
-          Case Creation
-        </Typography>
-      </Box>
-      <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-      <Box p={2}>
-        <FormFileUpload />
-      </Box>
-      <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-      <Box p={2}>
-        <FormInputText label="CASE NAME" onChange={handleCaseNameChange} />
-      </Box>
-      <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-      <Box p={2}>
-        <ModelSelection />
-      </Box>
-      <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-      <Box p={2}>
-        <DataSecurityPolicies />
-      </Box>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        p={2}
-      >
-        <Button
-          color="blue"
-          variant="text"
-          sx={{ borderRadius: "0.6rem", color: theme.palette.blue.main }}
-          onClick={handleCancel}
+    <form onSubmit={onSubmit}>
+      <Box sx={{ width: "100%" }}>
+        <Box p={2}>
+          <Typography variant="body1" color="secondary">
+            Case Creation
+          </Typography>
+        </Box>
+        <Divider sx={{ backgroundColor: theme.palette.border.main }} />
+        <Box p={2}>
+          {/* <FormFileUpload /> */}
+          <Box mb={2}>
+            <FileDropZone handleAddFiles={handleAddFiles} />
+          </Box>
+          <FileUploaded files={files} />
+        </Box>
+        <Divider sx={{ backgroundColor: theme.palette.border.main }} />
+        <Box p={2}>
+          <Controller
+            name="caseName"
+            control={control}
+            rules={{ required: "Case Name is required." }}
+            render={({ field }) => (
+              <FormInputText label="CASE NAME" {...field} />
+            )}
+          />
+          <ErrorMessage
+            errors={errors}
+            name="caseName"
+            render={({ message }) => <FormErrorMessage message={message} />}
+          />
+        </Box>
+        <Divider sx={{ backgroundColor: theme.palette.border.main }} />
+        <Box p={2}>
+          <ModelSelection />
+        </Box>
+        <Divider sx={{ backgroundColor: theme.palette.border.main }} />
+        <Box p={2}>
+          <DataSecurityPolicies />
+        </Box>
+
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          p={2}
         >
-          Cancel
-        </Button>
-        <Button
-          color="blue"
-          variant="contained"
-          sx={{ borderRadius: "0.6rem", color: theme.palette.secondary.main }}
-          onClick={handleCreate}
-        >
-          Create Case
-        </Button>
+          <Button
+            color="blue"
+            variant="text"
+            sx={{ borderRadius: "0.6rem", color: theme.palette.blue.main }}
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+          <Button
+            color="blue"
+            variant="contained"
+            sx={{ borderRadius: "0.6rem", color: theme.palette.secondary.main }}
+            type="submit"
+          >
+            Create Case
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </form>
   );
 };
 
