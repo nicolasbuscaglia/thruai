@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import { ChatCard } from "./ChatCard";
 import { useSelector } from "react-redux";
-import { selectAllChats } from "@/redux/features/chats/chatsSlice";
+import { selectFilteredChats } from "@/redux/features/chats/chatsSlice";
 
 const ChatList = () => {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
 
-  const chatList = useSelector((state) => selectAllChats(state));
+  const chatList = useSelector(selectFilteredChats);
 
   return (
     <Box p={2} width="100%">
@@ -27,7 +27,7 @@ const ChatList = () => {
         ) : chatList.length > 0 ? (
           chatList.map((chat) => {
             return (
-              <Box mb={1} key={chat.id}>
+              <Box mb={1} key={chat.caseId}>
                 <ChatCard chat={chat} />
               </Box>
             );

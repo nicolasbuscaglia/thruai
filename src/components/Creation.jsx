@@ -47,11 +47,11 @@ const Creation = ({ handleCancel }) => {
       caseId: uuidv4(),
       name: data.caseName,
       type: "Test - Dev",
-      filesCount: 1,
+      filesCount: files.length,
       daysLeft: 14,
       uploadStatus: 10,
       team: ["Test"],
-      attachments: true,
+      attachments: files.length > 0,
       summary: [],
       messages: [],
       notes: [],
@@ -107,8 +107,8 @@ const Creation = ({ handleCancel }) => {
             name="caseName"
             control={control}
             rules={{ required: "Case Name is required." }}
-            render={({ field }) => (
-              <FormInputText label="CASE NAME" {...field} />
+            render={({ field, ref }) => (
+              <FormInputText label="CASE NAME" {...field} ref={ref} />
             )}
           />
           <ErrorMessage

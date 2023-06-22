@@ -1,5 +1,4 @@
 import { Box, TextField, Typography, styled, useTheme } from "@mui/material";
-import { useState } from "react";
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   "& fieldset": {
@@ -15,9 +14,10 @@ const FormInputText = ({
   label = "",
   variant = "standard",
   placeholder = "",
-  value,
+  value = "",
   onChange = () => {},
   onKeyDown = () => {},
+  ref,
 }) => {
   const theme = useTheme();
 
@@ -48,6 +48,7 @@ const FormInputText = ({
           sx: { fontSize: "0.875rem", color: theme.palette.gray.light },
         }}
         onKeyDown={handleKeyDown}
+        inputRef={ref}
       />
     </Box>
   );

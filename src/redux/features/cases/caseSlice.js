@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: [
@@ -59,9 +59,30 @@ export const casesSlice = createSlice({
         ...action.payload,
       });
     },
+    updateFilesCount: (state, action) => {
+      const caseIndex = state.value.findIndex(
+        (file) => file.caseId === action.payload.caseId
+      );
+      if (caseIndex) {
+        state.value[caseIndex].filesCount += action.payload.filesCount;
+      }
+    },
   },
 });
 
-export const { addCase } = casesSlice.actions;
-export const selectAllCases = (state) => state.cases.value;
+export const { addCase, updateFilesCount } = casesSlice.actions;
+
+export const selectFilterCases = (state, filter) =>
+  state.filter(
+    (cases) =>
+      cases.name.toLowerCase().includes(filter.toLowerCase()) ||
+      cases.caseId.toLowerCase().includes(filter.toLowerCase())
+  );
+
+export const selectFilteredCases = createSelector(
+  (state) => state.cases.value,
+  (state) => state.ui.filter,
+  selectFilterCases
+);
+
 export default casesSlice.reducer;

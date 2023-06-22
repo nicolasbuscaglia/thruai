@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { FileList } from "../File/FileList";
-import { selectCleanedFilesById } from "@/redux/features/cases/filesSlice";
+import { selectFilteredCleanedFilesById } from "@/redux/features/cases/filesSlice";
 import { useParams } from "next/navigation";
 import { ChatFileUpload } from "./ChatFileUpload";
 import { FileCategories } from "../File/FileCategories";
@@ -10,7 +10,9 @@ const ChatFileList = () => {
   const params = useParams();
   const { id } = params;
   const theme = useTheme();
-  const files = useSelector(selectCleanedFilesById(id));
+  const files = useSelector((state) =>
+    selectFilteredCleanedFilesById(state, id)
+  );
   return (
     <>
       <ChatFileUpload />

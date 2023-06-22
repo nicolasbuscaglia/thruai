@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   value: [
@@ -166,15 +166,22 @@ export const chatsSlice = createSlice({
         ];
       }
     },
+    updateAttachments: (state, action) => {
+      const indexConv = state.value.findIndex(
+        (chats) => chats.caseId === action.payload.caseId
+      );
+      if (indexConv >= 0) {
+        state.value[indexConv].attachments = action.payload.attachments;
+      }
+    },
   },
 });
 
-export const { addMessage, addNewCaseMessages } = chatsSlice.actions;
+export const { addMessage, addNewCaseMessages, updateAttachments } =
+  chatsSlice.actions;
 
 export const selectChatById = (id) => (state) =>
   state.chats.value.find((chats) => chats.caseId === id);
-
-export const selectAllChats = (state) => state.chats.value;
 
 export const selectLastMessageById = (id) => (state) => {
   const messages = state.chats.value.find(
@@ -184,5 +191,18 @@ export const selectLastMessageById = (id) => (state) => {
   sortedMessages.sort((a, b) => b.createdOn - a.createdOn);
   return sortedMessages[0];
 };
+
+export const selectFilterChats = (state, filter) =>
+  state.filter(
+    (chats) =>
+      chats.name.toLowerCase().includes(filter.toLowerCase()) ||
+      chats.caseId.toLowerCase().includes(filter.toLowerCase())
+  );
+
+export const selectFilteredChats = createSelector(
+  (state) => state.chats.value,
+  (state) => state.ui.filter,
+  selectFilterChats
+);
 
 export default chatsSlice.reducer;

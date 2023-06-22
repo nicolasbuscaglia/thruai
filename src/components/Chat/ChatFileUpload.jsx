@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { addMoreFiles } from "@/redux/features/cases/filesSlice";
 import { useParams } from "next/navigation";
 import { FileList } from "../File/FileList";
+import { updateFilesCount } from "@/redux/features/cases/caseSlice";
+import { updateAttachments } from "@/redux/features/chats/chatsSlice";
 
 const ChatFileUpload = () => {
   const params = useParams();
@@ -31,6 +33,10 @@ const ChatFileUpload = () => {
     });
     setFiles(filesArray);
     dispatch(addMoreFiles({ caseId: id, files: filesArray }));
+    dispatch(
+      updateAttachments({ caseId: id, attachments: filesArray.length > 0 })
+    );
+    dispatch(updateFilesCount({ caseId: id, filesCount: filesArray.length }));
   };
 
   return (

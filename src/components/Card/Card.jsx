@@ -40,7 +40,7 @@ const Card = ({ card }) => {
         >
           <StyledTypographyBox>
             <Typography variant="body1" color="secondary">
-              Case ID #{caseId}
+              {name}
             </Typography>
           </StyledTypographyBox>
           <IconButton
@@ -59,15 +59,17 @@ const Card = ({ card }) => {
           justifyContent="space-between"
           gap={1}
         >
-          <Typography variant="body2" color="secondary">
-            {name}
-          </Typography>
-
+          <StyledTypographyBox>
+            <Typography variant="body2" color="secondary">
+              Case ID #{caseId}
+            </Typography>
+          </StyledTypographyBox>
           <Typography
             color="secondary"
             variant="body2"
             fontSize={14}
             fontWeight={200}
+            sx={{ textWrap: "nowrap" }}
           >
             {type}
           </Typography>

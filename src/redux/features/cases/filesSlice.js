@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { useParams } from "next/navigation";
 
 const initialState = {
   value: [
@@ -656,10 +657,22 @@ export const { addFiles, addMoreFiles } = filesSlice.actions;
 export const selectFilesById = (id) => (state) =>
   state.files.value.find((file) => file.caseId === id);
 
-export const selectCleanedFilesById = (id) => (state) => {
-  const files = state.files.value.find((file) => file.caseId === id)?.files;
+// export const selectCleanedFilesById = (id) => (state) => {
+//   const files = state.files.value.find((file) => file.caseId === id)?.files;
+//   const cleanedFiles = files?.filter((file) => file.cleaningStatus === 100);
+//   return cleanedFiles;
+// };
+
+export const selectFilterCleanedFilesById = (state, id) => {
+  const files = state.find((file) => file.caseId === id)?.files;
   const cleanedFiles = files?.filter((file) => file.cleaningStatus === 100);
   return cleanedFiles;
 };
+
+export const selectFilteredCleanedFilesById = createSelector(
+  (state) => state.files.value,
+  (state, id) => id,
+  (state, id) => selectFilterCleanedFilesById(state, id)
+);
 
 export default filesSlice.reducer;
