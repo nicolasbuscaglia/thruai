@@ -1,42 +1,41 @@
 import { useState } from "react";
-import { Box, Button, IconButton, Typography } from "@mui/material";
-import { v4 as uuidv4 } from "uuid";
+import { Box, Button, IconButton, styled } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
-import { GoogleDriveIcon } from "@/assets/GoogleDriveIcon";
-import { DropboxIcon } from "@/assets/DropboxIcon";
-import { FileDropZone } from "../File/FileDropZone";
-import { useDispatch } from "react-redux";
+import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
+import { useDispatch, useSelector } from "react-redux";
 import { addMoreFiles } from "@/redux/features/cases/filesSlice";
 import { useParams } from "next/navigation";
-import { FileList } from "../File/FileList";
 import { updateFilesCount } from "@/redux/features/cases/caseSlice";
 import { updateAttachments } from "@/redux/features/chats/chatsSlice";
+import { FileUpload } from "../File/FileUpload";
+import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
+
+const StyledUploadButtonBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  position: "sticky",
+  bottom: "4rem",
+  backgroundColor: theme.palette.primary.main,
+  padding: "1rem",
+  borderTop: "1px solid",
+  borderColor: theme.palette.lightGray.dark,
+}));
 
 const ChatFileUpload = () => {
   const params = useParams();
   const { id } = params;
   const dispatch = useDispatch();
-  const [showFileUpload, setShowFileUpload] = useState(false);
-  const [files, setFiles] = useState([]);
 
-  const handleAddFiles = (data) => {
-    const filesArray = Object.keys(data).map((index) => {
-      return {
-        id: uuidv4(),
-        name: data[index].name,
-        type: data[index].type,
-        size: data[index].size,
-        uploadedOn: new Date(),
-        cleaningStatus: 100,
-        file: URL.createObjectURL(data[index]),
-      };
-    });
-    setFiles(filesArray);
-    dispatch(addMoreFiles({ caseId: id, files: filesArray }));
-    dispatch(
-      updateAttachments({ caseId: id, attachments: filesArray.length > 0 })
-    );
-    dispatch(updateFilesCount({ caseId: id, filesCount: filesArray.length }));
+  const files = useSelector((state) => selectNewFiles(state));
+
+  const [showFileUpload, setShowFileUpload] = useState(false);
+
+  const onSubmit = () => {
+    dispatch(addMoreFiles({ caseId: id, files: files }));
+    dispatch(updateAttachments({ caseId: id, attachments: files.length > 0 }));
+    dispatch(updateFilesCount({ caseId: id, filesCount: files.length }));
+    dispatch(manageUploadFiles({ files: [] }));
   };
 
   return (
@@ -63,38 +62,20 @@ const ChatFileUpload = () => {
           >
             <AttachFileOutlinedIcon color="icon" fontSize="small" />
           </IconButton>
-          <IconButton
-            size="small"
-            aria-label="add file from google drive"
-            aria-controls="add-file-from-google-drive-icon-button"
-            aria-haspopup="true"
-          >
-            <GoogleDriveIcon />
-          </IconButton>
-          <IconButton
-            size="small"
-            aria-label="add file from dropbox"
-            aria-controls="add-file-from-dropbox-icon-button"
-            aria-haspopup="true"
-          >
-            <DropboxIcon />
-          </IconButton>
         </Box>
       </Box>
-      {showFileUpload && (
-        <Box p={2}>
-          <FileDropZone handleAddFiles={handleAddFiles} />
-        </Box>
-      )}
+      {showFileUpload && <FileUpload />}
       {files.length > 0 && (
-        <>
-          <Box m={2}>
-            <Typography variant="body2" color="secondary">
-              New files uploaded
-            </Typography>
-          </Box>
-          <FileList files={files} />
-        </>
+        <StyledUploadButtonBox>
+          <Button
+            variant="outlined"
+            color="blue"
+            onClick={onSubmit}
+            endIcon={<FileUploadOutlinedIcon />}
+          >
+            Upload
+          </Button>
+        </StyledUploadButtonBox>
       )}
     </>
   );
