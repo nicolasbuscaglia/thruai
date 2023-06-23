@@ -45,6 +45,7 @@ const Chat = () => {
     const payload = {
       caseId: caseId,
       chatId: chatId,
+      lastUpdated: new Date(),
       message: {
         id: uuidv4(),
         createdOn: Date.now(),

@@ -42,6 +42,7 @@ const Creation = ({ handleCancel }) => {
         {
           chatId: uuidv4(),
           createdOn: new Date(),
+          lastUpdated: new Date(),
           summary: [],
           messages: [],
         },

@@ -8,6 +8,7 @@ const initialState = {
         {
           chatId: "1",
           createdOn: "1687208394743",
+          lastUpdated: "1687208394743",
           summary: [
             {
               id: 1,
@@ -85,6 +86,7 @@ const initialState = {
         {
           chatId: "2",
           createdOn: "1687208394743",
+          lastUpdated: "1687208394743",
           messages: [
             {
               id: "1",
@@ -109,6 +111,7 @@ const initialState = {
         {
           chatId: "1",
           createdOn: "1687208394743",
+          lastUpdated: "1687208394743",
           messages: [],
         },
       ],
@@ -119,6 +122,7 @@ const initialState = {
         {
           chatId: "1",
           createdOn: "1687208394743",
+          lastUpdated: "1687208394743",
           messages: [],
         },
       ],
@@ -129,6 +133,7 @@ const initialState = {
         {
           chatId: "1",
           createdOn: "1687208394743",
+          lastUpdated: "1687208394743",
           messages: [],
         },
       ],
@@ -139,6 +144,7 @@ const initialState = {
         {
           chatId: "1",
           createdOn: "1687208394743",
+          lastUpdated: "1687208394743",
           messages: [],
         },
       ],
@@ -169,6 +175,7 @@ export const chatsSlice = createSlice({
         (chat) => chat.chatId === action.payload.chatId
       );
       if (chat) {
+        chat.lastUpdated = action.payload.lastUpdated;
         chat.messages = [...chat.messages, action.payload.message];
       }
     },
@@ -183,7 +190,7 @@ export const selectDefaultChatIdByCaseId = (caseId) => (state) => {
   );
   if (oneCase) {
     const chats = [...oneCase.chats];
-    const sortedChats = chats.sort((a, b) => b.createdOn - a.createdOn);
+    const sortedChats = chats.sort((a, b) => b.lastUpdated - a.lastUpdated);
     return sortedChats[0].chatId;
   }
 };
@@ -217,7 +224,7 @@ export const selectSortedChatsByCaseId = (caseId) => (state) => {
   )?.chats;
   if (chats.length > 1) {
     const sortedChats = [...chats];
-    return sortedChats.sort((a, b) => b.createdOn - a.createdOn);
+    return sortedChats.sort((a, b) => b.lastUpdated - a.lastUpdated);
   }
   return chats;
 };

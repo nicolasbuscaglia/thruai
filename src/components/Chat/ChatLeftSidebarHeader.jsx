@@ -19,6 +19,7 @@ const ChatLeftSidebarHeader = () => {
       chat: {
         chatId: uuidv4(),
         createdOn: new Date(),
+        lastUpdated: new Date(),
         summary: [],
         messages: [],
       },
