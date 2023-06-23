@@ -222,7 +222,7 @@ export const selectSortedChatsByCaseId = (caseId) => (state) => {
   const chats = state.chats.value.find(
     (oneCase) => oneCase.caseId === caseId
   )?.chats;
-  if (chats.length > 1) {
+  if (chats?.length > 1) {
     const sortedChats = [...chats];
     return sortedChats.sort((a, b) => b.lastUpdated - a.lastUpdated);
   }

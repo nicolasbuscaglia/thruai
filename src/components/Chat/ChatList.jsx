@@ -28,7 +28,7 @@ const ChatList = () => {
       <Box>
         {isLoading ? (
           <CircularProgress color="secondary" size={20} />
-        ) : chatList.length > 0 ? (
+        ) : chatList?.length > 0 ? (
           chatList.map((chat) => {
             return (
               <Box mb={1} key={chat.caseId}>

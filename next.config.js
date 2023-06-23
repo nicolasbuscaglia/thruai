@@ -9,12 +9,17 @@ const nextConfig = {
       },
       {
         source: "/chats",
-        destination: "/chats/all/all",
+        destination: "/dashboard",
+        permanent: true,
+      },
+      {
+        source: "/chats/:path",
+        destination: "/dashboard",
         permanent: true,
       },
       {
         source: "/case",
-        destination: "/case/all",
+        destination: "/dashboard",
         permanent: true,
       },
       {
