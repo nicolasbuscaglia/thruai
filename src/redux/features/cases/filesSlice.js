@@ -654,14 +654,8 @@ export const filesSlice = createSlice({
 
 export const { addFiles, addMoreFiles } = filesSlice.actions;
 
-export const selectFilesById = (id) => (state) =>
-  state.files.value.find((file) => file.caseId === id);
-
-// export const selectCleanedFilesById = (id) => (state) => {
-//   const files = state.files.value.find((file) => file.caseId === id)?.files;
-//   const cleanedFiles = files?.filter((file) => file.cleaningStatus === 100);
-//   return cleanedFiles;
-// };
+export const selectFilesByCaseId = (caseId) => (state) =>
+  state.files.value.find((file) => file.caseId === caseId);
 
 export const selectFilterCleanedFilesById = (state, id) => {
   const files = state.find((file) => file.caseId === id)?.files;

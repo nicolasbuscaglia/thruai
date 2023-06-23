@@ -3,11 +3,12 @@ import { Button, useTheme } from "@mui/material";
 import ChevronRightOutlinedIcon from "@mui/icons-material/ChevronRightOutlined";
 
 const ButtonManageCase = () => {
+  const theme = useTheme();
   const router = useRouter();
   const params = useParams();
-  const theme = useTheme();
+  const { caseId } = params;
   const handleManageCase = () => {
-    router.push(`/case/${params.id}`);
+    router.push(`/case/${caseId}`);
   };
   return (
     <Button

@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMoreFiles } from "@/redux/features/cases/filesSlice";
 import { useParams } from "next/navigation";
 import { updateFilesCount } from "@/redux/features/cases/caseSlice";
-import { updateAttachments } from "@/redux/features/chats/chatsSlice";
 import { FileUpload } from "../File/FileUpload";
 import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
 
@@ -24,7 +23,7 @@ const StyledUploadButtonBox = styled(Box)(({ theme }) => ({
 
 const ChatFileUpload = () => {
   const params = useParams();
-  const { id } = params;
+  const { caseId } = params;
   const dispatch = useDispatch();
 
   const files = useSelector((state) => selectNewFiles(state));
@@ -32,9 +31,14 @@ const ChatFileUpload = () => {
   const [showFileUpload, setShowFileUpload] = useState(false);
 
   const onSubmit = () => {
-    dispatch(addMoreFiles({ caseId: id, files: files }));
-    dispatch(updateAttachments({ caseId: id, attachments: files.length > 0 }));
-    dispatch(updateFilesCount({ caseId: id, filesCount: files.length }));
+    dispatch(addMoreFiles({ caseId: caseId, files: files }));
+    dispatch(
+      updateFilesCount({
+        caseId: caseId,
+        attachments: files.length > 0,
+        filesCount: files.length,
+      })
+    );
     dispatch(manageUploadFiles({ files: [] }));
   };
 

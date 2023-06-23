@@ -4,22 +4,25 @@ import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { useEffect, useRef, useState } from "react";
 import { getDatePart, getTimePart } from "@/utils/date";
 import { useSelector } from "react-redux";
-import { selectLastMessageById } from "@/redux/features/chats/chatsSlice";
+import { selectCaseByCaseId } from "@/redux/features/cases/caseSlice";
 
 const StyledCenteredBox = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
+  gap: 10,
 }));
 
 const StyledMainBox = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "id" && prop !== "itemId",
-})(({ theme, id, itemId }) => ({
+  shouldForwardProp: (prop) => prop !== "paramsChatId" && prop !== "chatId",
+})(({ theme, paramsChatId, chatId }) => ({
   cursor: "pointer",
   padding: "1rem",
   borderRadius: "1rem",
   backgroundColor:
-    id === itemId ? theme.palette.blue.main : theme.palette.lightGray.dark,
+    paramsChatId === chatId
+      ? theme.palette.blue.main
+      : theme.palette.lightGray.dark,
 }));
 
 const StyledTypographyBox = styled(Box)(() => ({
@@ -34,31 +37,46 @@ const StyledTypographyBox = styled(Box)(() => ({
 const ChatCard = ({ chat = {} }) => {
   const router = useRouter();
   const params = useParams();
-  const { id } = params;
+  const { caseId, chatId: paramsChatId } = params;
   const ref = useRef();
   const theme = useTheme();
-  const { caseId, name, type, attachments } = chat;
 
-  const lastMessage = useSelector(selectLastMessageById(caseId));
+  const { chatId, messages } = chat;
+
+  const thisCase = useSelector(selectCaseByCaseId(caseId));
+  const { name, type, attachments } = thisCase;
+
+  const [lastMessage, setLastMessage] = useState({});
+
+  useEffect(() => {
+    const sortedMessages = [...messages];
+    sortedMessages.sort((a, b) => b.createdOn - a.createdOn);
+    setLastMessage(sortedMessages[0]);
+  }, [messages]);
 
   const handleClick = () => {
-    router.push(`/chats/${caseId}`);
+    router.push(`/chats/${caseId}/${chatId}`);
   };
 
   useEffect(() => {
-    if (caseId === id) {
+    if (paramsChatId === chatId) {
       ref.current.scrollIntoView(false);
     }
-  }, []);
+  }, [paramsChatId]);
 
   return (
-    <StyledMainBox onClick={handleClick} id={id} itemId={caseId} ref={ref}>
+    <StyledMainBox
+      onClick={handleClick}
+      paramsChatId={paramsChatId}
+      chatId={chatId}
+      ref={ref}
+    >
       <Grid container spacing={1}>
         <Grid item>
           <StyledCenteredBox>
             <Avatar alt={lastMessage?.user} src="/test" />
             {attachments && (
-              <Box mt={2}>
+              <Box>
                 <AttachFileOutlinedIcon fontSize="small" color="secondary" />
               </Box>
             )}
@@ -69,7 +87,9 @@ const ChatCard = ({ chat = {} }) => {
             <Grid item xs>
               <Typography
                 color={
-                  params.id === caseId ? "secondary" : theme.palette.blue.main
+                  paramsChatId === chatId
+                    ? "secondary"
+                    : theme.palette.blue.main
                 }
                 variant="body2"
                 fontSize={12}

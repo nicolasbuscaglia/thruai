@@ -9,7 +9,10 @@ import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { addNote } from "@/redux/features/chats/notesSlice";
-import { addMessage, selectChatById } from "@/redux/features/chats/chatsSlice";
+import {
+  addMessage,
+  selectChatByChatId,
+} from "@/redux/features/chats/chatsSlice";
 
 const StyledStickyBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "sticky",
@@ -32,15 +35,16 @@ const StyledContainer = styled(Box)(() => ({
 
 const Chat = () => {
   const params = useParams();
-  const { id } = params;
+  const { caseId, chatId } = params;
   const chatRef = useRef();
   const dispatch = useDispatch();
 
-  const chat = useSelector(selectChatById(id));
+  const chat = useSelector(selectChatByChatId(caseId, chatId));
 
   const onSubmit = (value, type) => {
     const payload = {
-      caseId: id,
+      caseId: caseId,
+      chatId: chatId,
       message: {
         id: uuidv4(),
         createdOn: Date.now(),
@@ -63,7 +67,7 @@ const Chat = () => {
       <StyledStickyBox sticky="top">
         <ChatHeader />
       </StyledStickyBox>
-      <Box p={2} sx={{ flexGrow: 1 }}>
+      <Box p={2} sx={{ flexGrow: 1, wordBreak: "break-word" }}>
         <Box mb={2}>
           <ChatDetails />
         </Box>

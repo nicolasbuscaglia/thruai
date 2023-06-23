@@ -108,15 +108,6 @@ export default function Header() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography
             variant="h6"
             noWrap
@@ -132,22 +123,7 @@ export default function Header() {
             gap={1}
           >
             <Find />
-            {/* <Button
-              startIcon={<SettingsIcon />}
-              color="gray"
-              variant="contained"
-              sx={{ borderRadius: "0.6rem" }}
-            >
-              API Keys
-            </Button> */}
-            {/* <Button
-              startIcon={<AddOutlinedIcon />}
-              color="blue"
-              variant="contained"
-              sx={{ borderRadius: "0.6rem" }}
-            >
-              New
-            </Button> */}
+
             <IconButton
               size="large"
               aria-label="show new notifications"

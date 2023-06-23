@@ -8,10 +8,10 @@ import { Box, Divider, Typography, useTheme } from "@mui/material";
 
 const ChatFileList = () => {
   const params = useParams();
-  const { id } = params;
+  const { caseId } = params;
   const theme = useTheme();
   const files = useSelector((state) =>
-    selectFilteredCleanedFilesById(state, id)
+    selectFilteredCleanedFilesById(state, caseId)
   );
   return (
     <>

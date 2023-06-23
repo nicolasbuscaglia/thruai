@@ -7,6 +7,8 @@ import { CardProgress } from "./CardProgress";
 import { CardAvatar } from "./CardAvatar";
 import Link from "next/link";
 import styled from "@emotion/styled";
+import { useSelector } from "react-redux";
+import { selectDefaultChatIdByCaseId } from "@/redux/features/chats/chatsSlice";
 
 const StyledTypographyBox = styled(Box)(() => ({
   display: "-webkit-box",
@@ -20,8 +22,9 @@ const StyledTypographyBox = styled(Box)(() => ({
 const Card = ({ card }) => {
   const { caseId, name, type, filesCount, daysLeft, uploadStatus, team } = card;
   const theme = useTheme();
+  const chatId = useSelector(selectDefaultChatIdByCaseId(caseId));
   return (
-    <Link href={`/chats/${caseId}`}>
+    <Link href={`/chats/${caseId}/${chatId}`}>
       <Box
         sx={{
           backgroundColor: theme.palette.primary.main,

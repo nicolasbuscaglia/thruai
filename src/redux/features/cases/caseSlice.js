@@ -6,6 +6,7 @@ const initialState = {
       caseId: "1",
       name: "Summarize Case",
       type: "DNAVisit - Dev",
+      attachments: true,
       filesCount: 13,
       daysLeft: 7,
       uploadStatus: 85,
@@ -15,6 +16,7 @@ const initialState = {
       caseId: "2",
       name: "Genetic test summary",
       type: "DNAVisit - Clinical",
+      attachments: true,
       filesCount: 5,
       daysLeft: 1,
       uploadStatus: 75,
@@ -24,6 +26,7 @@ const initialState = {
       caseId: "3",
       name: "Patient Visit Summary",
       type: "DNAVisit - Clinical",
+      attachments: true,
       filesCount: 3,
       daysLeft: 8,
       uploadStatus: 100,
@@ -33,6 +36,7 @@ const initialState = {
       caseId: "4",
       name: "Summarize Case",
       type: "DNAVisit - Clinical",
+      attachments: true,
       filesCount: 1,
       daysLeft: 10,
       uploadStatus: 35,
@@ -43,6 +47,7 @@ const initialState = {
       name: "Genetic test summary",
       type: "DNAVisit - Dev",
       filesCount: 2,
+      attachments: true,
       daysLeft: 14,
       uploadStatus: 20,
       team: ["KA", "RR", "Test 1"],
@@ -64,6 +69,7 @@ export const casesSlice = createSlice({
         (file) => file.caseId === action.payload.caseId
       );
       if (caseIndex) {
+        state.value[caseIndex].attachments = action.payload.attachments;
         state.value[caseIndex].filesCount += action.payload.filesCount;
       }
     },
@@ -84,5 +90,8 @@ export const selectFilteredCases = createSelector(
   (state) => state.ui.filter,
   selectFilterCases
 );
+
+export const selectCaseByCaseId = (caseId) => (state) =>
+  state.cases.value.find((oneCase) => oneCase.caseId === caseId);
 
 export default casesSlice.reducer;

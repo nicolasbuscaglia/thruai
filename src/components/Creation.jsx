@@ -5,11 +5,10 @@ import { ModelSelection } from "./ModelSelection";
 import { DataSecurityPolicies } from "./DataSecurityPolicies";
 import { useDispatch, useSelector } from "react-redux";
 import { addCase } from "@/redux/features/cases/caseSlice";
-import { addNewCaseMessages } from "@/redux/features/chats/chatsSlice";
+import { createNewChat } from "@/redux/features/chats/chatsSlice";
 import { addNewCaseNotes } from "@/redux/features/chats/notesSlice";
 import { v4 as uuidv4 } from "uuid";
 import { addFiles } from "@/redux/features/cases/filesSlice";
-import { FileDropZone } from "./File/FileDropZone";
 import { Controller, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { FormErrorMessage } from "./Forms/FormErrorMessage";
@@ -24,14 +23,10 @@ const Creation = ({ handleCancel }) => {
     control,
     formState: { errors },
   } = useForm();
-  // const [files, setFiles] = useState([]);
 
   const dispatch = useDispatch();
 
   const files = useSelector((state) => selectNewFiles(state));
-  // const handleSetFiles = (filesToUpload) => {
-  //   setFiles(filesToUpload);
-  // };
 
   const onSubmit = handleSubmit((data) => {
     const payload = {
@@ -43,8 +38,14 @@ const Creation = ({ handleCancel }) => {
       uploadStatus: 10,
       team: ["Test"],
       attachments: files.length > 0,
-      summary: [],
-      messages: [],
+      chats: [
+        {
+          chatId: uuidv4(),
+          createdOn: new Date(),
+          summary: [],
+          messages: [],
+        },
+      ],
       notes: [],
       files: files,
     };
@@ -53,6 +54,7 @@ const Creation = ({ handleCancel }) => {
         caseId: payload.caseId,
         name: payload.name,
         type: payload.type,
+        attachments: payload.attachments,
         filesCount: payload.filesCount,
         daysLeft: payload.daysLeft,
         uploadStatus: payload.uploadStatus,
@@ -60,13 +62,9 @@ const Creation = ({ handleCancel }) => {
       })
     );
     dispatch(
-      addNewCaseMessages({
+      createNewChat({
         caseId: payload.caseId,
-        name: payload.name,
-        type: payload.type,
-        attachments: payload.attachments,
-        summary: payload.summary,
-        messages: payload.messages,
+        chats: payload.chats,
       })
     );
     dispatch(addNewCaseNotes({ caseId: payload.caseId, notes: payload.notes }));

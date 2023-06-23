@@ -9,7 +9,7 @@ const nextConfig = {
       },
       {
         source: "/chats",
-        destination: "/chats/all",
+        destination: "/chats/all/all",
         permanent: true,
       },
       {

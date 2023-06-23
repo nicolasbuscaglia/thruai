@@ -1,15 +1,15 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { ChatNote } from "./ChatNote";
 import { useSelector } from "react-redux";
-import { selectNotesById } from "@/redux/features/chats/notesSlice";
+import { selectNotesByCaseId } from "@/redux/features/chats/notesSlice";
 import { useParams } from "next/navigation";
 
 const ChatNotes = () => {
   const params = useParams();
-  const { id } = params;
+  const { caseId } = params;
   const theme = useTheme();
 
-  const notes = useSelector(selectNotesById(id));
+  const notes = useSelector(selectNotesByCaseId(caseId));
 
   return (
     <Box p={2}>

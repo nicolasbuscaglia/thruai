@@ -4,144 +4,142 @@ const initialState = {
   value: [
     {
       caseId: "1",
-      name: "Summarize Case",
-      type: "DNA Visit - Dev",
-      attachments: true,
-      summary: [
+      chats: [
         {
-          id: 1,
-          title: "Summary",
-          description:
-            "“Pushing pixels and experiences in digital products for Sebostudio”",
-          items: [
-            {
-              id: 1,
-              label: "Nominal",
-            },
-            {
-              id: 2,
-              label: "Blood Pressure",
-            },
-            {
-              id: 3,
-              label: "Joined June 2012",
-            },
-            {
-              id: 4,
-              label: "Genetic Test completed",
-            },
-            {
-              id: 5,
-              label: "Some Other Medical",
-            },
-          ],
-        },
-        {
-          id: 2,
-          title: "Recommended Actions",
-          description:
-            "Based on your teams previous chats we recommend the following actions",
-          items: [
-            {
-              id: 1,
-              label: "Ask Patient A",
-            },
-            {
-              id: 2,
-              label: "Follow up with patient",
-            },
-            {
-              id: 3,
-              label: "Joined June 2012",
-            },
-            {
-              id: 4,
-              label: "Genetic Test Completed",
-            },
-            {
-              id: 5,
-              label: "Some Other Medical",
-            },
-          ],
-        },
-      ],
-      messages: [
-        {
-          id: "1",
+          chatId: "1",
           createdOn: "1687208394743",
-          user: "Jhon Doe",
-          content: "This is a test message",
+          summary: [
+            {
+              id: 1,
+              title: "Summary",
+              description:
+                "“Pushing pixels and experiences in digital products for Sebostudio”",
+              items: [
+                {
+                  id: 1,
+                  label: "Nominal",
+                },
+                {
+                  id: 2,
+                  label: "Blood Pressure",
+                },
+                {
+                  id: 3,
+                  label: "Joined June 2012",
+                },
+                {
+                  id: 4,
+                  label: "Genetic Test completed",
+                },
+                {
+                  id: 5,
+                  label: "Some Other Medical",
+                },
+              ],
+            },
+            {
+              id: 2,
+              title: "Recommended Actions",
+              description:
+                "Based on your teams previous chats we recommend the following actions",
+              items: [
+                {
+                  id: 1,
+                  label: "Ask Patient A",
+                },
+                {
+                  id: 2,
+                  label: "Follow up with patient",
+                },
+                {
+                  id: 3,
+                  label: "Joined June 2012",
+                },
+                {
+                  id: 4,
+                  label: "Genetic Test Completed",
+                },
+                {
+                  id: 5,
+                  label: "Some Other Medical",
+                },
+              ],
+            },
+          ],
+          messages: [
+            {
+              id: "1",
+              createdOn: "1687208394743",
+              user: "Jhon Doe",
+              content: "This is a test message",
+            },
+            {
+              id: "2",
+              createdOn: "1687209394743",
+              user: "Jhon Doe",
+              content:
+                "What was the last genetic test that was completed by this patient?",
+            },
+          ],
         },
         {
-          id: "2",
-          createdOn: "1687209394743",
-          user: "Jhon Doe",
-          content:
-            "What was the last genetic test that was completed by this patient?",
+          chatId: "2",
+          createdOn: "1687208394743",
+          messages: [
+            {
+              id: "1",
+              createdOn: "1687208394743",
+              user: "Jhon Doe",
+              content:
+                "What was the last genetic test that was completed by this patient?",
+            },
+            {
+              id: "2",
+              createdOn: "1687209394743",
+              user: "Jhon Doe",
+              content: "This is a test message",
+            },
+          ],
         },
       ],
     },
     {
       caseId: "2",
-      name: "Genetic test summary",
-      type: "DNA Visit - Clinical",
-      attachments: true,
-      summary: [],
-      messages: [
+      chats: [
         {
-          id: "1",
+          chatId: "1",
           createdOn: "1687208394743",
-          user: "Bill Doe",
-          content:
-            "Hey Cak, Could you free now? Can you look and read the brief first...",
+          messages: [],
         },
       ],
     },
     {
       caseId: "3",
-      name: "Patient Visit Summary",
-      type: "DNA Visit - Dev",
-      attachments: true,
-      summary: [],
-      messages: [
+      chats: [
         {
-          id: "1",
-          createdOn: "1687209394743",
-          user: "Tim Doe",
-          content:
-            "Hey Cak, Could you free now? Can you look and read the brief first...",
+          chatId: "1",
+          createdOn: "1687208394743",
+          messages: [],
         },
       ],
     },
     {
       caseId: "4",
-      name: "Summarize Case",
-      type: "DNA Visit - Dev",
-      attachments: true,
-      summary: [],
-      messages: [
+      chats: [
         {
-          id: "1",
+          chatId: "1",
           createdOn: "1687208394743",
-          user: "John Doe",
-          content:
-            "What was the last genetic test that was completed by this patient?",
+          messages: [],
         },
       ],
     },
     {
       caseId: "5",
-      name: "Genetic test summary",
-      type: "DNA Visit - Clinical",
-      attachments: true,
-      summary: [],
-      messages: [
+      chats: [
         {
-          id: "1",
+          chatId: "1",
           createdOn: "1687208394743",
-          user: "Bill Doe",
-          content:
-            "Hey Bill, Could you free now? Can you look and read the brief first...",
+          messages: [],
         },
       ],
     },
@@ -152,44 +150,52 @@ export const chatsSlice = createSlice({
   name: "chats",
   initialState,
   reducers: {
-    addNewCaseMessages: (state, action) => {
+    createNewChat: (state, action) => {
       state.value.push(action.payload);
     },
-    addMessage: (state, action) => {
-      const indexConv = state.value.findIndex(
-        (chats) => chats.caseId === action.payload.caseId
+    addNewChat: (state, action) => {
+      const oneCase = state.value.find(
+        (oneCase) => oneCase.caseId === action.payload.caseId
       );
-      if (indexConv >= 0) {
-        state.value[indexConv].messages = [
-          ...state.value[indexConv].messages,
-          action.payload.message,
-        ];
+      if (oneCase) {
+        oneCase.chats = [...oneCase.chats, action.payload.chat];
       }
     },
-    updateAttachments: (state, action) => {
-      const indexConv = state.value.findIndex(
-        (chats) => chats.caseId === action.payload.caseId
+    addMessage: (state, action) => {
+      const oneCase = state.value.find(
+        (oneCase) => oneCase.caseId === action.payload.caseId
       );
-      if (indexConv >= 0) {
-        state.value[indexConv].attachments = action.payload.attachments;
+      const chat = oneCase?.chats.find(
+        (chat) => chat.chatId === action.payload.chatId
+      );
+      if (chat) {
+        chat.messages = [...chat.messages, action.payload.message];
       }
     },
   },
 });
 
-export const { addMessage, addNewCaseMessages, updateAttachments } =
-  chatsSlice.actions;
+export const { addMessage, createNewChat, addNewChat } = chatsSlice.actions;
 
-export const selectChatById = (id) => (state) =>
-  state.chats.value.find((chats) => chats.caseId === id);
+export const selectDefaultChatIdByCaseId = (caseId) => (state) => {
+  const oneCase = state.chats.value.find(
+    (oneCase) => oneCase.caseId === caseId
+  );
+  if (oneCase) {
+    const chats = [...oneCase.chats];
+    const sortedChats = chats.sort((a, b) => b.createdOn - a.createdOn);
+    return sortedChats[0].chatId;
+  }
+};
 
-export const selectLastMessageById = (id) => (state) => {
-  const messages = state.chats.value.find(
-    (chats) => chats.caseId === id
-  )?.messages;
-  const sortedMessages = [...messages];
-  sortedMessages.sort((a, b) => b.createdOn - a.createdOn);
-  return sortedMessages[0];
+export const selectChatByChatId = (caseId, chatId) => (state) => {
+  const oneCase = state.chats.value.find(
+    (oneCase) => oneCase.caseId === caseId
+  );
+  if (oneCase) {
+    const chat = oneCase.chats.find((chat) => chat.chatId === chatId);
+    return chat;
+  }
 };
 
 export const selectFilterChats = (state, filter) =>
@@ -200,9 +206,20 @@ export const selectFilterChats = (state, filter) =>
   );
 
 export const selectFilteredChats = createSelector(
-  (state) => state.chats.value,
+  (state) => state.chats.cases.chats,
   (state) => state.ui.filter,
   selectFilterChats
 );
+
+export const selectSortedChatsByCaseId = (caseId) => (state) => {
+  const chats = state.chats.value.find(
+    (oneCase) => oneCase.caseId === caseId
+  )?.chats;
+  if (chats.length > 1) {
+    const sortedChats = [...chats];
+    return sortedChats.sort((a, b) => b.createdOn - a.createdOn);
+  }
+  return chats;
+};
 
 export default chatsSlice.reducer;

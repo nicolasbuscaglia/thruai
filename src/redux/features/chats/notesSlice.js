@@ -6,7 +6,7 @@ const initialState = {
       caseId: "1",
       notes: [
         {
-          id: "1",
+          noteId: "1",
           createdOn: "1687208394743",
           user: "Jhon Doe",
           content: "This is a test note",
@@ -28,25 +28,19 @@ export const notesSlice = createSlice({
       state.value.push(action.payload);
     },
     addNote: (state, action) => {
-      const indexConv = state.value.findIndex(
-        (chat) => chat.caseId === action.payload.caseId
+      const oneCase = state.value.find(
+        (oneCase) => oneCase.caseId === action.payload.caseId
       );
-      if (indexConv >= 0) {
-        state.value[indexConv].notes = [
-          ...state.value[indexConv].notes,
-          action.payload.message,
-        ];
-      } else {
-        state.value.push({
-          caseId: action.payload.caseId,
-          notes: [action.payload.message],
-        });
+      if (oneCase) {
+        oneCase.notes = [...oneCase.notes, action.payload.message];
       }
     },
   },
 });
 
 export const { addNote, addNewCaseNotes } = notesSlice.actions;
-export const selectNotesById = (id) => (state) =>
-  state.notes.value.find((chat) => chat.caseId === id)?.notes;
+
+export const selectNotesByCaseId = (caseId) => (state) =>
+  state.notes.value.find((oneCase) => oneCase.caseId === caseId)?.notes;
+
 export default notesSlice.reducer;

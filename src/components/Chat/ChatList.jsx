@@ -2,13 +2,17 @@ import { useState } from "react";
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import { ChatCard } from "./ChatCard";
 import { useSelector } from "react-redux";
-import { selectFilteredChats } from "@/redux/features/chats/chatsSlice";
+
+import { useParams } from "next/navigation";
+import { selectSortedChatsByCaseId } from "@/redux/features/chats/chatsSlice";
 
 const ChatList = () => {
+  const params = useParams();
+  const { caseId } = params;
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(false);
 
-  const chatList = useSelector(selectFilteredChats);
+  const chatList = useSelector(selectSortedChatsByCaseId(caseId));
 
   return (
     <Box p={2} width="100%">
@@ -40,7 +44,7 @@ const ChatList = () => {
             variant="overline"
             color={theme.palette.gray.main}
           >
-            No cases yet
+            No chats yet
           </Typography>
         )}
       </Box>

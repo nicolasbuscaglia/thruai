@@ -22,7 +22,7 @@ const MainContainer = ({ children }) => {
       title: "Chats",
       path: "/chats",
       icon: <ChatIcon />,
-      notifications: 3,
+      notifications: 0,
     },
     {
       title: "Audit",

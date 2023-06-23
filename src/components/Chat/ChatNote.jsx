@@ -21,6 +21,12 @@ const StyledTypographyBox = styled(Box)(() => ({
   overflow: "hidden",
   textOverflow: "ellipsis",
   textWrap: "wrap",
+  wordBreak: "break-all",
+}));
+
+const StyledTextWrapBox = styled(Box)(() => ({
+  wordWrap: "break-word",
+  textWrap: "wrap",
 }));
 
 const ChatNote = ({ note = {} }) => {
@@ -30,34 +36,40 @@ const ChatNote = ({ note = {} }) => {
   return (
     <StyledMainBox>
       <Grid container spacing={1}>
-        <Grid item>
+        <Grid item xs={2}>
           <StyledCenteredBox>
-            <Avatar alt={user} src="/test" />
+            <Avatar
+              alt={user}
+              src="/test"
+              sx={{ width: 24, height: 24, fontSize: 14 }}
+            />
           </StyledCenteredBox>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={10}>
           <Box
             display="flex"
             alignItems="center"
             justifyContent="space-between"
           >
-            <StyledTypographyBox
-              color={theme.palette.blue.main}
-              variant="body2"
-              fontSize={12}
-            >
-              {user}
+            <StyledTypographyBox>
+              <Typography
+                variant="body2"
+                fontSize={12}
+                color={theme.palette.blue.main}
+              >
+                {user}
+              </Typography>
             </StyledTypographyBox>
 
             <Typography color="secondary" variant="body2" fontSize={12}>
               {`${getDatePart(createdOn)} ${getTimePart(createdOn)}`}
             </Typography>
           </Box>
-          <StyledTypographyBox>
+          <StyledTextWrapBox>
             <Typography color="secondary" variant="body2" fontSize={12}>
               {content}
             </Typography>
-          </StyledTypographyBox>
+          </StyledTextWrapBox>
         </Grid>
       </Grid>
     </StyledMainBox>

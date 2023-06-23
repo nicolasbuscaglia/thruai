@@ -6,13 +6,13 @@ import { CaseHeader } from "@/components/Case/CaseHeader";
 import { CaseSettings } from "@/components/Case/CaseSettings";
 import { CaseSuggestedPrompts } from "@/components/Case/CaseSuggestedPrompts";
 import { useParams } from "next/navigation";
-import { selectFilesById } from "@/redux/features/cases/filesSlice";
+import { selectFilesByCaseId } from "@/redux/features/cases/filesSlice";
 import { useSelector } from "react-redux";
 
 const CasePage = () => {
   const params = useParams();
-  const { id } = params;
-  const files = useSelector(selectFilesById(id));
+  const { caseId } = params;
+  const files = useSelector(selectFilesByCaseId(caseId));
 
   return (
     <Box p={2} sx={{ flexGrow: 1 }}>

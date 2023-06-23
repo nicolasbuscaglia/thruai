@@ -1,6 +1,8 @@
 import { useRouter, useParams } from "next/navigation";
 import { Box, Button, Typography, styled, useTheme } from "@mui/material";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import { useSelector } from "react-redux";
+import { selectDefaultChatIdByCaseId } from "@/redux/features/chats/chatsSlice";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "1rem",
@@ -12,19 +14,20 @@ const StyledBox = styled(Box)(({ theme }) => ({
 }));
 
 const CaseHeader = ({ caseDetails }) => {
+  const theme = useTheme();
   const router = useRouter();
   const params = useParams();
-  const theme = useTheme();
+  const { caseId } = params;
 
-  const handleOpenCase = () => {
-    router.push(`/chats/${params.id}`);
+  const handleOpenStudio = () => {
+    router.back();
   };
 
   return (
     <StyledBox>
       <Box>
         <Typography variant="h6" color="secondary">
-          {`Case #${params.id}`}
+          {`Case #${caseId}`}
         </Typography>
         <Typography
           variant="body2"
@@ -40,9 +43,9 @@ const CaseHeader = ({ caseDetails }) => {
           color="blue"
           variant="contained"
           sx={{ borderRadius: "0.6rem", color: theme.palette.secondary.main }}
-          onClick={handleOpenCase}
+          onClick={handleOpenStudio}
         >
-          Open Chat
+          Open Studio
         </Button>
         <MoreHorizOutlinedIcon color="icon" />
       </Box>
