@@ -1,0 +1,684 @@
+[
+  {
+    "caseId": "1",
+    "name": "Summarize Case",
+    "type": "DNAVisit - Dev",
+    "attachments": true,
+    "filesCount": 13,
+    "daysLeft": 7,
+    "uploadStatus": 85,
+    "team": ["KA", "RR", "Test", "Demo"],
+    "lastUpdated": "12 April at 09:28 PM",
+    "chats": [
+      {
+        "chatId": "1",
+        "createdOn": "1687208394743",
+        "lastUpdated": 1687845292302,
+        "summary": [
+          {
+            "id": "1",
+            "title": "Summary",
+            "description": "“Pushing pixels and experiences in digital products for Sebostudio”",
+            "items": [
+              { "id": "1", "label": "Nominal" },
+              { "id": "2", "label": "Blood Pressure" },
+              { "id": "3", "label": "Joined June 2012" },
+              { "id": "4", "label": "Genetic Test completed" },
+              { "id": "5", "label": "Some Other Medical" }
+            ]
+          },
+          {
+            "id": "2",
+            "title": "Recommended Actions",
+            "description": "Based on your teams previous chats we recommend the following actions",
+            "items": [
+              { "id": "1", "label": "Ask Patient A" },
+              { "id": "2", "label": "Follow up with patient" },
+              { "id": "3", "label": "Joined June 2012" },
+              { "id": "4", "label": "Genetic Test Completed" },
+              { "id": "5", "label": "Some Other Medical" }
+            ]
+          }
+        ],
+        "messages": [
+          {
+            "id": "1",
+            "createdOn": "1687208394743",
+            "user": "Jhon Doe",
+            "content": "This is a test message"
+          },
+          {
+            "id": "2",
+            "createdOn": "1687209394743",
+            "user": "Jhon Doe",
+            "content": "What was the last genetic test that was completed by this patient?"
+          }
+        ]
+      },
+      {
+        "chatId": "2",
+        "createdOn": "1687208394743",
+        "lastUpdated": 1687844356071,
+        "messages": [
+          {
+            "id": "1",
+            "createdOn": "1687208394743",
+            "user": "Jhon Doe",
+            "content": "What was the last genetic test that was completed by this patient?"
+          },
+          {
+            "id": "2",
+            "createdOn": "1687209394743",
+            "user": "Jhon Doe",
+            "content": "This is a test message"
+          }
+        ]
+      }
+    ],
+    "notes": [
+      {
+        "id": "1",
+        "createdOn": "1687208394743",
+        "user": "Jhon Doe",
+        "content": "This is a test note"
+      },
+      {
+        "id": "2",
+        "createdOn": "1687208394743",
+        "user": "Jane Doe",
+        "content": "Another test note"
+      }
+    ],
+    "files": [
+      {
+        "fileId": "1",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "34234",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "2",
+        "name": "ClinicalTrialData_Q3_2023.xlsx",
+        "type": ".xlsx",
+        "size": "234234234",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "3",
+        "name": "InsuranceClaims_2023_Q2.json",
+        "type": ".json",
+        "size": "234234234",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "4",
+        "name": "PrescriptionData_May2023.csv",
+        "type": ".csv",
+        "size": "2343243324",
+        "cleaningStatus": 75,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "5",
+        "name": "HospitalAdmissions_2023Q1.xlsx",
+        "type": ".xlsx",
+        "size": "2343243324",
+        "cleaningStatus": 80,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "6",
+        "name": "EmergencyRoom_Visits_Jan2023.csv",
+        "type": ".csv",
+        "size": "2343243324",
+        "cleaningStatus": 60,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "7",
+        "name": "SurgicalProcedures_2023.json",
+        "type": ".json",
+        "size": "2343243324",
+        "cleaningStatus": 53,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "8",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "2343243324",
+        "cleaningStatus": 20,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "9",
+        "name": "ImmunizationRecords_2023.csv",
+        "type": ".csv",
+        "size": "2343243324",
+        "cleaningStatus": 98,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "10",
+        "name": "LabResults_Feb2023.xlsx",
+        "type": ".xlsx",
+        "size": "2343243324",
+        "cleaningStatus": 70,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "11",
+        "name": "MentalHealthStats_2023Q2.json",
+        "type": ".json",
+        "size": "2343243324",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "12",
+        "name": "MentalHealthStats_2023Q3.json",
+        "type": ".json",
+        "size": "2343243324",
+        "cleaningStatus": 40,
+        "uploadedOn": "1687208394743"
+      }
+    ]
+  },
+  {
+    "caseId": "2",
+    "name": "Genetic test summary",
+    "type": "DNAVisit - Clinical",
+    "attachments": true,
+    "filesCount": 5,
+    "daysLeft": 1,
+    "uploadStatus": 75,
+    "team": ["KA", "RR"],
+    "lastUpdated": "12 April at 09:28 PM",
+    "chats": [
+      {
+        "chatId": "1",
+        "createdOn": "1687208394743",
+        "lastUpdated": "1687208394743",
+        "messages": []
+      }
+    ],
+    "notes": [
+      {
+        "id": "1",
+        "createdOn": "1687208394743",
+        "user": "Jane Doe",
+        "content": "Another note"
+      }
+    ],
+    "files": [
+      {
+        "fileId": "1",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "2",
+        "name": "ClinicalTrialData_Q3_2023.xlsx",
+        "type": ".xlsx",
+        "size": "4234233452",
+        "cleaningStatus": 90,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "3",
+        "name": "InsuranceClaims_2023_Q2.json",
+        "type": ".json",
+        "size": "433452",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "4",
+        "name": "PrescriptionData_May2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 75,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "5",
+        "name": "HospitalAdmissions_2023Q1.xlsx",
+        "type": ".xlsx",
+        "size": "42342352",
+        "cleaningStatus": 80,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "6",
+        "name": "EmergencyRoom_Visits_Jan2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 60,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "7",
+        "name": "SurgicalProcedures_2023.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 53,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "8",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 20,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "9",
+        "name": "ImmunizationRecords_2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 98,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "10",
+        "name": "LabResults_Feb2023.xlsx",
+        "type": ".xlsx",
+        "size": "42342352",
+        "cleaningStatus": 70,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "11",
+        "name": "MentalHealthStats_2023Q2.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "12",
+        "name": "MentalHealthStats_2023Q3.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 40,
+        "uploadedOn": "1687208394743"
+      }
+    ]
+  },
+  {
+    "caseId": "3",
+    "name": "Patient Visit Summary",
+    "type": "DNAVisit - Clinical",
+    "attachments": true,
+    "filesCount": 3,
+    "daysLeft": 8,
+    "uploadStatus": 100,
+    "team": ["KA", "RR", "Demo"],
+    "lastUpdated": "12 April at 09:28 PM",
+    "chats": [
+      {
+        "chatId": "1",
+        "createdOn": "1687208394743",
+        "lastUpdated": "1687208394743",
+        "messages": []
+      }
+    ],
+    "notes": [],
+    "files": [
+      {
+        "fileId": "1",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "2",
+        "name": "ClinicalTrialData_Q3_2023.xlsx",
+        "type": ".xlsx",
+        "size": "4234233452",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "3",
+        "name": "InsuranceClaims_2023_Q2.json",
+        "type": ".json",
+        "size": "433452",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "4",
+        "name": "PrescriptionData_May2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 75,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "5",
+        "name": "HospitalAdmissions_2023Q1.xlsx",
+        "type": ".xlsx",
+        "size": "42342352",
+        "cleaningStatus": 80,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "6",
+        "name": "EmergencyRoom_Visits_Jan2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 60,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "7",
+        "name": "SurgicalProcedures_2023.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 53,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "8",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 20,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "9",
+        "name": "ImmunizationRecords_2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 98,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "10",
+        "name": "LabResults_Feb2023.xlsx",
+        "type": ".xlsx",
+        "size": "42342352",
+        "cleaningStatus": 70,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "11",
+        "name": "MentalHealthStats_2023Q2.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "12",
+        "name": "MentalHealthStats_2023Q3.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 40,
+        "uploadedOn": "1687208394743"
+      }
+    ]
+  },
+  {
+    "caseId": "4",
+    "name": "Summarize Case",
+    "type": "DNAVisit - Clinical",
+    "attachments": true,
+    "filesCount": 1,
+    "daysLeft": 10,
+    "uploadStatus": 35,
+    "team": ["KA", "RR", "Test 1", "Test 2", "Test 3", "Test 4", "Test 5"],
+    "lastUpdated": "12 April at 09:28 PM",
+    "chats": [
+      {
+        "chatId": "1",
+        "createdOn": "1687208394743",
+        "lastUpdated": 1687846905300,
+        "messages": [
+          {
+            "id": "5b642559-5dd8-42b7-916c-c9c141c990ee",
+            "createdOn": 1687846905301,
+            "user": "Jhon Doe",
+            "content": "Test"
+          }
+        ]
+      }
+    ],
+    "notes": [
+      {
+        "id": "da22eeac-0b2e-4579-afa3-df50ebeb2e81",
+        "createdOn": 1687846912717,
+        "user": "Jhon Doe",
+        "content": "Note 1"
+      }
+    ],
+    "files": [
+      {
+        "fileId": "1",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "2",
+        "name": "ClinicalTrialData_Q3_2023.xlsx",
+        "type": ".xlsx",
+        "size": "4234233452",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "3",
+        "name": "InsuranceClaims_2023_Q2.json",
+        "type": ".json",
+        "size": "433452",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "4",
+        "name": "PrescriptionData_May2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 75,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "5",
+        "name": "HospitalAdmissions_2023Q1.xlsx",
+        "type": ".xlsx",
+        "size": "42342352",
+        "cleaningStatus": 80,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "6",
+        "name": "EmergencyRoom_Visits_Jan2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 60,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "7",
+        "name": "SurgicalProcedures_2023.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 53,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "8",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 20,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "9",
+        "name": "ImmunizationRecords_2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 98,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "10",
+        "name": "LabResults_Feb2023.xlsx",
+        "type": ".xlsx",
+        "size": "42342352",
+        "cleaningStatus": 70,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "11",
+        "name": "MentalHealthStats_2023Q2.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "12",
+        "name": "MentalHealthStats_2023Q3.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 40,
+        "uploadedOn": "1687208394743"
+      }
+    ]
+  },
+  {
+    "caseId": "5",
+    "name": "Genetic test summary",
+    "type": "DNAVisit - Dev",
+    "filesCount": 2,
+    "attachments": true,
+    "daysLeft": 14,
+    "uploadStatus": 20,
+    "team": ["KA", "RR", "Test 1"],
+    "lastUpdated": "12 April at 09:28 PM",
+    "chats": [
+      {
+        "chatId": "1",
+        "createdOn": "1687208394743",
+        "lastUpdated": "1687208394743",
+        "messages": []
+      }
+    ],
+    "notes": [],
+    "files": [
+      {
+        "fileId": "1",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "2",
+        "name": "ClinicalTrialData_Q3_2023.xlsx",
+        "type": ".xlsx",
+        "size": "4234233452",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "3",
+        "name": "InsuranceClaims_2023_Q2.json",
+        "type": ".json",
+        "size": "433452",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "4",
+        "name": "PrescriptionData_May2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 75,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "5",
+        "name": "HospitalAdmissions_2023Q1.xlsx",
+        "type": ".xlsx",
+        "size": "42342352",
+        "cleaningStatus": 80,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "6",
+        "name": "EmergencyRoom_Visits_Jan2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 60,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "7",
+        "name": "SurgicalProcedures_2023.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 53,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "8",
+        "name": "PatientRecords_June2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 20,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "9",
+        "name": "ImmunizationRecords_2023.csv",
+        "type": ".csv",
+        "size": "42342352",
+        "cleaningStatus": 98,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "10",
+        "name": "LabResults_Feb2023.xlsx",
+        "type": ".xlsx",
+        "size": "42342352",
+        "cleaningStatus": 70,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "11",
+        "name": "MentalHealthStats_2023Q2.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 100,
+        "uploadedOn": "1687208394743"
+      },
+      {
+        "fileId": "12",
+        "name": "MentalHealthStats_2023Q3.json",
+        "type": ".json",
+        "size": "42342352",
+        "cleaningStatus": 40,
+        "uploadedOn": "1687208394743"
+      }
+    ]
+  }
+]

@@ -3,11 +3,10 @@ import { Box, Button, IconButton, styled } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { useDispatch, useSelector } from "react-redux";
-import { addMoreFiles } from "@/redux/features/cases/filesSlice";
 import { useParams } from "next/navigation";
-import { updateFilesCount } from "@/redux/features/cases/caseSlice";
 import { FileUpload } from "../File/FileUpload";
 import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
+import { useAddMoreFilesMutation } from "@/redux/services/casesApi";
 
 const StyledUploadButtonBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -30,15 +29,10 @@ const ChatFileUpload = () => {
 
   const [showFileUpload, setShowFileUpload] = useState(false);
 
+  const [addMoreFiles] = useAddMoreFilesMutation();
+
   const onSubmit = () => {
-    dispatch(addMoreFiles({ caseId: caseId, files: files }));
-    dispatch(
-      updateFilesCount({
-        caseId: caseId,
-        attachments: files.length > 0,
-        filesCount: files.length,
-      })
-    );
+    addMoreFiles({ caseId: caseId, files: files });
     dispatch(manageUploadFiles({ files: [] }));
   };
 

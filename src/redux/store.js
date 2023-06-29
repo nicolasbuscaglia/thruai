@@ -1,16 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import casesReducer from "./features/cases/caseSlice";
-import chatsReducer from "./features/chats/chatsSlice";
-import notesReducer from "./features/chats/notesSlice";
-import filesReducer from "./features/cases/filesSlice";
 import uiSlice from "./features/uiSlice";
+import { casesApi } from "./services/casesApi";
+import { setupListeners } from "@reduxjs/toolkit/dist/query";
 
 export const store = configureStore({
   reducer: {
     ui: uiSlice,
-    cases: casesReducer,
-    chats: chatsReducer,
-    notes: notesReducer,
-    files: filesReducer,
+    [casesApi.reducerPath]: casesApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat([casesApi.middleware]),
 });
+
+setupListeners(store.dispatch);

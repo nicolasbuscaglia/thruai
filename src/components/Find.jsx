@@ -1,7 +1,6 @@
 import { Button, InputBase, alpha, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch, useSelector } from "react-redux";
-import { findCase } from "@/redux/features/cases/caseSlice";
 import { selectFilter, updateFilter } from "@/redux/features/uiSlice";
 
 const Search = styled("div")(({ theme }) => ({

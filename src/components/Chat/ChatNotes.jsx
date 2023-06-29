@@ -1,15 +1,16 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import { ChatNote } from "./ChatNote";
-import { useSelector } from "react-redux";
-import { selectNotesByCaseId } from "@/redux/features/chats/notesSlice";
 import { useParams } from "next/navigation";
+import { useGetNoteByCaseIdQuery } from "@/redux/services/casesApi";
 
 const ChatNotes = () => {
   const params = useParams();
   const { caseId } = params;
   const theme = useTheme();
 
-  const notes = useSelector(selectNotesByCaseId(caseId));
+  // const notes = useSelector(selectNotesByCaseId(caseId));
+  const { data, error, isLoading, isFetching } =
+    useGetNoteByCaseIdQuery(caseId);
 
   return (
     <Box p={2}>
@@ -19,8 +20,10 @@ const ChatNotes = () => {
         </Typography>
       </Box>
       <Box>
-        {notes?.length > 0 ? (
-          notes.map((note) => {
+        {isLoading ? (
+          <CircularProgress color="secondary" size={20} />
+        ) : data?.length > 0 ? (
+          data.map((note) => {
             return (
               <Box key={note.id} mb={1}>
                 <ChatNote note={note} />

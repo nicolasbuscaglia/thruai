@@ -1,18 +1,25 @@
 import { useSelector } from "react-redux";
 import { FileList } from "../File/FileList";
-import { selectFilteredCleanedFilesById } from "@/redux/features/cases/filesSlice";
 import { useParams } from "next/navigation";
 import { ChatFileUpload } from "./ChatFileUpload";
 import { FileCategories } from "../File/FileCategories";
-import { Box, Divider, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { useGetCleanedFilesByCaseIdQuery } from "@/redux/services/casesApi";
 
 const ChatFileList = () => {
   const params = useParams();
   const { caseId } = params;
   const theme = useTheme();
-  const files = useSelector((state) =>
-    selectFilteredCleanedFilesById(state, caseId)
-  );
+
+  const { data, error, isLoading, isFetching } =
+    useGetCleanedFilesByCaseIdQuery(caseId);
+
   return (
     <>
       <ChatFileUpload />
@@ -21,9 +28,17 @@ const ChatFileList = () => {
           Training Files - Cleaned
         </Typography>
       </Box>
-      <FileList files={files} />
-      <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-      <FileCategories />
+      {isLoading ? (
+        <Box p={2} display="flex" alignItems="center" justifyContent="center">
+          <CircularProgress color="secondary" size={20} />
+        </Box>
+      ) : (
+        <>
+          <FileList files={data} />
+          <Divider sx={{ backgroundColor: theme.palette.border.main }} />
+          <FileCategories />
+        </>
+      )}
     </>
   );
 };

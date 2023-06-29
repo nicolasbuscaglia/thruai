@@ -3,8 +3,7 @@ import { Avatar, Box, Grid, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { useEffect, useRef, useState } from "react";
 import { getDatePart, getTimePart } from "@/utils/date";
-import { useSelector } from "react-redux";
-import { selectCaseByCaseId } from "@/redux/features/cases/caseSlice";
+import { useGetCaseByIdQuery } from "@/redux/services/casesApi";
 
 const StyledCenteredBox = styled(Box)(() => ({
   display: "flex",
@@ -43,8 +42,8 @@ const ChatCard = ({ chat = {} }) => {
 
   const { chatId, messages } = chat;
 
-  const thisCase = useSelector(selectCaseByCaseId(caseId));
-  const { name, type, attachments } = thisCase;
+  const { data, error, isLoading, isFetching } = useGetCaseByIdQuery(caseId);
+  const { name, type, attachments } = data;
 
   const [lastMessage, setLastMessage] = useState({});
 

@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
 import { ChatCard } from "./ChatCard";
-import { useSelector } from "react-redux";
-
 import { useParams } from "next/navigation";
-import { selectSortedChatsByCaseId } from "@/redux/features/chats/chatsSlice";
+import { useGetCaseByIdQuery } from "@/redux/services/casesApi";
 
 const ChatList = () => {
   const params = useParams();
   const { caseId } = params;
   const theme = useTheme();
-  const [isLoading, setIsLoading] = useState(false);
+  const [chats, setChats] = useState([]);
 
-  const chatList = useSelector(selectSortedChatsByCaseId(caseId));
+  const { data, error, isLoading, isFetching } = useGetCaseByIdQuery(caseId);
+
+  useEffect(() => {
+    if (data) {
+      const sortedChats = [...data.chats];
+      sortedChats.sort((a, b) => b.lastUpdated - a.lastUpdated);
+      setChats(sortedChats);
+    }
+  }, [data]);
 
   return (
     <Box p={2} width="100%">
@@ -27,11 +33,13 @@ const ChatList = () => {
       </Box>
       <Box>
         {isLoading ? (
-          <CircularProgress color="secondary" size={20} />
-        ) : chatList?.length > 0 ? (
-          chatList.map((chat) => {
+          <Box p={2} display="flex" alignItems="center" justifyContent="center">
+            <CircularProgress color="secondary" size={20} />
+          </Box>
+        ) : chats?.length > 0 ? (
+          chats.map((chat) => {
             return (
-              <Box mb={1} key={chat.caseId}>
+              <Box mb={1} key={chat.chatId}>
                 <ChatCard chat={chat} />
               </Box>
             );

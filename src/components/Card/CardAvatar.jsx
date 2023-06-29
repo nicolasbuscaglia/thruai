@@ -6,7 +6,7 @@ const CardAvatar = ({ avatars }) => {
   const theme = useTheme();
   return (
     <Box sx={{ display: "flex", gap: 0.8 }}>
-      {avatars.map((avatar, index) => {
+      {avatars?.map((avatar, index) => {
         return (
           <Avatar
             key={index}

@@ -18,7 +18,7 @@ const FileUpload = () => {
         name: data[index].name,
         type: data[index].type,
         size: data[index].size,
-        uploadedOn: new Date(),
+        uploadedOn: Date.now(),
         clean: false,
         cleaningStatus: 100,
         file: URL.createObjectURL(data[index]),

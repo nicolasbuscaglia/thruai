@@ -1,19 +1,15 @@
-import { useState } from "react";
 import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { FormInputText } from "./Forms/FormInputText";
 import { ModelSelection } from "./ModelSelection";
 import { DataSecurityPolicies } from "./DataSecurityPolicies";
 import { useDispatch, useSelector } from "react-redux";
-import { addCase } from "@/redux/features/cases/caseSlice";
-import { createNewChat } from "@/redux/features/chats/chatsSlice";
-import { addNewCaseNotes } from "@/redux/features/chats/notesSlice";
 import { v4 as uuidv4 } from "uuid";
-import { addFiles } from "@/redux/features/cases/filesSlice";
 import { Controller, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { FormErrorMessage } from "./Forms/FormErrorMessage";
 import { FileUpload } from "./File/FileUpload";
 import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
+import { useCreateCaseMutation } from "@/redux/services/casesApi";
 
 const Creation = ({ handleCancel }) => {
   const theme = useTheme();
@@ -28,6 +24,8 @@ const Creation = ({ handleCancel }) => {
 
   const files = useSelector((state) => selectNewFiles(state));
 
+  const [createCase] = useCreateCaseMutation();
+
   const onSubmit = handleSubmit((data) => {
     const payload = {
       caseId: uuidv4(),
@@ -37,39 +35,20 @@ const Creation = ({ handleCancel }) => {
       daysLeft: 14,
       uploadStatus: 10,
       team: ["Test"],
-      attachments: files.length > 0,
       chats: [
         {
           chatId: uuidv4(),
-          createdOn: new Date(),
-          lastUpdated: new Date(),
+          createdOn: Date.now(),
+          lastUpdated: Date.now(),
           summary: [],
           messages: [],
         },
       ],
       notes: [],
+      attachments: files.length > 0,
       files: files,
     };
-    dispatch(
-      addCase({
-        caseId: payload.caseId,
-        name: payload.name,
-        type: payload.type,
-        attachments: payload.attachments,
-        filesCount: payload.filesCount,
-        daysLeft: payload.daysLeft,
-        uploadStatus: payload.uploadStatus,
-        team: payload.team,
-      })
-    );
-    dispatch(
-      createNewChat({
-        caseId: payload.caseId,
-        chats: payload.chats,
-      })
-    );
-    dispatch(addNewCaseNotes({ caseId: payload.caseId, notes: payload.notes }));
-    dispatch(addFiles({ caseId: payload.caseId, files: payload.files }));
+    createCase(payload);
     reset({ caseName: "" });
     dispatch(manageUploadFiles({ files: [] }));
     handleCancel();

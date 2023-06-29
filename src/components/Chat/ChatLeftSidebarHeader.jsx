@@ -3,28 +3,28 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import { v4 as uuidv4 } from "uuid";
 import { useParams, useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { addNewChat } from "@/redux/features/chats/chatsSlice";
+import { useAddNewChatMutation } from "@/redux/services/casesApi";
 
 const ChatLeftSidebarHeader = () => {
   const theme = useTheme();
   const router = useRouter();
-  const dispatch = useDispatch();
   const params = useParams();
   const { caseId } = params;
+
+  const [addNewChat] = useAddNewChatMutation();
 
   const handleClick = () => {
     const payload = {
       caseId: caseId,
       chat: {
         chatId: uuidv4(),
-        createdOn: new Date(),
-        lastUpdated: new Date(),
+        createdOn: Date.now(),
+        lastUpdated: Date.now(),
         summary: [],
         messages: [],
       },
     };
-    dispatch(addNewChat(payload));
+    addNewChat(payload);
     router.push(`/chats/${caseId}/${payload.chat.chatId}`);
   };
 

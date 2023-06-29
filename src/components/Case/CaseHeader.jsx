@@ -1,8 +1,6 @@
 import { useRouter, useParams } from "next/navigation";
 import { Box, Button, Typography, styled, useTheme } from "@mui/material";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
-import { useSelector } from "react-redux";
-import { selectDefaultChatIdByCaseId } from "@/redux/features/chats/chatsSlice";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: "1rem",

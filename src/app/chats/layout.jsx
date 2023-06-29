@@ -1,9 +1,6 @@
 "use client";
-import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
-import { Box, Typography, styled } from "@mui/material";
-import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
-import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
+import { Box, styled } from "@mui/material";
 import { ChatLeftSidebarHeader } from "@/components/Chat/ChatLeftSidebarHeader";
 import { ChatList } from "@/components/Chat/ChatList";
 

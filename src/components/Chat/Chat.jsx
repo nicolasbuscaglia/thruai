@@ -7,12 +7,11 @@ import { ChatDetails } from "./ChatDetails";
 import { ChatConversation } from "./ChatConversation";
 import { useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useDispatch, useSelector } from "react-redux";
-import { addNote } from "@/redux/features/chats/notesSlice";
 import {
-  addMessage,
-  selectChatByChatId,
-} from "@/redux/features/chats/chatsSlice";
+  useAddMessageMutation,
+  useAddNoteMutation,
+  useGetChatByChatIdQuery,
+} from "@/redux/services/casesApi";
 
 const StyledStickyBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "sticky",
@@ -37,15 +36,20 @@ const Chat = () => {
   const params = useParams();
   const { caseId, chatId } = params;
   const chatRef = useRef();
-  const dispatch = useDispatch();
 
-  const chat = useSelector(selectChatByChatId(caseId, chatId));
+  const { data, error, isLoading, isFetching } = useGetChatByChatIdQuery({
+    caseId,
+    chatId,
+  });
+
+  const [addMessage] = useAddMessageMutation();
+  const [addNote] = useAddNoteMutation();
 
   const onSubmit = (value, type) => {
     const payload = {
       caseId: caseId,
       chatId: chatId,
-      lastUpdated: new Date(),
+      lastUpdated: Date.now(),
       message: {
         id: uuidv4(),
         createdOn: Date.now(),
@@ -54,12 +58,12 @@ const Chat = () => {
       },
     };
     if (type === "Chat") {
-      dispatch(addMessage(payload));
+      addMessage(payload);
       chatRef.current.scrollIntoView({
         behavior: "smooth",
       });
     } else if (type === "Note") {
-      dispatch(addNote(payload));
+      addNote(payload);
     }
   };
 
@@ -72,7 +76,7 @@ const Chat = () => {
         <Box mb={2}>
           <ChatDetails />
         </Box>
-        <ChatConversation chat={chat} />
+        <ChatConversation chat={data} />
       </Box>
       <Box ref={chatRef} mb={6} />
       <StyledStickyBox sticky="bottom">
