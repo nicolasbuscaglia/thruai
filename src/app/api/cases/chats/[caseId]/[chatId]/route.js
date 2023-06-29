@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import path from "path";
 import { promises as fs } from "fs";
 
-const dataFilePath = path.join(process.cwd(), "json/data.json");
+const dataFilePath = path.join(process.cwd(), "tmp/data.json");
 
 export async function GET(req, { params }) {
   const { caseId, chatId } = params;
