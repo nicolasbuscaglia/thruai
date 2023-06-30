@@ -12,8 +12,10 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { Find } from "../Find";
+import useAuth from "@/hooks/useAuth";
 
 export default function Header() {
+  const { logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
@@ -31,6 +33,10 @@ export default function Header() {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+
+  const handleLogout = () => {
+    logout();
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -56,6 +62,7 @@ export default function Header() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Log out</MenuItem>
     </Menu>
   );
 
@@ -100,6 +107,18 @@ export default function Header() {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
+      </MenuItem>
+      <MenuItem onClick={handleLogout}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Log out</p>
       </MenuItem>
     </Menu>
   );
