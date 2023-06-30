@@ -27,5 +27,9 @@
     "react-hook-form": "^7.45.0",
     "react-redux": "^8.1.0",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "aws-crt": "^1.15.19",
+    "encoding": "^0.1.13"
   }
 }
