@@ -32,7 +32,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 const LogInForm = () => {
   const theme = useTheme();
   const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const {
