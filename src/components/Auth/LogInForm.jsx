@@ -53,10 +53,7 @@ const LogInForm = () => {
   const onSubmit = handleSubmit(async (data) => {
     setError("");
     setSubmitting(true);
-    const isLoggedIn = await login(data, { setSubmitting, setError });
-    if (isLoggedIn) {
-      router.push("/dashboard");
-    }
+    login(data, { setSubmitting, setError });
   });
 
   const confirmed = searchParams.get("confirmed");
