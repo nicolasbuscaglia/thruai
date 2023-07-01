@@ -85,7 +85,6 @@ export default function useAuth() {
   };
 
   return {
-    validateAccessToken,
     login,
     logout,
     resetPasswordRequest,
