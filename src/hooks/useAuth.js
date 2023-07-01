@@ -3,18 +3,6 @@ import { useRouter } from "next/navigation";
 export default function useAuth() {
   const router = useRouter();
 
-  const validateAccessToken = ({ setIsLoading }) => {
-    fetch("/api/auth/validate", { method: "GET" })
-      .then((res) => {
-        if (!res.ok) throw res;
-        router.push("/dashboard");
-      })
-      .catch((err) => {
-        logout();
-        setIsLoading(false);
-      });
-  };
-
   const login = (values, { setSubmitting, setError }) => {
     fetch("/api/auth/login", {
       method: "POST",

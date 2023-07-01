@@ -47,17 +47,13 @@ const LogInForm = () => {
     },
   });
 
-  const { login, validateAccessToken } = useAuth();
+  const { login } = useAuth();
 
   const onSubmit = handleSubmit((data) => {
     setError("");
     setSubmitting(true);
     login(data, { setSubmitting, setError });
   });
-
-  useEffect(() => {
-    validateAccessToken({ setIsLoading });
-  }, []);
 
   const confirmed = searchParams.get("confirmed");
 
