@@ -1,5 +1,5 @@
 "use client";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, get, useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -30,6 +30,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 }));
 
 const LogInForm = () => {
+  const router = useRouter();
   const theme = useTheme();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);

@@ -12,7 +12,9 @@ export default function useAuth() {
       body: JSON.stringify(values),
     })
       .then((res) => {
+        console.log("res");
         if (!res.ok) throw res;
+        console.log(res);
         router.push("/dashboard");
       })
       .catch(async (err) => {
@@ -41,7 +43,7 @@ export default function useAuth() {
     })
       .then((res) => {
         if (!res.ok) throw res;
-        router.push("/auth/login");
+        window.location.href = "/auth/login";
       })
       .catch(async (err) => {
         const responseData = await err.json();
