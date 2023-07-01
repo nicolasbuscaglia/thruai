@@ -15,6 +15,7 @@ export default function useAuth() {
         console.log("res");
         if (!res.ok) throw res;
         console.log(res);
+        console.log(router);
         router.push("/dashboard");
       })
       .catch(async (err) => {
