@@ -3,8 +3,8 @@ import { useRouter } from "next/navigation";
 export default function useAuth() {
   const router = useRouter();
 
-  const login = (values, { setSubmitting, setError }) => {
-    fetch("/api/auth/login", {
+  const login = async (values, { setSubmitting, setError }) => {
+    const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -13,9 +13,7 @@ export default function useAuth() {
     })
       .then((res) => {
         if (!res.ok) throw res;
-        setTimeout(() => {
-          router.push("/dashboard");
-        }, 5000);
+        return true;
       })
       .catch(async (err) => {
         const responseData = await err.json();
@@ -32,6 +30,7 @@ export default function useAuth() {
         setError(responseData.message);
         setSubmitting(false);
       });
+    return response;
   };
 
   const logout = () => {

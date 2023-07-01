@@ -50,10 +50,13 @@ const LogInForm = () => {
 
   const { login } = useAuth();
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     setError("");
     setSubmitting(true);
-    login(data, { setSubmitting, setError });
+    const isLoggedIn = await login(data, { setSubmitting, setError });
+    if (isLoggedIn) {
+      router.push("/dashboard");
+    }
   });
 
   const confirmed = searchParams.get("confirmed");
@@ -77,6 +80,7 @@ const LogInForm = () => {
         <Box mb={2}>
           <Controller
             name="username"
+            disabled={submitting}
             control={control}
             rules={{ required: "Username is required." }}
             render={({ field }) => (
