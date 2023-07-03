@@ -1,23 +1,28 @@
+import { selectIsAuthenticated } from "@/redux/features/uiSlice";
 import {
   Badge,
+  Box,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Skeleton,
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
 
 const MenuItems = ({ menuItems = [] }) => {
   const pathname = usePathname();
   const theme = useTheme();
+  const isAuthenticated = useSelector((state) => selectIsAuthenticated(state));
 
   return (
     <List>
       {menuItems.map((menu, index) => {
-        return (
+        return isAuthenticated ? (
           <Link key={index} href={menu.path}>
             <ListItem disablePadding sx={{ display: "block" }}>
               <ListItemButton
@@ -54,6 +59,17 @@ const MenuItems = ({ menuItems = [] }) => {
               </ListItemButton>
             </ListItem>
           </Link>
+        ) : (
+          <Box mt={2} mb={2} ml={2} key={index}>
+            <Skeleton
+              variant="circular"
+              width={30}
+              height={30}
+              sx={{
+                backgroundColor: theme.palette.border.main,
+              }}
+            />
+          </Box>
         );
       })}
     </List>

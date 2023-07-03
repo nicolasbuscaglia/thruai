@@ -13,8 +13,13 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { Find } from "../Find";
 import useAuth from "@/hooks/useAuth";
+import { Skeleton, useTheme } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectIsAuthenticated } from "@/redux/features/uiSlice";
 
 export default function Header() {
+  const theme = useTheme();
+  const isAuthenticated = useSelector((state) => selectIsAuthenticated(state));
   const { logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -141,28 +146,61 @@ export default function Header() {
             sx={{ display: { xs: "none", md: "flex", alignItems: "center" } }}
             gap={1}
           >
-            <Find />
+            {isAuthenticated ? (
+              <Find />
+            ) : (
+              <Skeleton
+                variant="text"
+                width={100}
+                height={60}
+                sx={{
+                  backgroundColor: theme.palette.border.main,
+                }}
+              />
+            )}
 
-            <IconButton
-              size="large"
-              aria-label="show new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={2} color="error">
-                <NotificationsNoneOutlinedIcon color="gray" />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            {isAuthenticated ? (
+              <IconButton
+                size="large"
+                aria-label="show new notifications"
+                color="inherit"
+              >
+                <Badge badgeContent={2} color="error">
+                  <NotificationsNoneOutlinedIcon color="gray" />
+                </Badge>
+              </IconButton>
+            ) : (
+              <Skeleton
+                variant="circular"
+                width={40}
+                height={40}
+                sx={{
+                  backgroundColor: theme.palette.border.main,
+                }}
+              />
+            )}
+            {isAuthenticated ? (
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            ) : (
+              <Skeleton
+                variant="circular"
+                width={40}
+                height={40}
+                sx={{
+                  backgroundColor: theme.palette.border.main,
+                }}
+              />
+            )}
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton

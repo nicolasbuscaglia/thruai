@@ -5,12 +5,16 @@ const initialState = {
   newCase: {
     files: [],
   },
+  isAuthenticated: false,
 };
 
 export const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
+    updateIsAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload;
+    },
     updateFilter: (state, action) => {
       state.filter = action.payload;
     },
@@ -33,6 +37,7 @@ export const uiSlice = createSlice({
 });
 
 export const {
+  updateIsAuthenticated,
   updateFilter,
   manageUploadFiles,
   removeFileById,
@@ -40,6 +45,8 @@ export const {
 } = uiSlice.actions;
 
 export const selectFilter = (state) => state.ui.filter;
+
+export const selectIsAuthenticated = (state) => state.ui.isAuthenticated;
 
 export const selectNewFiles = (state) => state.ui.newCase.files;
 

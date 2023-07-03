@@ -6,15 +6,20 @@ import { CardAdd } from "@/components/Card/CardAdd";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Creation } from "@/components/Creation";
 import { useGetCasesQuery } from "@/redux/services/casesApi";
-import { useSelector } from "react-redux";
-import { selectFilter } from "@/redux/features/uiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectFilter, updateIsAuthenticated } from "@/redux/features/uiSlice";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
   const [openRightSidebar, setOpenRightSidebar] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
 
   const filter = useSelector((state) => selectFilter(state));
   const { data, error, isLoading, isFetching } = useGetCasesQuery();
+
+  useEffect(() => {
+    dispatch(updateIsAuthenticated(true));
+  }, []);
 
   useEffect(() => {
     if (data?.length > 0) {
