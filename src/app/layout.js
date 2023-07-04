@@ -4,7 +4,7 @@ import { Poppins } from "next/font/google";
 import { Theme } from "@/components/Theme";
 import { MainContainer } from "@/components/MainContainer";
 import { Providers } from "@/redux/provider";
-
+import { GoogleAuthProviders } from "@/auth/GoogleAuthProvider";
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700"],
@@ -19,12 +19,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Providers>
-          <Theme>
-            <Header />
-            <MainContainer>{children}</MainContainer>
-          </Theme>
-        </Providers>
+        <GoogleAuthProviders>
+          <Providers>
+            <Theme>
+              <Header />
+              <MainContainer>{children}</MainContainer>
+            </Theme>
+          </Providers>
+        </GoogleAuthProviders>
       </body>
     </html>
   );

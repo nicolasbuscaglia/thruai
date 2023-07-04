@@ -5,7 +5,11 @@ const {
   useTheme,
 } = require("@mui/material");
 
-const SubmitButton = ({ label = "Submit", disabled = false }) => {
+const SubmitButton = ({
+  label = "Submit",
+  disabled = false,
+  fullWidth = false,
+}) => {
   const theme = useTheme();
   return (
     <Button
@@ -14,12 +18,9 @@ const SubmitButton = ({ label = "Submit", disabled = false }) => {
       variant="contained"
       sx={{ borderRadius: "0.6rem", color: theme.palette.secondary.main }}
       type="submit"
+      fullWidth={fullWidth}
     >
-      {disabled ? (
-        <CircularProgress color="secondary" size={25} />
-      ) : (
-        <Typography color="secondary">{label}</Typography>
-      )}
+      {disabled ? <CircularProgress color="secondary" size={25} /> : label}
     </Button>
   );
 };

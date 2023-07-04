@@ -1,6 +1,7 @@
 "use client";
 import { AuthForm } from "@/components/Auth/AuthForm";
 import { LoginLink } from "@/components/Auth/LoginLink";
+import { StyledAuthFormBottomBox } from "@/components/StyledComponents/StyledAuthFormBottomBox";
 import useRegister from "@/hooks/useRegister";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
@@ -22,12 +23,12 @@ const ConfirmForm = () => {
 
   const { confirm } = useRegister();
 
-  const onSubmitForm = (data, { ...params }) => {
+  const onSubmitForm = (data) => {
     const payload = {
       username: username,
       code: data.code,
     };
-    confirm(payload, { ...params });
+    confirm(payload);
   };
 
   const username = searchParams.get("username");
@@ -38,11 +39,12 @@ const ConfirmForm = () => {
         formFields={formFields}
         submitButtonLabel={submitButtonLabel}
         onSubmitForm={onSubmitForm}
-      >
-        <Box mb={2}>
-          <LoginLink />
-        </Box>
-      </AuthForm>
+        bottomComponent={
+          <StyledAuthFormBottomBox>
+            <LoginLink />
+          </StyledAuthFormBottomBox>
+        }
+      />
     </Box>
   );
 };

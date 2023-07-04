@@ -1,9 +1,14 @@
 "use client";
 import { AuthForm } from "@/components/Auth/AuthForm";
 import { LoginLink } from "@/components/Auth/LoginLink";
+import { SignUpTermsPolicy } from "@/components/Auth/SignUpTermsPolicy";
+import { StyledAuthFormBottomBox } from "@/components/StyledComponents/StyledAuthFormBottomBox";
+import { GoogleButton } from "@/components/StyledComponents/StyledGoogleButton";
 import useRegister from "@/hooks/useRegister";
-import { Box, Typography } from "@mui/material";
-import Link from "next/link";
+import { setIsAuthSubmitting } from "@/redux/features/uiSlice";
+import { Box, Typography, useTheme } from "@mui/material";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useDispatch } from "react-redux";
 
 const formFields = [
   {
@@ -27,13 +32,27 @@ const formFields = [
   },
 ];
 
-const submitButtonLabel = "Sign up";
+const submitButtonLabel = "Get Started";
 
 const SignUp = () => {
-  const { register } = useRegister();
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const { register, googleSignUpSuccess, googleSignUpFailure } = useRegister();
 
-  const onSubmitForm = (data, { ...params }) => {
-    register(data, { ...params });
+  const onSubmitForm = (data) => {
+    register(data);
+  };
+
+  const signUpWithGoogle = useGoogleLogin({
+    onSuccess: (tokenResponse) =>
+      googleSignUpSuccess({ access_token: tokenResponse.access_token }),
+    onError: (err) => googleSignUpFailure(err),
+    onNonOAuthError: () => dispatch(setIsAuthSubmitting(false)),
+  });
+
+  const handleSignUpWithGoogle = () => {
+    dispatch(setIsAuthSubmitting(true));
+    signUpWithGoogle();
   };
 
   return (
@@ -43,9 +62,24 @@ const SignUp = () => {
         formFields={formFields}
         submitButtonLabel={submitButtonLabel}
         onSubmitForm={onSubmitForm}
+        descriptionComponent={<SignUpTermsPolicy />}
+        bottomComponent={
+          <StyledAuthFormBottomBox>
+            <LoginLink />
+          </StyledAuthFormBottomBox>
+        }
       >
-        <Box mb={2}>
-          <LoginLink />
+        <Box my={1}>
+          <Typography
+            variant="body2"
+            textAlign="center"
+            sx={{ color: theme.palette.gray.main }}
+          >
+            OR
+          </Typography>
+        </Box>
+        <Box display="flex" justifyContent="center">
+          <GoogleButton handleClick={handleSignUpWithGoogle} />
         </Box>
       </AuthForm>
     </Box>

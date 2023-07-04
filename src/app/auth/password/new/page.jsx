@@ -1,6 +1,7 @@
 "use client";
 import { AuthForm } from "@/components/Auth/AuthForm";
 import { LoginLink } from "@/components/Auth/LoginLink";
+import { StyledAuthFormBottomBox } from "@/components/StyledComponents/StyledAuthFormBottomBox";
 import useAuth from "@/hooks/useAuth";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
@@ -29,12 +30,12 @@ const NewPassword = () => {
 
   const { resetPassword } = useAuth();
 
-  const onSubmitForm = (data, { ...params }) => {
+  const onSubmitForm = (data) => {
     const payload = {
       username,
       ...data,
     };
-    resetPassword(payload, { ...params });
+    resetPassword(payload);
   };
 
   const username = searchParams.get("username");
@@ -46,11 +47,12 @@ const NewPassword = () => {
         formFields={formFields}
         submitButtonLabel={submitButtonLabel}
         onSubmitForm={onSubmitForm}
-      >
-        <Box mb={2}>
-          <LoginLink />
-        </Box>
-      </AuthForm>
+        bottomComponent={
+          <StyledAuthFormBottomBox>
+            <LoginLink />
+          </StyledAuthFormBottomBox>
+        }
+      />
     </Box>
   );
 };

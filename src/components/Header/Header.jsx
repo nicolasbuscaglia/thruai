@@ -202,18 +202,29 @@ export default function Header() {
               />
             )}
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
+          {isAuthenticated ? (
+            <Box sx={{ display: { xs: "flex", md: "none" } }}>
+              <IconButton
+                size="large"
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </Box>
+          ) : (
+            <Skeleton
+              variant="circular"
+              width={40}
+              height={40}
+              sx={{
+                backgroundColor: theme.palette.border.main,
+              }}
+            />
+          )}
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
