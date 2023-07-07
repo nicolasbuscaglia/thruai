@@ -13,11 +13,11 @@ const SignUpTermsPolicy = () => {
         sx={{ maxWidth: "20rem" }}
       >
         {"By signing up, you confirm that you've read and accepted our "}
-        <Link href="" style={{ color: theme.palette.blue.main }}>
+        <Link href="/" style={{ color: theme.palette.blue.main }}>
           Terms
         </Link>{" "}
         and{" "}
-        <Link href="" style={{ color: theme.palette.blue.main }}>
+        <Link href="/" style={{ color: theme.palette.blue.main }}>
           Privacy Policy
         </Link>
       </Typography>
