@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { FileDropZone } from "./FileDropZone";
 import { FileList } from "./FileList";
-import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
 import { useEffect } from "react";
@@ -14,11 +13,9 @@ const FileUpload = () => {
   const handleAddFiles = (data) => {
     const filesArray = Object.keys(data).map((index) => {
       return {
-        id: uuidv4(),
         name: data[index].name,
         type: data[index].type,
         size: data[index].size,
-        uploadedOn: Date.now(),
         clean: false,
         cleaningStatus: 100,
         file: URL.createObjectURL(data[index]),

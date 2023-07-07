@@ -15,7 +15,9 @@ const ChatList = () => {
   useEffect(() => {
     if (data) {
       const sortedChats = [...data.chats];
-      sortedChats.sort((a, b) => b.lastUpdated - a.lastUpdated);
+      sortedChats.sort(
+        (a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+      );
       setChats(sortedChats);
     }
   }, [data]);
@@ -39,8 +41,8 @@ const ChatList = () => {
         ) : chats?.length > 0 ? (
           chats.map((chat) => {
             return (
-              <Box mb={1} key={chat.chatId}>
-                <ChatCard chat={chat} />
+              <Box mb={1} key={chat.id}>
+                <ChatCard thisCase={data} chat={chat} />
               </Box>
             );
           })

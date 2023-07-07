@@ -7,6 +7,9 @@ const StyledGoogleButton = styled(Button)(({ theme }) => ({
   color: theme.palette.secondary.main,
   backgroundColor: theme.palette.border.main,
   borderRadius: "0.5rem",
+  "&:hover": {
+    backgroundColor: theme.palette.lightGray.dark,
+  },
 }));
 
 const GoogleButton = ({ handleClick }) => {

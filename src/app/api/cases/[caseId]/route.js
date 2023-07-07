@@ -1,14 +1,23 @@
 import { NextResponse } from "next/server";
-import path from "path";
-import { promises as fs } from "fs";
-
-const dataFilePath = path.join(process.cwd(), "tmp/data.json");
+import prisma from "../../../../../lib/prisma";
 
 export async function GET(req, { params }) {
   const { caseId } = params;
-  const cases = await fs.readFile(dataFilePath, "utf8");
-  const oneCase = JSON.parse(cases).find(
-    (oneCase) => oneCase.caseId === caseId
-  );
+  const oneCase = await prisma.case.findUnique({
+    where: {
+      id: caseId,
+    },
+    include: {
+      chats: {
+        include: {
+          messages: {
+            include: {
+              user: true,
+            },
+          },
+        },
+      },
+    },
+  });
   return NextResponse.json(oneCase, { status: 200 });
 }

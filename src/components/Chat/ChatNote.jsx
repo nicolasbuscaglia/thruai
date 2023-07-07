@@ -31,7 +31,7 @@ const StyledTextWrapBox = styled(Box)(() => ({
 
 const ChatNote = ({ note = {} }) => {
   const theme = useTheme();
-  const { createdOn, user, content } = note;
+  const { createdAt, user, content } = note;
 
   return (
     <StyledMainBox>
@@ -39,7 +39,7 @@ const ChatNote = ({ note = {} }) => {
         <Grid item xs={2}>
           <StyledCenteredBox>
             <Avatar
-              alt={user}
+              alt={user.name}
               src="/test"
               sx={{ width: 24, height: 24, fontSize: 14 }}
             />
@@ -57,12 +57,12 @@ const ChatNote = ({ note = {} }) => {
                 fontSize={12}
                 color={theme.palette.blue.main}
               >
-                {user}
+                {user.name}
               </Typography>
             </StyledTypographyBox>
 
             <Typography color="secondary" variant="body2" fontSize={12}>
-              {`${getDatePart(createdOn)} ${getTimePart(createdOn)}`}
+              {`${getDatePart(createdAt)} ${getTimePart(createdAt)}`}
             </Typography>
           </Box>
           <StyledTextWrapBox>

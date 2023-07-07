@@ -28,23 +28,12 @@ const Creation = ({ handleCancel }) => {
 
   const onSubmit = handleSubmit((data) => {
     const payload = {
-      caseId: uuidv4(),
       name: data.caseName,
       type: "Test - Dev",
       filesCount: files.length,
       daysLeft: 14,
       uploadStatus: 10,
       team: ["Test"],
-      chats: [
-        {
-          chatId: uuidv4(),
-          createdOn: Date.now(),
-          lastUpdated: Date.now(),
-          summary: [],
-          messages: [],
-        },
-      ],
-      notes: [],
       attachments: files.length > 0,
       files: files,
     };

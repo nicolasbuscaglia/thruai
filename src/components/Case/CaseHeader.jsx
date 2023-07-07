@@ -33,7 +33,7 @@ const CaseHeader = ({ caseDetails }) => {
           fontWeight={300}
           color={theme.palette.gray.light}
         >
-          {`Last Updated on ${caseDetails?.lastUpdated}`}
+          {`Last Updated on ${caseDetails?.createdAt}`}
         </Typography>
       </Box>
       <Box display="flex" alignItems="center" gap={2}>

@@ -14,18 +14,7 @@ const ChatLeftSidebarHeader = () => {
   const [addNewChat] = useAddNewChatMutation();
 
   const handleClick = () => {
-    const payload = {
-      caseId: caseId,
-      chat: {
-        chatId: uuidv4(),
-        createdOn: Date.now(),
-        lastUpdated: Date.now(),
-        summary: [],
-        messages: [],
-      },
-    };
-    addNewChat(payload);
-    router.push(`/chats/${caseId}/${payload.chat.chatId}`);
+    addNewChat(caseId);
   };
 
   return (

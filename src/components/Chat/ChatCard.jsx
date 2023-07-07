@@ -3,7 +3,6 @@ import { Avatar, Box, Grid, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { useEffect, useRef, useState } from "react";
 import { getDatePart, getTimePart } from "@/utils/date";
-import { useGetCaseByIdQuery } from "@/redux/services/casesApi";
 
 const StyledCenteredBox = styled(Box)(() => ({
   display: "flex",
@@ -33,23 +32,23 @@ const StyledTypographyBox = styled(Box)(() => ({
   textWrap: "wrap",
 }));
 
-const ChatCard = ({ chat = {} }) => {
+const ChatCard = ({ thisCase = {}, chat = {} }) => {
   const router = useRouter();
   const params = useParams();
   const { caseId, chatId: paramsChatId } = params;
   const ref = useRef();
   const theme = useTheme();
 
-  const { chatId, messages } = chat;
+  const { name, type, attachments } = thisCase;
+  const { id: chatId, messages } = chat;
 
-  const { data, error, isLoading, isFetching } = useGetCaseByIdQuery(caseId);
-  const { name, type, attachments } = data;
-
-  const [lastMessage, setLastMessage] = useState({});
+  const [lastMessage, setLastMessage] = useState();
 
   useEffect(() => {
     const sortedMessages = [...messages];
-    sortedMessages.sort((a, b) => b.createdOn - a.createdOn);
+    sortedMessages.sort(
+      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)
+    );
     setLastMessage(sortedMessages[0]);
   }, [messages]);
 
@@ -73,7 +72,7 @@ const ChatCard = ({ chat = {} }) => {
       <Grid container spacing={1}>
         <Grid item>
           <StyledCenteredBox>
-            <Avatar alt={lastMessage?.user} src="/test" />
+            <Avatar alt={lastMessage?.user.name} src="/test" />
             {attachments && (
               <Box>
                 <AttachFileOutlinedIcon fontSize="small" color="secondary" />
@@ -97,11 +96,13 @@ const ChatCard = ({ chat = {} }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Typography color="secondary" variant="body2" fontSize={12}>
-                {`${getDatePart(lastMessage?.createdOn)} ${getTimePart(
-                  lastMessage?.createdOn
-                )}`}
-              </Typography>
+              {lastMessage && (
+                <Typography color="secondary" variant="body2" fontSize={12}>
+                  {`${getDatePart(lastMessage?.createdAt)} ${getTimePart(
+                    lastMessage?.createdAt
+                  )}`}
+                </Typography>
+              )}
             </Grid>
           </Grid>
           <Typography

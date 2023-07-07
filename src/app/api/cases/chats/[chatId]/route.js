@@ -2,33 +2,40 @@ import { NextResponse } from "next/server";
 import prisma from "../../../../../../lib/prisma";
 
 export async function GET(req, { params }) {
-  const { caseId } = params;
-  const notes = await prisma.note.findMany({
+  const { chatId } = params;
+  const chat = await prisma.chat.findUnique({
     where: {
-      caseId: caseId,
+      id: chatId,
     },
     include: {
-      user: true,
+      messages: true,
     },
   });
-  return NextResponse.json(notes, { status: 200 });
+  return NextResponse.json(chat, { status: 200 });
 }
 
 export async function POST(req, { params }) {
   try {
-    const { caseId } = params;
+    const { chatId } = params;
     const data = await req.json();
-    const note = await prisma.note.create({
+    const message = await prisma.message.create({
       data: {
-        caseId: caseId,
+        chatId: chatId,
         userId: "395732ae-9ef6-4483-9dd5-aa269c165dd6", // Here auto set authenticated user
         content: data,
       },
     });
-
-    return NextResponse.json({ message: note }, { status: 200 });
+    await prisma.chat.update({
+      where: {
+        id: chatId,
+      },
+      data: {
+        updatedAt: new Date().toISOString(),
+      },
+    });
+    return NextResponse.json({ message: message }, { status: 200 });
   } catch (error) {
-    console.error(error.meta.field_name);
+    console.error(error);
     return NextResponse.json(
       { message: "Error storing data" },
       { status: 500 }

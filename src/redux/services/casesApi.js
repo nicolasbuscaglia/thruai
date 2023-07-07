@@ -5,7 +5,7 @@ export const casesApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   }),
-  tagTypes: ["Cases", "Chats", "Files"],
+  tagTypes: ["Cases", "Chats", "Notes", "Files"],
   endpoints: (builder) => ({
     getCases: builder.query({
       query: () => "cases",
@@ -24,22 +24,21 @@ export const casesApi = createApi({
       invalidatesTags: ["Cases"],
     }),
     getChatByChatId: builder.query({
-      query: ({ caseId, chatId }) => `cases/chats/${caseId}/${chatId}`,
+      query: ({ chatId }) => `cases/chats/${chatId}`,
       providesTags: ["Chats"],
     }),
     addNewChat: builder.mutation({
-      query: (newChat) => ({
-        url: `cases/chats/${newChat.caseId}`,
+      query: (caseId) => ({
+        url: `cases/chats/newChat/${caseId}`,
         method: "post",
-        body: newChat,
       }),
       invalidatesTags: ["Cases", "Chats"],
     }),
     addMessage: builder.mutation({
       query: (newMessage) => ({
-        url: `cases/chats/${newMessage.caseId}/${newMessage.chatId}`,
+        url: `cases/chats/${newMessage.chatId}`,
         method: "post",
-        body: newMessage,
+        body: JSON.stringify(newMessage.content),
       }),
       invalidatesTags: ["Cases", "Chats"],
     }),
@@ -49,9 +48,9 @@ export const casesApi = createApi({
     }),
     addNote: builder.mutation({
       query: (newNote) => ({
-        url: `cases/notes/${newNote.caseId}/${newNote.noteId}`,
+        url: `cases/notes/${newNote.caseId}`,
         method: "post",
-        body: newNote,
+        body: JSON.stringify(newNote.content),
       }),
       invalidatesTags: ["Notes"],
     }),
@@ -65,7 +64,7 @@ export const casesApi = createApi({
     }),
     addMoreFiles: builder.mutation({
       query: (newFiles) => ({
-        url: `cases/files/${newFiles.caseId}`,
+        url: `cases/files/addFiles/${newFiles.caseId}`,
         method: "post",
         body: newFiles.files,
       }),

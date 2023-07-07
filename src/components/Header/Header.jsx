@@ -198,6 +198,7 @@ export default function Header() {
                 height={40}
                 sx={{
                   backgroundColor: theme.palette.border.main,
+                  marginRight: "0.5rem",
                 }}
               />
             )}

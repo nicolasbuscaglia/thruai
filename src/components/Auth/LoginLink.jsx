@@ -8,7 +8,7 @@ const LoginLink = () => {
   return (
     <Link href={isSubmitting ? "" : "/auth/login"}>
       <Typography fontSize={12} color="secondary" textAlign="center">
-        Already have a ThruAI account? Log in
+        Already have a ThruAi account? Log in
       </Typography>
     </Link>
   );

@@ -20,7 +20,7 @@ const StyledTypographyBox = styled(Box)(() => ({
 
 const Card = ({ card }) => {
   const {
-    caseId,
+    id: caseId,
     name,
     type,
     filesCount,
@@ -36,8 +36,10 @@ const Card = ({ card }) => {
   useEffect(() => {
     if (chats) {
       const sortedChats = [...chats];
-      sortedChats.sort((a, b) => b.lastUpdated - a.lastUpdated);
-      setDefaultChatId(sortedChats[0].chatId);
+      sortedChats.sort(
+        (a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
+      );
+      setDefaultChatId(sortedChats[0].id);
     }
   }, [chats]);
 

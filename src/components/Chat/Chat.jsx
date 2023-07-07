@@ -38,7 +38,6 @@ const Chat = () => {
   const chatRef = useRef();
 
   const { data, error, isLoading, isFetching } = useGetChatByChatIdQuery({
-    caseId,
     chatId,
   });
 
@@ -49,13 +48,7 @@ const Chat = () => {
     const payload = {
       caseId: caseId,
       chatId: chatId,
-      lastUpdated: Date.now(),
-      message: {
-        id: uuidv4(),
-        createdOn: Date.now(),
-        user: "Jhon Doe",
-        content: value,
-      },
+      content: value,
     };
     if (type === "Chat") {
       addMessage(payload);

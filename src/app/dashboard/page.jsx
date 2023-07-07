@@ -18,10 +18,6 @@ const Dashboard = () => {
   const { data, error, isLoading, isFetching } = useGetCasesQuery();
 
   useEffect(() => {
-    dispatch(updateIsAuthenticated(true));
-  }, []);
-
-  useEffect(() => {
     if (data?.length > 0) {
       const filtered = data?.filter((item) => {
         return (
@@ -51,7 +47,7 @@ const Dashboard = () => {
             <Grid container spacing={2}>
               {filteredData?.map((card) => {
                 return (
-                  <Grid item xs={12} md={4} key={card.caseId}>
+                  <Grid item xs={12} md={4} key={card.id}>
                     <Card card={card} />
                   </Grid>
                 );
