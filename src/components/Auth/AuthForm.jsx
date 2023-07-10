@@ -1,11 +1,4 @@
-import {
-  Box,
-  IconButton,
-  InputAdornment,
-  Typography,
-  styled,
-  useTheme,
-} from "@mui/material";
+import { Box, Typography, styled, useTheme } from "@mui/material";
 import { SubmitButton } from "../SubmitButton";
 import { Controller, useForm } from "react-hook-form";
 import { StyledTextField } from "../StyledComponents/StyledTextField";

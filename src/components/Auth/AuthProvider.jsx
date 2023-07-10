@@ -1,6 +1,6 @@
 "use client";
 
-import { updateIsAuthenticated } from "@/redux/features/uiSlice";
+import { setIsAuthenticated, setMember } from "@/redux/features/uiSlice";
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -12,9 +12,10 @@ const AuthProvider = ({ children }) => {
     const isAuthenticated = async () => {
       try {
         const { data } = await axios.get("/api/auth/verify");
-        dispatch(updateIsAuthenticated(true));
+        dispatch(setIsAuthenticated(true));
+        dispatch(setMember(data));
       } catch (error) {
-        dispatch(updateIsAuthenticated(false));
+        dispatch(setIsAuthenticated(false));
       }
     };
     isAuthenticated();

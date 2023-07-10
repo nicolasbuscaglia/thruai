@@ -29,6 +29,14 @@ export async function POST(req, res) {
 
   try {
     const response = await cognitoClient.send(signUpCommand);
+
+    await prisma.user.create({
+      data: {
+        cognitoId: response.UserSub,
+        name: username,
+      },
+    });
+
     return NextResponse.json({ status: response["$metadata"].httpStatusCode });
   } catch (err) {
     return NextResponse.json(

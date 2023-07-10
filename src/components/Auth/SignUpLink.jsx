@@ -10,7 +10,7 @@ const SignUpLink = () => {
   return (
     <StyledAuthFormBottomBox>
       <Box display="flex" alignItems="center" justifyContent="center" gap={1}>
-        <Link href={isSubmitting ? "" : "/auth/password/reset"}>
+        <Link href={isSubmitting ? "#" : "/auth/password/reset"}>
           <Typography fontSize={12} color="secondary" textAlign="center">
             {"Can't login?"}
           </Typography>
@@ -18,7 +18,7 @@ const SignUpLink = () => {
         <Typography variant="subtitle2" color="secondary">
           ·
         </Typography>
-        <Link href={isSubmitting ? "" : "/auth/signup"}>
+        <Link href={isSubmitting ? "#" : "/auth/signup"}>
           <Typography fontSize={12} color="secondary" textAlign="center">
             {"Sign up for new user?"}
           </Typography>

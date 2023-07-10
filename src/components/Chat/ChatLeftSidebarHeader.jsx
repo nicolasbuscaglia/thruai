@@ -1,7 +1,6 @@
 import { Box, Button, IconButton, useTheme } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
-import { v4 as uuidv4 } from "uuid";
 import { useParams, useRouter } from "next/navigation";
 import { useAddNewChatMutation } from "@/redux/services/casesApi";
 
@@ -13,8 +12,9 @@ const ChatLeftSidebarHeader = () => {
 
   const [addNewChat] = useAddNewChatMutation();
 
-  const handleClick = () => {
-    addNewChat(caseId);
+  const handleClick = async () => {
+    const newChat = await addNewChat(caseId);
+    router.push(`/chats/${caseId}/${newChat?.data?.id}`);
   };
 
   return (

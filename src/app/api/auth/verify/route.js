@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { cookies } from "next/headers";
-
-const { COGNITO_USER_POOL_ID, COGNITO_APP_CLIENT_ID } = process.env;
+import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
 
 export async function GET(req, res) {
   const accessToken = req.cookies.get("accessToken");
@@ -11,15 +9,9 @@ export async function GET(req, res) {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 
-  const verifier = CognitoJwtVerifier.create({
-    userPoolId: COGNITO_USER_POOL_ID,
-    tokenUse: "access",
-    clientId: COGNITO_APP_CLIENT_ID,
-  });
-
   try {
-    const payload = await verifier.verify(accessToken.value);
-    return NextResponse.json(payload, { status: 200 });
+    const user = await cognitoJwtVerifier(accessToken.value);
+    return NextResponse.json(user, { status: 200 });
   } catch (err) {
     cookies().set({
       name: "accessToken",

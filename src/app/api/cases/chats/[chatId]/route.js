@@ -1,27 +1,39 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../../../lib/prisma";
+import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
 
 export async function GET(req, { params }) {
-  const { chatId } = params;
-  const chat = await prisma.chat.findUnique({
-    where: {
-      id: chatId,
-    },
-    include: {
-      messages: true,
-    },
-  });
-  return NextResponse.json(chat, { status: 200 });
+  const accessToken = req.cookies.get("accessToken");
+  try {
+    await cognitoJwtVerifier(accessToken.value);
+    const { chatId } = params;
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: chatId,
+      },
+      include: {
+        messages: true,
+      },
+    });
+    return NextResponse.json(chat, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
 }
 
 export async function POST(req, { params }) {
   try {
+    const accessToken = req.cookies.get("accessToken");
+
     const { chatId } = params;
     const data = await req.json();
+    const user = await cognitoJwtVerifier(accessToken.value);
+
     const message = await prisma.message.create({
       data: {
         chatId: chatId,
-        userId: "395732ae-9ef6-4483-9dd5-aa269c165dd6", // Here auto set authenticated user
+        userId: user.sub,
         content: data,
       },
     });

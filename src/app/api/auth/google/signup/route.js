@@ -3,6 +3,7 @@ import {
   SignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import { NextResponse } from "next/server";
+import prisma from "@/../lib/prisma";
 
 const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
 
@@ -55,6 +56,14 @@ export async function POST(req, res) {
     });
     const signUpCommand = new SignUpCommand(params);
     const response = await cognitoClient.send(signUpCommand);
+
+    await prisma.user.create({
+      data: {
+        cognitoId: response.UserSub,
+        name: googlePayload.email.split("@")[0],
+      },
+    });
+
     return NextResponse.json({ status: response["$metadata"].httpStatusCode });
   } catch (err) {
     console.log(err);

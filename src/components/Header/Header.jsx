@@ -8,18 +8,21 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { Find } from "../Find";
 import useAuth from "@/hooks/useAuth";
-import { Skeleton, useTheme } from "@mui/material";
+import { ListItemIcon, ListItemText, Skeleton, useTheme } from "@mui/material";
 import { useSelector } from "react-redux";
-import { selectIsAuthenticated } from "@/redux/features/uiSlice";
+import { selectIsAuthenticated, selectMember } from "@/redux/features/uiSlice";
 
 export default function Header() {
   const theme = useTheme();
   const isAuthenticated = useSelector((state) => selectIsAuthenticated(state));
+  const member = useSelector((state) => selectMember(state));
   const { logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -65,9 +68,27 @@ export default function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <MenuItem onClick={handleLogout}>Log out</MenuItem>
+      <MenuItem divider={true}>
+        <ListItemText>{member?.username}</ListItemText>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <ListItemIcon>
+          <AccountCircle fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Profile</ListItemText>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <ListItemIcon>
+          <SettingsIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Settings</ListItemText>
+      </MenuItem>
+      <MenuItem onClick={handleLogout}>
+        <ListItemIcon>
+          <LogoutIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText>Log out</ListItemText>
+      </MenuItem>
     </Menu>
   );
 

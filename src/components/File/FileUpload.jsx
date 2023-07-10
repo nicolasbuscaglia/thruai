@@ -4,6 +4,7 @@ import { FileList } from "./FileList";
 import { useDispatch, useSelector } from "react-redux";
 import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
 import { useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 const FileUpload = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const FileUpload = () => {
   const handleAddFiles = (data) => {
     const filesArray = Object.keys(data).map((index) => {
       return {
+        id: uuidv4(),
         name: data[index].name,
         type: data[index].type,
         size: data[index].size,

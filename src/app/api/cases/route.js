@@ -1,17 +1,36 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../lib/prisma";
+import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
 
-export async function GET() {
-  const cases = await prisma.case.findMany({
-    include: {
-      chats: true,
-    },
-  });
-  return NextResponse.json(cases, { status: 200 });
+export async function GET(req) {
+  const accessToken = req.cookies.get("accessToken");
+
+  if (accessToken === undefined) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+
+  try {
+    const user = await cognitoJwtVerifier(accessToken.value);
+    const cases = await prisma.case.findMany({
+      where: {
+        userId: user.sub,
+      },
+      include: {
+        chats: true,
+      },
+    });
+    return NextResponse.json(cases, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
 }
 
 export async function POST(req) {
   try {
+    const accessToken = req.cookies.get("accessToken");
+
+    const user = await cognitoJwtVerifier(accessToken.value);
+
     const data = await req.json();
     const {
       name,
@@ -25,6 +44,7 @@ export async function POST(req) {
     } = data;
     const thisCase = await prisma.case.create({
       data: {
+        userId: user.sub,
         name: name,
         type: type,
         filesCount,

@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { CognitoJwtVerifier } from "aws-jwt-verify";
-
-const { COGNITO_USER_POOL_ID, COGNITO_APP_CLIENT_ID } = process.env;
+import { cognitoJwtVerifier } from "./utils/cognitoJwtVerifier";
 
 export async function middleware(request, response) {
   const accessToken = request.cookies.get("accessToken");
@@ -9,15 +7,8 @@ export async function middleware(request, response) {
   if (accessToken === undefined) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
-
-  const verifier = CognitoJwtVerifier.create({
-    userPoolId: COGNITO_USER_POOL_ID,
-    tokenUse: "access",
-    clientId: COGNITO_APP_CLIENT_ID,
-  });
-
   try {
-    const payload = await verifier.verify(accessToken.value);
+    await cognitoJwtVerifier(accessToken.value);
   } catch (err) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }

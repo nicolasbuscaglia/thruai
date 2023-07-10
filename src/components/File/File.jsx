@@ -47,11 +47,11 @@ const File = ({ file, remove = false, cleanCheckbox = false }) => {
   const theme = useTheme();
 
   const handleRemove = () => {
-    dispatch(removeFileById({ fileId: id }));
+    dispatch(removeFileById({ id: id }));
   };
 
   const handleClean = (e) => {
-    dispatch(setFileCleanCheck({ fileId: id, clean: e.target.checked }));
+    dispatch(setFileCleanCheck({ id: id, clean: e.target.checked }));
   };
 
   return (

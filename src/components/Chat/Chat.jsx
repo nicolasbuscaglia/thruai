@@ -6,7 +6,6 @@ import { ChatInput } from "./ChatInput";
 import { ChatDetails } from "./ChatDetails";
 import { ChatConversation } from "./ChatConversation";
 import { useRef } from "react";
-import { v4 as uuidv4 } from "uuid";
 import {
   useAddMessageMutation,
   useAddNoteMutation,

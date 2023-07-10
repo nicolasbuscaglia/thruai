@@ -8,7 +8,20 @@ export async function POST(req, { params }) {
     const fileAdded = await prisma.file.createMany({
       data: data.map((file) => ({ caseId: caseId, ...file })),
     });
-
+    const thisCase = await prisma.case.findUnique({
+      where: {
+        id: caseId,
+      },
+    });
+    await prisma.case.update({
+      where: {
+        id: caseId,
+      },
+      data: {
+        filesCount: thisCase.filesCount + data.length,
+        attachments: data.length > 0,
+      },
+    });
     return NextResponse.json({ message: fileAdded }, { status: 200 });
   } catch (error) {
     console.error(error);

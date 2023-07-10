@@ -8,6 +8,7 @@ const initialState = {
   isAuthenticated: false,
   isAuthSubmitting: false,
   authError: "",
+  member: {},
 };
 
 export const uiSlice = createSlice({
@@ -20,8 +21,11 @@ export const uiSlice = createSlice({
     setAuthError: (state, action) => {
       state.authError = action.payload;
     },
-    updateIsAuthenticated: (state, action) => {
+    setIsAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
+    },
+    setMember: (state, action) => {
+      state.member = action.payload;
     },
     updateFilter: (state, action) => {
       state.filter = action.payload;
@@ -31,12 +35,12 @@ export const uiSlice = createSlice({
     },
     removeFileById: (state, action) => {
       state.newCase.files = state.newCase.files.filter(
-        (file) => file.id != action.payload.fileId
+        (file) => file.id != action.payload.id
       );
     },
     setFileCleanCheck: (state, action) => {
       state.newCase.files = state.newCase.files.map((file) =>
-        file.id === action.payload.fileId
+        file.id === action.payload.id
           ? { ...file, clean: action.payload.clean }
           : file
       );
@@ -47,7 +51,8 @@ export const uiSlice = createSlice({
 export const {
   setIsAuthSubmitting,
   setAuthError,
-  updateIsAuthenticated,
+  setIsAuthenticated,
+  setMember,
   updateFilter,
   manageUploadFiles,
   removeFileById,
@@ -59,6 +64,8 @@ export const selectAuthError = (state) => state.ui.authError;
 export const selectIsAuthSubmitting = (state) => state.ui.isAuthSubmitting;
 
 export const selectIsAuthenticated = (state) => state.ui.isAuthenticated;
+
+export const selectMember = (state) => state.ui.member;
 
 export const selectFilter = (state) => state.ui.filter;
 

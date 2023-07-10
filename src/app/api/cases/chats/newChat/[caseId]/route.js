@@ -10,7 +10,7 @@ export async function POST(req, { params }) {
       },
     });
 
-    return NextResponse.json({ message: chat }, { status: 200 });
+    return NextResponse.json(chat, { status: 200 });
   } catch (error) {
     console.error(error.meta?.field_name);
     return NextResponse.json(
