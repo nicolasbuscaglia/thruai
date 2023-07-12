@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import prisma from "../../../../../../lib/prisma";
 import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
+import axios from "axios";
 
 const { COGNITO_REGION, COGNITO_APP_CLIENT_ID, COGNITO_USER_POOL_ID } =
   process.env;
@@ -17,18 +18,15 @@ export async function POST(req, res) {
   let googlePayload;
 
   try {
-    await fetch(
+    const { data } = await axios.get(
       `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        googlePayload = data;
-      });
+    );
+    googlePayload = data;
   } catch (err) {
     return NextResponse.json(
-      { message: err.toString() },
+      { message: "Invalid access" },
       {
-        status: 422,
+        status: 401,
         statusText: err.toString(),
       }
     );

@@ -1,5 +1,5 @@
 import { useParams } from "next/navigation";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { ChatHeader } from "./ChatHeader";
 import styled from "@emotion/styled";
 import { ChatInput } from "./ChatInput";
@@ -65,10 +65,18 @@ const Chat = () => {
         <ChatHeader />
       </StyledStickyBox>
       <Box p={2} sx={{ flexGrow: 1, wordBreak: "break-word" }}>
-        <Box mb={2}>
-          <ChatDetails />
-        </Box>
-        <ChatConversation chat={data} />
+        {isLoading ? (
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <CircularProgress color="secondary" size={20} />
+          </Box>
+        ) : (
+          <>
+            <Box mb={2}>
+              <ChatDetails />
+            </Box>
+            <ChatConversation chat={data} isFetching={isFetching} />
+          </>
+        )}
       </Box>
       <Box ref={chatRef} mb={6} />
       <StyledStickyBox sticky="bottom">

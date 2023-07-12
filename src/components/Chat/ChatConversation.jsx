@@ -1,9 +1,17 @@
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, CircularProgress, Grid, Typography, styled } from "@mui/material";
 import { ChatSummaryCard } from "./ChatSummaryCard";
 
-const ChatConversation = ({ chat }) => {
-  const theme = useTheme();
+const StyledMainBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  padding: "1rem",
+  marginBottom: "1rem",
+  marginLeft: "auto",
+  width: "fit-content",
+  borderRadius: "0.8rem",
+  backgroundColor: theme.palette.lightGray.dark,
+}));
 
+const ChatConversation = ({ chat, isFetching }) => {
   return (
     <Box>
       <Box mb={3}>
@@ -32,17 +40,7 @@ const ChatConversation = ({ chat }) => {
       <Box>
         {chat?.messages?.map((message) => {
           return (
-            <Box
-              key={message.messageId}
-              p={2}
-              mb={1}
-              sx={{
-                marginLeft: "auto",
-                width: "fit-content",
-                borderRadius: "0.8rem",
-                backgroundColor: theme.palette.lightGray.dark,
-              }}
-            >
+            <StyledMainBox key={message.messageId}>
               <Typography
                 variant="body2"
                 color="secondary"
@@ -50,9 +48,14 @@ const ChatConversation = ({ chat }) => {
               >
                 {message.content}
               </Typography>
-            </Box>
+            </StyledMainBox>
           );
         })}
+        {isFetching && (
+          <StyledMainBox>
+            <CircularProgress color="secondary" size={20} />
+          </StyledMainBox>
+        )}
       </Box>
     </Box>
   );

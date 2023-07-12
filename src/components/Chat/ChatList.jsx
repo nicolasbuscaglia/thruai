@@ -1,8 +1,24 @@
 import { useEffect, useState } from "react";
-import { Box, CircularProgress, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  styled,
+  useTheme,
+} from "@mui/material";
 import { ChatCard } from "./ChatCard";
 import { useParams } from "next/navigation";
 import { useGetCaseByIdQuery } from "@/redux/services/casesApi";
+
+const StyledFetchingBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: "1rem",
+  borderRadius: "1rem",
+  backgroundColor: theme.palette.lightGray.dark,
+  marginBottom: "0.5rem",
+}));
 
 const ChatList = () => {
   const params = useParams();
@@ -39,13 +55,20 @@ const ChatList = () => {
             <CircularProgress color="secondary" size={20} />
           </Box>
         ) : chats?.length > 0 ? (
-          chats.map((chat) => {
-            return (
-              <Box mb={1} key={chat.chatId}>
-                <ChatCard thisCase={data} chat={chat} />
-              </Box>
-            );
-          })
+          <>
+            {isFetching && (
+              <StyledFetchingBox>
+                <CircularProgress color="secondary" size={20} />
+              </StyledFetchingBox>
+            )}
+            {chats.map((chat) => {
+              return (
+                <Box mb={1} key={chat.chatId}>
+                  <ChatCard thisCase={data} chat={chat} />
+                </Box>
+              );
+            })}
+          </>
         ) : (
           <Typography
             display="flex"

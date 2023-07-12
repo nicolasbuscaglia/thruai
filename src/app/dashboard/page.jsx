@@ -1,13 +1,26 @@
 "use client";
 import { CardContainer, Card } from "@/components/Card";
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Box, CircularProgress, Grid, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CardAdd } from "@/components/Card/CardAdd";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Creation } from "@/components/Creation";
 import { useGetCasesQuery } from "@/redux/services/casesApi";
 import { useDispatch, useSelector } from "react-redux";
-import { selectFilter, updateIsAuthenticated } from "@/redux/features/uiSlice";
+import { selectFilter } from "@/redux/features/uiSlice";
+
+const StyledFetchingBox = styled(Box)(({ theme }) => ({
+  minHeight: "12rem",
+  height: "100%",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  border: "1px solid",
+  borderColor: theme.palette.gray.light,
+  borderRadius: "1rem",
+  gap: 5,
+  cursor: "pointer",
+}));
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -52,6 +65,13 @@ const Dashboard = () => {
                   </Grid>
                 );
               })}
+              {isFetching && (
+                <Grid item xs={12} md={4}>
+                  <StyledFetchingBox>
+                    <CircularProgress color="secondary" size={20} />
+                  </StyledFetchingBox>
+                </Grid>
+              )}
               <Grid item xs={12} md={4}>
                 <CardAdd handleAddCard={handleOpenRightSidebar} />
               </Grid>
