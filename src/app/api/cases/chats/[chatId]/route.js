@@ -9,7 +9,7 @@ export async function GET(req, { params }) {
     const { chatId } = params;
     const chat = await prisma.chat.findUnique({
       where: {
-        id: chatId,
+        chatId: chatId,
       },
       include: {
         messages: true,
@@ -39,7 +39,7 @@ export async function POST(req, { params }) {
     });
     await prisma.chat.update({
       where: {
-        id: chatId,
+        chatId: chatId,
       },
       data: {
         updatedAt: new Date().toISOString(),

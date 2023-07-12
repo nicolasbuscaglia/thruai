@@ -47,7 +47,7 @@ const Dashboard = () => {
             <Grid container spacing={2}>
               {filteredData?.map((card) => {
                 return (
-                  <Grid item xs={12} md={4} key={card.id}>
+                  <Grid item xs={12} md={4} key={card.caseId}>
                     <Card card={card} />
                   </Grid>
                 );

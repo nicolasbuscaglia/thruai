@@ -35,12 +35,12 @@ export const uiSlice = createSlice({
     },
     removeFileById: (state, action) => {
       state.newCase.files = state.newCase.files.filter(
-        (file) => file.id != action.payload.id
+        (file) => file.fileId != action.payload.fileId
       );
     },
     setFileCleanCheck: (state, action) => {
       state.newCase.files = state.newCase.files.map((file) =>
-        file.id === action.payload.id
+        file.fileId === action.payload.fileId
           ? { ...file, clean: action.payload.clean }
           : file
       );

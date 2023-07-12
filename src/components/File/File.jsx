@@ -43,15 +43,15 @@ const StyledIconButton = styled(IconButton)(() => ({
 
 const File = ({ file, remove = false, cleanCheckbox = false }) => {
   const dispatch = useDispatch();
-  const { id, name, type, size, clean, file: fileURL } = file;
+  const { fileId, name, type, size, clean, file: fileURL } = file;
   const theme = useTheme();
 
   const handleRemove = () => {
-    dispatch(removeFileById({ id: id }));
+    dispatch(removeFileById({ fileId: fileId }));
   };
 
   const handleClean = (e) => {
-    dispatch(setFileCleanCheck({ id: id, clean: e.target.checked }));
+    dispatch(setFileCleanCheck({ fileId: fileId, clean: e.target.checked }));
   };
 
   return (
@@ -93,7 +93,7 @@ const File = ({ file, remove = false, cleanCheckbox = false }) => {
               <FormControlLabel
                 control={
                   <Checkbox
-                    name={id}
+                    name={fileId}
                     checked={clean}
                     onChange={handleClean}
                     inputProps={{ "aria-label": "controlled" }}

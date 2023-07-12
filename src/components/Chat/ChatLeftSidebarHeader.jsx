@@ -14,7 +14,7 @@ const ChatLeftSidebarHeader = () => {
 
   const handleClick = async () => {
     const newChat = await addNewChat(caseId);
-    router.push(`/chats/${caseId}/${newChat?.data?.id}`);
+    router.push(`/chats/${caseId}/${newChat?.data?.chatId}`);
   };
 
   return (

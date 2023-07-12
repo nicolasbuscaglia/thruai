@@ -16,7 +16,7 @@
     "@hookform/error-message": "^2.0.1",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.4",
-    "@prisma/client": "^4.16.2",
+    "@prisma/client": "^5.0.0",
     "@react-oauth/google": "^0.11.0",
     "@reduxjs/toolkit": "^1.9.5",
     "aws-jwt-verify": "^4.0.0",
@@ -35,6 +35,6 @@
   "devDependencies": {
     "aws-crt": "^1.15.19",
     "encoding": "^0.1.13",
-    "prisma": "^4.16.2"
+    "prisma": "^5.0.0"
   }
 }

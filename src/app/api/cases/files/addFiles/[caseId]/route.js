@@ -10,12 +10,12 @@ export async function POST(req, { params }) {
     });
     const thisCase = await prisma.case.findUnique({
       where: {
-        id: caseId,
+        caseId: caseId,
       },
     });
     await prisma.case.update({
       where: {
-        id: caseId,
+        caseId: caseId,
       },
       data: {
         filesCount: thisCase.filesCount + data.length,

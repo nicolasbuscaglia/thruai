@@ -41,7 +41,7 @@ const ChatList = () => {
         ) : chats?.length > 0 ? (
           chats.map((chat) => {
             return (
-              <Box mb={1} key={chat.id}>
+              <Box mb={1} key={chat.chatId}>
                 <ChatCard thisCase={data} chat={chat} />
               </Box>
             );

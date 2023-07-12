@@ -14,7 +14,7 @@ const FileUpload = () => {
   const handleAddFiles = (data) => {
     const filesArray = Object.keys(data).map((index) => {
       return {
-        id: uuidv4(),
+        fileId: uuidv4(),
         name: data[index].name,
         type: data[index].type,
         size: data[index].size,

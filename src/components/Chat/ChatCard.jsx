@@ -40,7 +40,7 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
   const theme = useTheme();
 
   const { name, type, attachments } = thisCase;
-  const { id: chatId, messages } = chat;
+  const { chatId, messages } = chat;
 
   const [lastMessage, setLastMessage] = useState();
 

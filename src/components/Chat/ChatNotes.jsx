@@ -25,7 +25,7 @@ const ChatNotes = () => {
         ) : data?.length > 0 ? (
           data.map((note) => {
             return (
-              <Box key={note.id} mb={1}>
+              <Box key={note.noteId} mb={1}>
                 <ChatNote note={note} />
               </Box>
             );

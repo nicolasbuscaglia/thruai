@@ -5,7 +5,7 @@ export async function GET(req, { params }) {
   const { caseId } = params;
   const oneCase = await prisma.case.findUnique({
     where: {
-      id: caseId,
+      caseId: caseId,
     },
     include: {
       chats: {
