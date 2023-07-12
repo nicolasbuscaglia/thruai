@@ -4,7 +4,7 @@ import prisma from "../../../../../../../lib/prisma";
 export async function POST(req, { params }) {
   try {
     const { caseId } = params;
-    const chat = await prisma.chat.create({
+    const chat = await prisma.Chat.create({
       data: {
         caseId: caseId,
       },

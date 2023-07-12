@@ -7,7 +7,7 @@ export async function GET(req, { params }) {
   try {
     await cognitoJwtVerifier(accessToken.value);
     const { chatId } = params;
-    const chat = await prisma.chat.findUnique({
+    const chat = await prisma.Chat.findUnique({
       where: {
         chatId: chatId,
       },
@@ -30,14 +30,14 @@ export async function POST(req, { params }) {
     const data = await req.json();
     const user = await cognitoJwtVerifier(accessToken.value);
 
-    const message = await prisma.message.create({
+    const message = await prisma.Message.create({
       data: {
         chatId: chatId,
         userId: user.sub,
         content: data,
       },
     });
-    await prisma.chat.update({
+    await prisma.Chat.update({
       where: {
         chatId: chatId,
       },

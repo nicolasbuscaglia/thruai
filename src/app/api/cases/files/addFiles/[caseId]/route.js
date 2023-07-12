@@ -5,15 +5,15 @@ export async function POST(req, { params }) {
   try {
     const { caseId } = params;
     const data = await req.json();
-    const fileAdded = await prisma.file.createMany({
+    const fileAdded = await prisma.File.createMany({
       data: data.map((file) => ({ caseId: caseId, ...file })),
     });
-    const thisCase = await prisma.case.findUnique({
+    const thisCase = await prisma.Case.findUnique({
       where: {
         caseId: caseId,
       },
     });
-    await prisma.case.update({
+    await prisma.Case.update({
       where: {
         caseId: caseId,
       },

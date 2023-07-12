@@ -15,10 +15,10 @@ const StyledMainBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
 }));
 
-const CardAdd = ({ handleAddCard }) => {
+const CardAdd = ({ handleClick }) => {
   const theme = useTheme();
   return (
-    <StyledMainBox onClick={handleAddCard}>
+    <StyledMainBox onClick={handleClick}>
       <AddCircleIcon fontSize="medium" color="lightGray" />
       <Typography color="secondary">Add Case</Typography>
     </StyledMainBox>

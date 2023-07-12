@@ -30,7 +30,7 @@ export async function POST(req, res) {
 
   try {
     const response = await cognitoClient.send(signUpCommand);
-    await prisma.user.create({
+    await prisma.User.create({
       data: {
         cognitoId: response.UserSub,
         name: username,

@@ -7,7 +7,7 @@ export async function GET(req, { params }) {
   try {
     await cognitoJwtVerifier(accessToken.value);
     const { caseId } = params;
-    const notes = await prisma.note.findMany({
+    const notes = await prisma.Note.findMany({
       where: {
         caseId: caseId,
       },
@@ -28,7 +28,7 @@ export async function POST(req, { params }) {
     const user = await cognitoJwtVerifier(accessToken.value);
     const { caseId } = params;
     const data = await req.json();
-    const note = await prisma.note.create({
+    const note = await prisma.Note.create({
       data: {
         caseId: caseId,
         userId: user.sub,

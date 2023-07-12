@@ -35,7 +35,7 @@ export async function POST(req, res) {
     const user = await cognitoJwtVerifier(
       response.AuthenticationResult.AccessToken
     );
-    await prisma.session.create({
+    await prisma.Session.create({
       data: {
         userId: user.sub,
       },

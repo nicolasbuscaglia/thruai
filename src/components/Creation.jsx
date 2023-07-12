@@ -10,7 +10,7 @@ import { FileUpload } from "./File/FileUpload";
 import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
 import { useCreateCaseMutation } from "@/redux/services/casesApi";
 
-const Creation = ({ handleCancel }) => {
+const Creation = ({ handleCancel, caseId }) => {
   const theme = useTheme();
   const {
     handleSubmit,
@@ -27,6 +27,7 @@ const Creation = ({ handleCancel }) => {
 
   const onSubmit = handleSubmit((data) => {
     const payload = {
+      caseId: caseId,
       name: data.caseName,
       type: "Test - Dev",
       filesCount: files.length,
@@ -53,6 +54,16 @@ const Creation = ({ handleCancel }) => {
         <Divider sx={{ backgroundColor: theme.palette.border.main }} />
         <FileUpload />
         <Divider sx={{ backgroundColor: theme.palette.border.main }} />
+        <Box p={2} pb={0}>
+          <Typography
+            variant="body2"
+            color="secondary"
+            fontSize={12}
+            sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+          >
+            Case ID #{caseId}
+          </Typography>
+        </Box>
         <Box p={2}>
           <Controller
             name="caseName"

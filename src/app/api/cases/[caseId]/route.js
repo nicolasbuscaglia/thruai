@@ -3,7 +3,7 @@ import prisma from "../../../../../lib/prisma";
 
 export async function GET(req, { params }) {
   const { caseId } = params;
-  const oneCase = await prisma.case.findUnique({
+  const oneCase = await prisma.Case.findUnique({
     where: {
       caseId: caseId,
     },

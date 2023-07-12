@@ -55,20 +55,13 @@ const ChatList = () => {
             <CircularProgress color="secondary" size={20} />
           </Box>
         ) : chats?.length > 0 ? (
-          <>
-            {isFetching && (
-              <StyledFetchingBox>
-                <CircularProgress color="secondary" size={20} />
-              </StyledFetchingBox>
-            )}
-            {chats.map((chat) => {
-              return (
-                <Box mb={1} key={chat.chatId}>
-                  <ChatCard thisCase={data} chat={chat} />
-                </Box>
-              );
-            })}
-          </>
+          chats.map((chat) => {
+            return (
+              <Box mb={1} key={chat.chatId}>
+                <ChatCard thisCase={data} chat={chat} />
+              </Box>
+            );
+          })
         ) : (
           <Typography
             display="flex"

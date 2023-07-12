@@ -15,6 +15,12 @@ export const casesApi = createApi({
       query: (caseId) => `cases/${caseId}`,
       providesTags: ["Cases"],
     }),
+    createNewCase: builder.mutation({
+      query: () => ({
+        url: "/cases/newCase",
+        method: "post",
+      }),
+    }),
     createCase: builder.mutation({
       query: (newCase) => ({
         url: "/cases",
@@ -77,6 +83,7 @@ export const {
   useGetCasesQuery,
   useGetCaseByIdQuery,
   useCreateCaseMutation,
+  useCreateNewCaseMutation,
   useGetChatByChatIdQuery,
   useAddNewChatMutation,
   useAddMessageMutation,

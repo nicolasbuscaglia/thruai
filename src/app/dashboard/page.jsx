@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import { CardAdd } from "@/components/Card/CardAdd";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
 import { Creation } from "@/components/Creation";
-import { useGetCasesQuery } from "@/redux/services/casesApi";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  useCreateNewCaseMutation,
+  useGetCasesQuery,
+} from "@/redux/services/casesApi";
+import { useSelector } from "react-redux";
 import { selectFilter } from "@/redux/features/uiSlice";
 
 const StyledFetchingBox = styled(Box)(({ theme }) => ({
@@ -23,12 +26,13 @@ const StyledFetchingBox = styled(Box)(({ theme }) => ({
 }));
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
   const [openRightSidebar, setOpenRightSidebar] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
+  const [caseId, setCaseId] = useState();
 
   const filter = useSelector((state) => selectFilter(state));
   const { data, error, isLoading, isFetching } = useGetCasesQuery();
+  const [createNewCase, newCase] = useCreateNewCaseMutation();
 
   useEffect(() => {
     if (data?.length > 0) {
@@ -42,7 +46,10 @@ const Dashboard = () => {
     }
   }, [data, filter]);
 
-  const handleOpenRightSidebar = () => {
+  const handleCaseCreation = async () => {
+    setOpenRightSidebar(false);
+    const { data } = await createNewCase();
+    setCaseId(data?.newCaseId);
     setOpenRightSidebar(true);
   };
 
@@ -73,7 +80,13 @@ const Dashboard = () => {
                 </Grid>
               )}
               <Grid item xs={12} md={4}>
-                <CardAdd handleAddCard={handleOpenRightSidebar} />
+                {newCase.isLoading ? (
+                  <StyledFetchingBox>
+                    <CircularProgress color="secondary" size={20} />
+                  </StyledFetchingBox>
+                ) : (
+                  <CardAdd handleClick={handleCaseCreation} />
+                )}
               </Grid>
             </Grid>
           </CardContainer>
@@ -86,7 +99,7 @@ const Dashboard = () => {
         hidden={true}
         openSidebar={openRightSidebar}
       >
-        <Creation handleCancel={handleCloseRightSidebar} />
+        <Creation handleCancel={handleCloseRightSidebar} caseId={caseId} />
       </Sidebar>
     </>
   );

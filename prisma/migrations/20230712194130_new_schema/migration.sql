@@ -1,4 +1,14 @@
 -- CreateTable
+CREATE TABLE "NewCase" (
+    "newCaseId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "NewCase_pkey" PRIMARY KEY ("newCaseId")
+);
+
+-- CreateTable
 CREATE TABLE "Case" (
     "caseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -10,9 +20,7 @@ CREATE TABLE "Case" (
     "daysLeft" INTEGER NOT NULL,
     "uploadStatus" INTEGER NOT NULL,
     "team" TEXT[],
-    "attachments" BOOLEAN NOT NULL DEFAULT false,
-
-    CONSTRAINT "Case_pkey" PRIMARY KEY ("caseId")
+    "attachments" BOOLEAN NOT NULL DEFAULT false
 );
 
 -- CreateTable
@@ -90,6 +98,24 @@ CREATE TABLE "User" (
     CONSTRAINT "User_pkey" PRIMARY KEY ("cognitoId")
 );
 
+-- CreateTable
+CREATE TABLE "Session" (
+    "sessionId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "Session_pkey" PRIMARY KEY ("sessionId")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Case_caseId_key" ON "Case"("caseId");
+
+-- AddForeignKey
+ALTER TABLE "NewCase" ADD CONSTRAINT "NewCase_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("cognitoId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Case" ADD CONSTRAINT "Case_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "NewCase"("newCaseId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
 -- AddForeignKey
 ALTER TABLE "Case" ADD CONSTRAINT "Case_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("cognitoId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -116,3 +142,6 @@ ALTER TABLE "Note" ADD CONSTRAINT "Note_userId_fkey" FOREIGN KEY ("userId") REFE
 
 -- AddForeignKey
 ALTER TABLE "File" ADD CONSTRAINT "File_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "Case"("caseId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("cognitoId") ON DELETE RESTRICT ON UPDATE CASCADE;
