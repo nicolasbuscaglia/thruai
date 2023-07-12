@@ -244,7 +244,7 @@ const EnhancedTable = ({ title, data = [] }) => {
                     // onClick={(event) => handleClick(event, row.name)}
                     role="checkbox"
                     tabIndex={-1}
-                    key={row.id}
+                    key={index}
                     sx={{ cursor: "pointer" }}
                   >
                     <StyledTableCell id={labelId} align="left" scope="row">

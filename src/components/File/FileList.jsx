@@ -6,7 +6,7 @@ const FileList = ({ files = [], remove = false, cleanCheckbox = false }) => {
     <Box px={2}>
       {files.map((file) => {
         return (
-          <Box mb={2} key={file.id}>
+          <Box mb={2} key={file.fileId}>
             <File file={file} remove={remove} cleanCheckbox={cleanCheckbox} />
           </Box>
         );

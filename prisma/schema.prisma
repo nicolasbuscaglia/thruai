@@ -93,4 +93,12 @@ model User {
   Case      Case[]
   message   Message[]
   note      Note[]
+  session   Session[]
+}
+
+model Session {
+  sessionId   String  @id @default(uuid())
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [cognitoId]) 
+  userId      String
 }

@@ -4,6 +4,8 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import prisma from "../../../../../../lib/prisma";
+import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
 
 const { COGNITO_REGION, COGNITO_APP_CLIENT_ID, COGNITO_USER_POOL_ID } =
   process.env;
@@ -49,6 +51,14 @@ export async function POST(req, res) {
     const initiateAuthCommand = new InitiateAuthCommand(params);
     const response = await cognitoClient.send(initiateAuthCommand);
     cookies().set("accessToken", response.AuthenticationResult.AccessToken);
+    const user = await cognitoJwtVerifier(
+      response.AuthenticationResult.AccessToken
+    );
+    await prisma.session.create({
+      data: {
+        userId: user.sub,
+      },
+    });
     return NextResponse.json(
       { ...response.AuthenticationResult },
       {

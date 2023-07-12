@@ -33,7 +33,7 @@ const ChatConversation = ({ chat }) => {
         {chat?.messages?.map((message) => {
           return (
             <Box
-              key={message.id}
+              key={message.messageId}
               p={2}
               mb={1}
               sx={{
