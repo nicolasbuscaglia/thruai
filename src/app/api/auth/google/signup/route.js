@@ -43,6 +43,10 @@ export async function POST(req, res) {
           Name: "custom:RegistrationMethod",
           Value: "google",
         },
+        {
+          Name: "custom:Client",
+          Value: googlePayload.email.split("@")[1].split(".")[0], // Client extracted from email address domain
+        },
       ],
       ClientMetadata: {
         EmailVerified: googlePayload.email_verified.toString(),
@@ -55,10 +59,17 @@ export async function POST(req, res) {
     const signUpCommand = new SignUpCommand(params);
     const response = await cognitoClient.send(signUpCommand);
 
+    const client = await prisma.Client.findUnique({
+      where: {
+        name: googlePayload.email.split("@")[1].split(".")[0],
+      },
+    });
+
     await prisma.User.create({
       data: {
         cognitoId: response.UserSub,
         name: googlePayload.email.split("@")[0],
+        clientId: client.clientId,
       },
     });
 

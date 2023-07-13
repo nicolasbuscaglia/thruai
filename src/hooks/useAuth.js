@@ -19,18 +19,22 @@ export default function useAuth() {
         window.location.href = "/dashboard";
       })
       .catch(async (err) => {
-        const responseData = await err.json();
-        if (responseData?.message?.includes("UserNotConfirmedException:")) {
-          await fetch("/api/auth/resendCode", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ username: values.username }),
-          });
-          router.push(`/auth/confirm?username=${values.username}`);
+        try {
+          const responseData = await err.json();
+          if (responseData?.message?.includes("UserNotConfirmedException:")) {
+            await fetch("/api/auth/resendCode", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ username: values.username }),
+            });
+            router.push(`/auth/confirm?username=${values.username}`);
+          }
+          dispatch(setAuthError(responseData.message));
+        } catch (err) {
+          dispatch(setAuthError("Error logging in"));
         }
-        dispatch(setAuthError(responseData.message));
         dispatch(setIsAuthSubmitting(false));
       });
   };

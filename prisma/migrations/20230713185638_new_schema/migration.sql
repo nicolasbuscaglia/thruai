@@ -20,7 +20,8 @@ CREATE TABLE "Case" (
     "daysLeft" INTEGER NOT NULL,
     "uploadStatus" INTEGER NOT NULL,
     "team" TEXT[],
-    "attachments" BOOLEAN NOT NULL DEFAULT false
+    "attachments" BOOLEAN NOT NULL DEFAULT false,
+    "clientId" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -94,6 +95,7 @@ CREATE TABLE "User" (
     "userId" TEXT NOT NULL,
     "cognitoId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "clientId" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("cognitoId")
 );
@@ -107,6 +109,14 @@ CREATE TABLE "Session" (
     CONSTRAINT "Session_pkey" PRIMARY KEY ("sessionId")
 );
 
+-- CreateTable
+CREATE TABLE "Client" (
+    "clientId" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "Client_pkey" PRIMARY KEY ("clientId")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Case_caseId_key" ON "Case"("caseId");
 
@@ -115,6 +125,9 @@ ALTER TABLE "NewCase" ADD CONSTRAINT "NewCase_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Case" ADD CONSTRAINT "Case_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "NewCase"("newCaseId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Case" ADD CONSTRAINT "Case_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("clientId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Case" ADD CONSTRAINT "Case_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("cognitoId") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -142,6 +155,9 @@ ALTER TABLE "Note" ADD CONSTRAINT "Note_userId_fkey" FOREIGN KEY ("userId") REFE
 
 -- AddForeignKey
 ALTER TABLE "File" ADD CONSTRAINT "File_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "Case"("caseId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("clientId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("cognitoId") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -10,10 +10,17 @@ export async function GET(req) {
   }
 
   try {
-    const user = await cognitoJwtVerifier(accessToken.value);
+    const cognitoUser = await cognitoJwtVerifier(accessToken.value);
+
+    const user = await prisma.User.findUnique({
+      where: {
+        cognitoId: cognitoUser.sub,
+      },
+    });
+
     const cases = await prisma.Case.findMany({
       where: {
-        userId: user.sub,
+        clientId: user.clientId,
       },
       include: {
         chats: true,
@@ -30,7 +37,13 @@ export async function POST(req) {
   try {
     const accessToken = req.cookies.get("accessToken");
 
-    const user = await cognitoJwtVerifier(accessToken.value);
+    const cognitoUser = await cognitoJwtVerifier(accessToken.value);
+
+    const user = await prisma.User.findUnique({
+      where: {
+        cognitoId: cognitoUser.sub,
+      },
+    });
 
     const data = await req.json();
     const {
@@ -47,7 +60,8 @@ export async function POST(req) {
     const thisCase = await prisma.Case.create({
       data: {
         caseId: caseId,
-        userId: user.sub,
+        clientId: user.clientId,
+        userId: user.cognitoId,
         name: name,
         type: type,
         filesCount,
