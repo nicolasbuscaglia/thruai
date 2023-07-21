@@ -1,20 +1,18 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import prisma from "../../../../lib/prisma";
 import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
+import { v4 as uuidv4 } from "uuid";
 
 export async function GET(req) {
-  const accessToken = req.cookies.get("accessToken");
-
-  if (accessToken === undefined) {
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
-  }
-
+  const headersList = headers();
+  const accessToken = headersList.get("authorization");
   try {
-    const cognitoUser = await cognitoJwtVerifier(accessToken.value);
+    const cognitoUser = await cognitoJwtVerifier(accessToken);
 
     const user = await prisma.User.findUnique({
       where: {
-        cognitoId: cognitoUser.sub,
+        cognitoId: `user-${cognitoUser.sub}`,
       },
     });
 
@@ -29,19 +27,22 @@ export async function GET(req) {
     return NextResponse.json(cases, { status: 200 });
   } catch (err) {
     console.log(err);
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    return NextResponse.json(
+      { message: "Error calling API" },
+      { status: 500, statusText: "Error calling API" }
+    );
   }
 }
 
 export async function POST(req) {
+  const headersList = headers();
+  const accessToken = headersList.get("authorization");
   try {
-    const accessToken = req.cookies.get("accessToken");
-
-    const cognitoUser = await cognitoJwtVerifier(accessToken.value);
+    const cognitoUser = await cognitoJwtVerifier(accessToken);
 
     const user = await prisma.User.findUnique({
       where: {
-        cognitoId: cognitoUser.sub,
+        cognitoId: `user-${cognitoUser.sub}`,
       },
     });
 
@@ -55,7 +56,6 @@ export async function POST(req) {
       uploadStatus,
       team,
       attachments,
-      files,
     } = data;
     const thisCase = await prisma.Case.create({
       data: {
@@ -71,10 +71,9 @@ export async function POST(req) {
         team: team,
         attachments: attachments,
         chats: {
-          create: {},
-        },
-        files: {
-          create: files,
+          create: {
+            chatId: `chat-${uuidv4()}`,
+          },
         },
       },
     });
@@ -84,7 +83,7 @@ export async function POST(req) {
     console.error(error);
     return NextResponse.json(
       { message: "Error storing data" },
-      { status: 500 }
+      { status: 500, statusText: "Error storing data" }
     );
   }
 }

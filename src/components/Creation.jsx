@@ -2,13 +2,17 @@ import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { FormInputText } from "./Forms/FormInputText";
 import { ModelSelection } from "./ModelSelection";
 import { DataSecurityPolicies } from "./DataSecurityPolicies";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { FormErrorMessage } from "./Forms/FormErrorMessage";
 import { FileUpload } from "./File/FileUpload";
-import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
-import { useCreateCaseMutation } from "@/redux/services/casesApi";
+import {
+  useAddAWSFileMutation,
+  useCreateCaseMutation,
+} from "@/redux/services/casesApi";
+import { useFiles } from "@/context/FilesContext";
+import { selectMember } from "@/redux/features/uiSlice";
 
 const Creation = ({ handleCancel, caseId }) => {
   const theme = useTheme();
@@ -19,27 +23,47 @@ const Creation = ({ handleCancel, caseId }) => {
     formState: { errors },
   } = useForm();
 
-  const dispatch = useDispatch();
-
-  const files = useSelector((state) => selectNewFiles(state));
+  const { files, setFiles } = useFiles();
+  const member = useSelector((state) => selectMember(state));
 
   const [createCase] = useCreateCaseMutation();
+  const [addAWSFile] = useAddAWSFileMutation();
 
-  const onSubmit = handleSubmit((data) => {
-    const payload = {
-      caseId: caseId,
-      name: data.caseName,
-      type: "Test - Dev",
-      filesCount: files.length,
-      daysLeft: 14,
-      uploadStatus: 10,
-      team: ["Test"],
-      attachments: files.length > 0,
-      files: files,
-    };
-    createCase(payload);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      // review fields and defaults
+      const payload = {
+        caseId: caseId,
+        name: data.caseName,
+        type: "Test - Dev",
+        filesCount: 0,
+        daysLeft: 14,
+        uploadStatus: 10,
+        team: ["Test"],
+        attachments: false,
+      };
+      const caseResponse = await createCase(payload);
+      if (caseResponse.error) {
+        throw new Error(caseResponse.error.data?.message);
+      }
+      const ids = {
+        clientId: member.clientId,
+        caseId: caseId,
+        userId: member.cognitoId,
+      };
+      const formData = new FormData();
+      formData.append("file", files[0].rawFile, files[0].rawFile.name);
+      formData.append("metadata", JSON.stringify({ ...ids, ...files[0] }));
+      const fileResponse = await addAWSFile(formData);
+      if (fileResponse.error) {
+        throw new Error(fileResponse.error.data?.message);
+      }
+      console.log("Case succesfully created");
+    } catch (error) {
+      console.log("Error creating case", error);
+    }
     reset({ caseName: "" });
-    dispatch(manageUploadFiles({ files: [] }));
+    setFiles([]);
     handleCancel();
   });
 

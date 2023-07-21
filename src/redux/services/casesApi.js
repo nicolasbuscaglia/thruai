@@ -1,9 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { getAccessToken } from "@/services/auth";
 
 export const casesApi = createApi({
   reducerPath: "casesApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+    prepareHeaders: (headers) => {
+      headers.set("Authorization", getAccessToken());
+    },
   }),
   tagTypes: ["Cases", "Chats", "Notes", "Files"],
   endpoints: (builder) => ({
@@ -28,6 +32,12 @@ export const casesApi = createApi({
         body: newCase,
       }),
       invalidatesTags: ["Cases"],
+    }),
+    getUser: builder.query({
+      query: (cognitoId) => `auth/user/${cognitoId}`,
+    }),
+    verifyUser: builder.query({
+      query: () => "auth/verify",
     }),
     getChatByChatId: builder.query({
       query: ({ chatId }) => `cases/chats/${chatId}`,
@@ -76,6 +86,15 @@ export const casesApi = createApi({
       }),
       invalidatesTags: ["Cases", "Files"],
     }),
+    addAWSFile: builder.mutation({
+      query: (newFile) => ({
+        url: "aws/fileUpload",
+        method: "POST",
+        body: newFile,
+        formData: true,
+      }),
+      invalidatesTags: ["Cases", "Files"],
+    }),
   }),
 });
 
@@ -84,6 +103,8 @@ export const {
   useGetCaseByIdQuery,
   useCreateCaseMutation,
   useCreateNewCaseMutation,
+  useGetUserQuery,
+  useVerifyUserQuery,
   useGetChatByChatIdQuery,
   useAddNewChatMutation,
   useAddMessageMutation,
@@ -92,4 +113,5 @@ export const {
   useGetCleanedFilesByCaseIdQuery,
   useGetFilesByCaseIdQuery,
   useAddMoreFilesMutation,
+  useAddAWSFileMutation,
 } = casesApi;

@@ -1,33 +1,28 @@
 import { Box, Typography } from "@mui/material";
 import { FileDropZone } from "./FileDropZone";
 import { FileList } from "./FileList";
-import { useDispatch, useSelector } from "react-redux";
-import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
 import { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { useFiles } from "@/context/FilesContext";
 
 const FileUpload = () => {
-  const dispatch = useDispatch();
-
-  const files = useSelector((state) => selectNewFiles(state));
+  const { files, setFiles } = useFiles();
 
   const handleAddFiles = (data) => {
     const filesArray = Object.keys(data).map((index) => {
       return {
         fileId: uuidv4(),
-        name: data[index].name,
-        type: data[index].type,
-        size: data[index].size,
-        clean: false,
+        rawFile: data[index],
+        skipReview: false,
+        skipClean: false,
         cleaningStatus: 100,
-        file: URL.createObjectURL(data[index]),
       };
     });
-    dispatch(manageUploadFiles({ files: filesArray }));
+    setFiles(filesArray);
   };
 
   useEffect(() => {
-    return () => dispatch(manageUploadFiles({ files: [] }));
+    return () => setFiles([]);
   }, []);
 
   return (
@@ -42,7 +37,7 @@ const FileUpload = () => {
               Files to upload
             </Typography>
           </Box>
-          <FileList files={files} remove cleanCheckbox />
+          <FileList files={files} remove skipCleanCheckbox skipReviewCheckbox />
         </>
       )}
     </>

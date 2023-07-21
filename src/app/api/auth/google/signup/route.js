@@ -67,7 +67,7 @@ export async function POST(req, res) {
 
     await prisma.User.create({
       data: {
-        cognitoId: response.UserSub,
+        cognitoId: `user-${response.UserSub}`,
         name: googlePayload.email.split("@")[0],
         clientId: client.clientId,
       },

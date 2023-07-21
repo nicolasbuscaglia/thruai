@@ -1,16 +1,20 @@
 import { useParams } from "next/navigation";
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { ChatHeader } from "./ChatHeader";
 import styled from "@emotion/styled";
 import { ChatInput } from "./ChatInput";
 import { ChatDetails } from "./ChatDetails";
 import { ChatConversation } from "./ChatConversation";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useAddNoteMutation } from "@/redux/services/casesApi";
 import {
-  useAddMessageMutation,
-  useAddNoteMutation,
-  useGetChatByChatIdQuery,
-} from "@/redux/services/casesApi";
+  useGetChatHistoryMutation,
+  useGetLastChatUpdateMutation,
+  useSendMessageMutation,
+} from "@/redux/services/engageApi";
+import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
+import { selectMember } from "@/redux/features/uiSlice";
 
 const StyledStickyBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "sticky",
@@ -28,7 +32,7 @@ const StyledContainer = styled(Box)(() => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  height: "100%",
+  minHeight: "100%",
 }));
 
 const Chat = () => {
@@ -36,28 +40,114 @@ const Chat = () => {
   const { caseId, chatId } = params;
   const chatRef = useRef();
 
-  const { data, error, isLoading, isFetching } = useGetChatByChatIdQuery({
-    chatId,
-  });
+  const [ids, setIds] = useState();
+  const [lastMessage, setLastMessage] = useState();
+  const [lastChatUpdate, setLastChatUpdate] = useState();
+  const [intervalId, setIntervalId] = useState();
+  const [isAILoading, setIsAILoading] = useState(false);
+  const member = useSelector((state) => selectMember(state));
 
-  const [addMessage] = useAddMessageMutation();
   const [addNote] = useAddNoteMutation();
 
-  const onSubmit = (value, type) => {
+  const [getChatHistory, { data, isLoading }] = useGetChatHistoryMutation();
+  const [sendMessage] = useSendMessageMutation();
+  const [getLastChatUpdate] = useGetLastChatUpdateMutation();
+
+  useEffect(() => {
+    if (member) {
+      setIds({
+        clientId: member.clientId,
+        caseId: caseId,
+        chatId: chatId,
+        userId: member.cognitoId,
+      });
+    }
+  }, [member]);
+
+  useEffect(() => {
+    if (ids) {
+      handleGetChatHistory();
+    }
+  }, [ids]);
+
+  const scrollDown = () => {
+    chatRef.current.scrollIntoView({
+      behavior: "smooth",
+    });
+  };
+
+  const handleGetChatHistory = async () => {
+    await getChatHistory({
+      ids: {
+        ...ids,
+      },
+      pageSize: 1000,
+    });
+    setLastMessage();
+    setIsAILoading(false);
+    scrollDown();
+  };
+
+  const handleGetLastChatUpdate = async () => {
+    const { data } = await getLastChatUpdate({
+      ids: {
+        ...ids,
+      },
+    });
+    return data?.lastChatUpdate;
+  };
+
+  const onSubmit = async (value, type) => {
     const payload = {
       caseId: caseId,
       chatId: chatId,
       content: value,
     };
     if (type === "Chat") {
-      addMessage(payload);
-      chatRef.current.scrollIntoView({
-        behavior: "smooth",
+      setLastMessage(value);
+      setIsAILoading(true);
+      setTimeout(() => {
+        scrollDown();
+      }, 100);
+
+      await sendMessage({
+        ids: {
+          ...ids,
+        },
+        message: {
+          showToUser: true,
+          actor: "USER",
+          msgId: `msg-${uuidv4()}`,
+          dt_create: new Date().toISOString(),
+          content: value,
+        },
       });
+      const chatUpdate = await handleGetLastChatUpdate();
+      setLastChatUpdate(chatUpdate);
+      scrollDown();
     } else if (type === "Note") {
       addNote(payload);
     }
   };
+
+  const handleLastChatUpdate = async () => {
+    const chatUpdate = await handleGetLastChatUpdate();
+    if (Date.parse(lastChatUpdate) !== Date.parse(chatUpdate)) {
+      setLastChatUpdate();
+      handleGetChatHistory();
+    }
+  };
+
+  useEffect(() => {
+    if (lastChatUpdate && !intervalId) {
+      const intervalLastChatUpdate = setInterval(handleLastChatUpdate, 3000);
+      setIntervalId(intervalLastChatUpdate);
+    } else if (intervalId) {
+      clearInterval(intervalId);
+      setIntervalId();
+    }
+    return () => clearInterval(intervalId);
+  }, [lastChatUpdate]);
 
   return (
     <StyledContainer>
@@ -65,22 +155,21 @@ const Chat = () => {
         <ChatHeader />
       </StyledStickyBox>
       <Box p={2} sx={{ flexGrow: 1, wordBreak: "break-word" }}>
-        {isLoading ? (
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <CircularProgress color="secondary" size={20} />
+        <>
+          <Box mb={2}>
+            <ChatDetails />
           </Box>
-        ) : (
-          <>
-            <Box mb={2}>
-              <ChatDetails />
-            </Box>
-            <ChatConversation chat={data} isFetching={isFetching} />
-          </>
-        )}
+          <ChatConversation
+            chat={data?.chat}
+            isLoading={isLoading}
+            lastMessage={lastMessage}
+            isAILoading={isAILoading}
+          />
+        </>
       </Box>
-      <Box ref={chatRef} mb={6} />
+      <Box ref={chatRef} />
       <StyledStickyBox sticky="bottom">
-        <ChatInput onSubmit={onSubmit} />
+        <ChatInput onSubmit={onSubmit} disabled={!!lastMessage} />
       </StyledStickyBox>
     </StyledContainer>
   );

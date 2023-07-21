@@ -3,7 +3,7 @@ import { FileUploader } from "react-drag-drop-files";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { File } from "./File";
 
-const fileTypes = ["PDF", "DOCX"];
+const fileTypes = ["PDF", "DOCX", "XML"];
 
 const FileDropZone = ({ handleAddFiles }) => {
   const theme = useTheme();

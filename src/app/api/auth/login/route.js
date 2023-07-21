@@ -37,7 +37,7 @@ export async function POST(req, res) {
     );
     await prisma.Session.create({
       data: {
-        userId: user.sub,
+        userId: `user-${user.sub}`,
       },
     });
     return NextResponse.json(

@@ -13,6 +13,7 @@ export async function GET(req, res) {
     const user = await cognitoJwtVerifier(accessToken.value);
     return NextResponse.json(user, { status: 200 });
   } catch (err) {
+    console.log("verify", err);
     cookies().set({
       name: "accessToken",
       value: "",

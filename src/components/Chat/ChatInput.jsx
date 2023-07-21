@@ -18,7 +18,7 @@ const StyledMainBox = styled(Box)(({ theme }) => ({
   borderRadius: "1rem",
 }));
 
-const ChatInput = ({ onSubmit }) => {
+const ChatInput = ({ onSubmit, disabled = false }) => {
   const theme = useTheme();
   const [value, setValue] = useState("");
   const [messageType, setMessageType] = useState(MESSAGE_TYPES[0].label);
@@ -53,13 +53,14 @@ const ChatInput = ({ onSubmit }) => {
             value={value}
             onChange={handleChange}
             onKeyDown={handleSubmit}
+            disabled={disabled}
           />
         </Box>
         <Box display="flex" gap={1} p={1}>
           <IconButton>
             <AttachFileOutlinedIcon color="gray" fontSize="small" />
           </IconButton>
-          <IconButton onClick={handleSubmit}>
+          <IconButton onClick={handleSubmit} disabled={disabled}>
             <SendIcon color="gray" fontSize="small" />
           </IconButton>
         </Box>

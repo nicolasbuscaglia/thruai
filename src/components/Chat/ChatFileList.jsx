@@ -25,7 +25,7 @@ const ChatFileList = () => {
       <ChatFileUpload />
       <Box p={2}>
         <Typography variant="body1" color="secondary">
-          Training Files - Cleaned
+          Training Files
         </Typography>
       </Box>
       {isLoading ? (

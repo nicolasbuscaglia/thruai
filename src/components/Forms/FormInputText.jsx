@@ -18,6 +18,7 @@ const FormInputText = ({
   onChange = () => {},
   onKeyDown = () => {},
   ref,
+  disabled = false,
 }) => {
   const theme = useTheme();
 
@@ -49,6 +50,7 @@ const FormInputText = ({
         }}
         onKeyDown={handleKeyDown}
         inputRef={ref}
+        disabled={disabled}
       />
     </Box>
   );

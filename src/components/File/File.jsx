@@ -10,8 +10,7 @@ import {
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { formatBytes } from "@/utils/bytes";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { useDispatch } from "react-redux";
-import { removeFileById, setFileCleanCheck } from "@/redux/features/uiSlice";
+import { useFiles } from "@/context/FilesContext";
 
 const StyledMainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -41,85 +40,130 @@ const StyledIconButton = styled(IconButton)(() => ({
   right: -8,
 }));
 
-const File = ({ file, remove = false, cleanCheckbox = false }) => {
-  const dispatch = useDispatch();
-  const { fileId, name, type, size, clean, file: fileURL } = file;
+const File = ({
+  file,
+  remove = false,
+  skipReviewCheckbox = false,
+  skipCleanCheckbox = false,
+}) => {
+  const { files, setFiles } = useFiles();
+  const { fileId, rawFile, skipReview, skipClean } = file;
+  const { name, type, size } = rawFile || file;
   const theme = useTheme();
 
   const handleRemove = () => {
-    dispatch(removeFileById({ fileId: fileId }));
+    const newFiles = files.filter((file) => file.fileId !== fileId);
+    setFiles(newFiles);
   };
 
   const handleClean = (e) => {
-    dispatch(setFileCleanCheck({ fileId: fileId, clean: e.target.checked }));
+    const newFiles = files.map((file) =>
+      file.fileId === fileId ? { ...file, skipClean: e.target.checked } : file
+    );
+    setFiles(newFiles);
+  };
+
+  const handleReview = (e) => {
+    const newFiles = files.map((file) =>
+      file.fileId === fileId ? { ...file, skipReview: e.target.checked } : file
+    );
+    setFiles(newFiles);
   };
 
   return (
     <Box sx={{ position: "relative" }}>
-      <a href={fileURL} download>
-        <StyledMainContainer>
-          <StyledIconContainer>
-            <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 16 }} />
-          </StyledIconContainer>
+      {/* <a href={fileURL} download> */}
+      <StyledMainContainer>
+        <StyledIconContainer>
+          <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 16 }} />
+        </StyledIconContainer>
 
-          <Box overflow="hidden" p={1}>
+        <Box overflow="hidden" p={1}>
+          <Typography
+            variant="body2"
+            color="secondary"
+            fontSize={12}
+            sx={{ textOverflow: "ellipsis", overflow: "hidden" }}
+            gutterBottom
+          >
+            {name}
+          </Typography>
+
+          <StyledCenteredBox>
             <Typography
               variant="body2"
-              color="secondary"
+              color={theme.palette.gray.light}
               fontSize={12}
-              sx={{ textOverflow: "ellipsis", overflow: "hidden" }}
-              gutterBottom
             >
-              {name}
+              {formatBytes(Number(size))}
             </Typography>
-
-            <StyledCenteredBox>
-              <Typography
-                variant="body2"
-                color={theme.palette.gray.light}
-                fontSize={12}
-              >
-                {formatBytes(Number(size))}
-              </Typography>
-              <Typography
-                variant="body2"
-                color={theme.palette.gray.light}
-                fontSize={12}
-              >
-                {type}
-              </Typography>
-            </StyledCenteredBox>
-            {cleanCheckbox && (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name={fileId}
-                    checked={clean}
-                    onChange={handleClean}
-                    inputProps={{ "aria-label": "controlled" }}
-                    color="blue"
-                    size="small"
-                    sx={{
-                      color: theme.palette.gray.light,
-                      paddingTop: 0,
-                      paddingBottom: 0,
-                    }}
-                  />
-                }
-                label={
-                  <Typography
-                    fontSize={12}
-                    color={theme.palette.gray.light}
-                    fontWeight={300}
-                  >
-                    Clean
-                  </Typography>
-                }
-              />
-            )}
-          </Box>
-        </StyledMainContainer>
-      </a>
+            <Typography
+              variant="body2"
+              color={theme.palette.gray.light}
+              fontSize={12}
+            >
+              {type}
+            </Typography>
+          </StyledCenteredBox>
+          {skipReviewCheckbox && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name={fileId}
+                  checked={skipReview}
+                  onChange={handleReview}
+                  inputProps={{ "aria-label": "controlled" }}
+                  color="blue"
+                  size="small"
+                  sx={{
+                    color: theme.palette.gray.light,
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                  }}
+                />
+              }
+              label={
+                <Typography
+                  fontSize={12}
+                  color={theme.palette.gray.light}
+                  fontWeight={300}
+                >
+                  Skip Review
+                </Typography>
+              }
+            />
+          )}
+          {skipCleanCheckbox && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  name={fileId}
+                  checked={skipClean}
+                  onChange={handleClean}
+                  inputProps={{ "aria-label": "controlled" }}
+                  color="blue"
+                  size="small"
+                  sx={{
+                    color: theme.palette.gray.light,
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                  }}
+                />
+              }
+              label={
+                <Typography
+                  fontSize={12}
+                  color={theme.palette.gray.light}
+                  fontWeight={300}
+                >
+                  Skip Clean
+                </Typography>
+              }
+            />
+          )}
+        </Box>
+      </StyledMainContainer>
+      {/* </a> */}
       {remove && (
         <StyledIconButton
           aria-label="remove file"

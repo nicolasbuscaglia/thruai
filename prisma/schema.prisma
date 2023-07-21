@@ -87,15 +87,19 @@ model Note {
 
 model File {
   fileId         String  @id @default(uuid())
+  clientId       String
   caseId         String
+  userId         String
   name           String
   type           String
   size           Int
   cleaningStatus Int
-  clean          Boolean  @default(false)
+  skipClean      Boolean  @default(false)
+  skipReview     Boolean  @default(false)
   createdAt      DateTime @default(now())
-  file           String
   case           Case     @relation(fields: [caseId], references: [caseId])
+  client         Client   @relation(fields: [clientId], references: [clientId])
+  user           User     @relation(fields: [userId], references: [cognitoId])
 }
 
 model User {
@@ -109,6 +113,7 @@ model User {
   session   Session[]
   clientId  String
   client    Client @relation(fields: [clientId], references: [clientId]) 
+  file      File[]
 }
 
 model Session {
@@ -123,4 +128,5 @@ model Client {
   name        String @unique
   user        User[]
   case        Case[]
+  file        File[]
 }

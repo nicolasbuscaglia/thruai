@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, IconButton, styled } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "next/navigation";
 import { FileUpload } from "../File/FileUpload";
-import { manageUploadFiles, selectNewFiles } from "@/redux/features/uiSlice";
-import { useAddMoreFilesMutation } from "@/redux/services/casesApi";
+import {
+  useAddAWSFileMutation,
+  useGetUserQuery,
+} from "@/redux/services/casesApi";
+import { useFiles } from "@/context/FilesContext";
+import { useSelector } from "react-redux";
+import { selectMember } from "@/redux/features/uiSlice";
+import { v4 as uuidv4 } from "uuid";
+import { useParams } from "next/navigation";
 
 const StyledUploadButtonBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -22,18 +27,25 @@ const StyledUploadButtonBox = styled(Box)(({ theme }) => ({
 
 const ChatFileUpload = () => {
   const params = useParams();
-  const { caseId } = params;
-  const dispatch = useDispatch();
-
-  const files = useSelector((state) => selectNewFiles(state));
-
   const [showFileUpload, setShowFileUpload] = useState(false);
+  const { files, setFiles } = useFiles();
+  const { caseId } = params;
+  const member = useSelector((state) => selectMember(state));
+  const { data: user } = useGetUserQuery(member.sub);
 
-  const [addMoreFiles] = useAddMoreFilesMutation();
+  const [addAWSFile, response] = useAddAWSFileMutation();
 
   const onSubmit = () => {
-    addMoreFiles({ caseId: caseId, files: files });
-    dispatch(manageUploadFiles({ files: [] }));
+    const ids = {
+      clientId: user.clientId,
+      caseId: caseId,
+      userId: user.cognitoId,
+    };
+    const formData = new FormData();
+    formData.append("file", files[0].rawFile, files[0].rawFile.name);
+    formData.append("metadata", JSON.stringify({ ...ids, ...files[0] }));
+    addAWSFile(formData);
+    setFiles([]);
   };
 
   return (

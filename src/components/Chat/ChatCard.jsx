@@ -3,6 +3,13 @@ import { Avatar, Box, Grid, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { useEffect, useRef, useState } from "react";
 import { getDatePart, getTimePart } from "@/utils/date";
+import {
+  useChatHandlerMutation,
+  useGetChatHistoryMutation,
+} from "@/redux/services/engageApi";
+import { selectMember } from "@/redux/features/uiSlice";
+import { useGetUserQuery } from "@/redux/services/casesApi";
+import { useSelector } from "react-redux";
 
 const StyledCenteredBox = styled(Box)(() => ({
   display: "flex",
@@ -40,17 +47,42 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
   const theme = useTheme();
 
   const { name, type, attachments } = thisCase;
-  const { chatId, messages } = chat;
+  const { chatId } = chat;
 
+  const member = useSelector((state) => selectMember(state));
+  const [ids, setIds] = useState();
   const [lastMessage, setLastMessage] = useState();
+  const [getChatHistory, { data: chatHistory }] = useGetChatHistoryMutation();
 
   useEffect(() => {
-    const sortedMessages = [...messages];
-    sortedMessages.sort(
-      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)
-    );
-    setLastMessage(sortedMessages[0]);
-  }, [messages]);
+    if (member) {
+      setIds({
+        clientId: member.clientId,
+        caseId: caseId,
+        chatId: chatId,
+        userId: member.cognitoId,
+      });
+    }
+  }, [member]);
+
+  useEffect(() => {
+    if (ids) {
+      handleGetChatHistory();
+    }
+  }, [ids]);
+
+  const handleGetChatHistory = () => {
+    getChatHistory({
+      ids: {
+        ...ids,
+      },
+      pageSize: 1,
+    });
+  };
+
+  useEffect(() => {
+    setLastMessage(chatHistory?.chat?.messages[0]);
+  }, [chatHistory]);
 
   const handleClick = () => {
     router.push(`/chats/${caseId}/${chatId}`);
@@ -70,9 +102,9 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
       ref={ref}
     >
       <Grid container spacing={1}>
-        <Grid item>
+        <Grid item xs={2}>
           <StyledCenteredBox>
-            <Avatar alt={lastMessage?.user.name} src="/test" />
+            <Avatar alt={lastMessage?.actor} src="/test" />
             {attachments && (
               <Box>
                 <AttachFileOutlinedIcon fontSize="small" color="secondary" />
@@ -80,7 +112,7 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
             )}
           </StyledCenteredBox>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={10}>
           <Grid container>
             <Grid item xs>
               <Typography
@@ -98,8 +130,8 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
             <Grid item>
               {lastMessage && (
                 <Typography color="secondary" variant="body2" fontSize={12}>
-                  {`${getDatePart(lastMessage?.createdAt)} ${getTimePart(
-                    lastMessage?.createdAt
+                  {`${getDatePart(lastMessage?.dt_create)} ${getTimePart(
+                    lastMessage?.dt_create
                   )}`}
                 </Typography>
               )}

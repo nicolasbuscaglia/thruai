@@ -6,6 +6,7 @@ import { MainContainer } from "@/components/MainContainer";
 import { Providers } from "@/redux/provider";
 import { GoogleAuthProviders } from "@/auth/GoogleAuthProvider";
 import { AuthProvider } from "@/components/Auth/AuthProvider";
+import { FilesProvider } from "@/context/FilesContext";
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "300", "400", "500", "700"],
@@ -23,10 +24,12 @@ export default function RootLayout({ children }) {
         <GoogleAuthProviders>
           <Providers>
             <AuthProvider>
-              <Theme>
-                <Header />
-                <MainContainer>{children}</MainContainer>
-              </Theme>
+              <FilesProvider>
+                <Theme>
+                  <Header />
+                  <MainContainer>{children}</MainContainer>
+                </Theme>
+              </FilesProvider>
             </AuthProvider>
           </Providers>
         </GoogleAuthProviders>

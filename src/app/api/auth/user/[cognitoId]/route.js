@@ -2,16 +2,16 @@ import { NextResponse } from "next/server";
 import prisma from "../../../../../../lib/prisma";
 
 export async function GET(req, { params }) {
-  const { caseId } = params;
+  const { cognitoId } = params;
   try {
-    const files = await prisma.File.findMany({
+    const user = await prisma.User.findUnique({
       where: {
-        caseId: caseId,
+        cognitoId: `user-${cognitoId}`,
       },
     });
-    return NextResponse.json(files, { status: 200 });
-  } catch (error) {
-    console.error(error);
+    return NextResponse.json(user, { status: 200 });
+  } catch (err) {
+    console.log(err);
     return NextResponse.json(
       { message: "Error calling API" },
       { status: 500, statusText: "Error calling API" }

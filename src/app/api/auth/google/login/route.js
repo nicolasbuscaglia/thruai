@@ -54,7 +54,7 @@ export async function POST(req, res) {
     );
     await prisma.Session.create({
       data: {
-        userId: user.sub,
+        userId: `user-${user.sub}`,
       },
     });
     return NextResponse.json(
@@ -68,7 +68,7 @@ export async function POST(req, res) {
     return NextResponse.json(
       { message: err.toString() },
       {
-        status: err["$metadata"].httpStatusCode,
+        status: err["$metadata"]?.httpStatusCode,
         statusText: err.toString(),
       }
     );

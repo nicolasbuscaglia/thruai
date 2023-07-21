@@ -78,14 +78,16 @@ CREATE TABLE "Note" (
 -- CreateTable
 CREATE TABLE "File" (
     "fileId" TEXT NOT NULL,
+    "clientId" TEXT NOT NULL,
     "caseId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "size" INTEGER NOT NULL,
     "cleaningStatus" INTEGER NOT NULL,
-    "clean" BOOLEAN NOT NULL DEFAULT false,
+    "skipClean" BOOLEAN NOT NULL DEFAULT false,
+    "skipReview" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "file" TEXT NOT NULL,
 
     CONSTRAINT "File_pkey" PRIMARY KEY ("fileId")
 );
@@ -119,6 +121,9 @@ CREATE TABLE "Client" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Case_caseId_key" ON "Case"("caseId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Client_name_key" ON "Client"("name");
 
 -- AddForeignKey
 ALTER TABLE "NewCase" ADD CONSTRAINT "NewCase_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("cognitoId") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -155,6 +160,12 @@ ALTER TABLE "Note" ADD CONSTRAINT "Note_userId_fkey" FOREIGN KEY ("userId") REFE
 
 -- AddForeignKey
 ALTER TABLE "File" ADD CONSTRAINT "File_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "Case"("caseId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "File" ADD CONSTRAINT "File_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("clientId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "File" ADD CONSTRAINT "File_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("cognitoId") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("clientId") ON DELETE RESTRICT ON UPDATE CASCADE;

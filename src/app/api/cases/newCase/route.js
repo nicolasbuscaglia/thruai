@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import prisma from "../../../../../lib/prisma";
 import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
+import { v4 as uuidv4 } from "uuid";
 
 export async function POST(req) {
+  const headersList = headers();
+  const accessToken = headersList.get("authorization");
   try {
-    const accessToken = req.cookies.get("accessToken");
-
-    const user = await cognitoJwtVerifier(accessToken.value);
+    const user = await cognitoJwtVerifier(accessToken);
 
     const thisCase = await prisma.NewCase.create({
       data: {
-        userId: user.sub,
+        newCaseId: `case-${uuidv4()}`,
+        userId: `user-${user.sub}`,
       },
     });
 
@@ -19,7 +22,7 @@ export async function POST(req) {
     console.error(error);
     return NextResponse.json(
       { message: "Error storing data" },
-      { status: 500 }
+      { status: 500, statusText: "Error storing data" }
     );
   }
 }

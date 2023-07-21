@@ -44,9 +44,9 @@ export async function POST(req, res) {
 
     await prisma.User.create({
       data: {
-        cognitoId: response.UserSub,
+        cognitoId: `user-${response.UserSub}`,
         name: username,
-        clientId: client.clientId,
+        clientId: `clnt-${client.clientId}`,
       },
     });
     return NextResponse.json({ status: response["$metadata"].httpStatusCode });
