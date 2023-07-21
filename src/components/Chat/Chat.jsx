@@ -132,9 +132,11 @@ const Chat = () => {
 
   const handleLastChatUpdate = async () => {
     const chatUpdate = await handleGetLastChatUpdate();
-    if (Date.parse(lastChatUpdate) !== Date.parse(chatUpdate)) {
+    if (chatUpdate && Date.parse(lastChatUpdate) !== Date.parse(chatUpdate)) {
       setLastChatUpdate();
-      handleGetChatHistory();
+      setTimeout(() => {
+        handleGetChatHistory();
+      }, [1000]);
     }
   };
 
