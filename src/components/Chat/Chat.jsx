@@ -53,8 +53,7 @@ const Chat = () => {
 
   const [addNote] = useAddNoteMutation();
 
-  const [getChatHistory, { data: chatHistory, isLoading }] =
-    useGetChatHistoryMutation();
+  const [getChatHistory, { isLoading }] = useGetChatHistoryMutation();
   const [sendMessage] = useSendMessageMutation();
   const [getLastChatUpdate] = useGetLastChatUpdateMutation();
 
@@ -71,9 +70,17 @@ const Chat = () => {
 
   useEffect(() => {
     if (ids) {
-      handleGetChatHistory();
+      getChatHistoryResponse();
     }
   }, [ids]);
+
+  const getChatHistoryResponse = async () => {
+    const chatHistoryResponse = await handleGetChatHistory();
+    setMessages(chatHistoryResponse?.chat?.messages);
+    setTimeout(() => {
+      scrollDown();
+    }, [100]);
+  };
 
   const scrollDown = () => {
     chatRef.current?.scrollIntoView({
@@ -82,24 +89,14 @@ const Chat = () => {
   };
 
   const handleGetChatHistory = async () => {
-    await getChatHistory({
+    const { data } = await getChatHistory({
       ids: {
         ...ids,
       },
       pageSize: 1000,
     });
+    return data;
   };
-
-  useEffect(() => {
-    if (chatHistory) {
-      setMessages(chatHistory?.chat?.messages);
-      setLastMessage();
-      setIsAILoading(false);
-      setTimeout(() => {
-        scrollDown();
-      }, [100]);
-    }
-  }, [chatHistory]);
 
   const handleGetLastChatUpdate = async () => {
     const { data } = await getLastChatUpdate({
@@ -165,9 +162,17 @@ const Chat = () => {
       lastChatUpdateResponse &&
       Date.parse(lastChatUpdate) !== Date.parse(lastChatUpdateResponse)
     ) {
-      handleGetChatHistory();
-      setLastChatUpdate();
-      dispatch(refetch(true));
+      const chatHistory = await handleGetChatHistory();
+      if (chatHistory?.chat?.messages[0].actor === ACTOR.AI) {
+        setMessages(chatHistory?.chat?.messages);
+        setLastMessage();
+        setLastChatUpdate();
+        setIsAILoading(false);
+        setTimeout(() => {
+          scrollDown();
+        }, [100]);
+        dispatch(refetch(true));
+      }
     }
   };
 
