@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import { ChatInput } from "./ChatInput";
 import { ChatDetails } from "./ChatDetails";
 import { ChatConversation } from "./ChatConversation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useAddNoteMutation } from "@/redux/services/casesApi";
 import {
   useGetChatHistoryMutation,
@@ -13,8 +13,9 @@ import {
   useSendMessageMutation,
 } from "@/redux/services/engageApi";
 import { v4 as uuidv4 } from "uuid";
-import { useSelector } from "react-redux";
-import { selectMember } from "@/redux/features/uiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { refetch, selectMember, selectRefetch } from "@/redux/features/uiSlice";
+import { ACTOR } from "@/constants";
 
 const StyledStickyBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "sticky",
@@ -39,22 +40,26 @@ const Chat = () => {
   const params = useParams();
   const { caseId, chatId } = params;
   const chatRef = useRef();
+  const dispatch = useDispatch();
 
   const [ids, setIds] = useState();
+  const [messages, setMessages] = useState([]);
   const [lastMessage, setLastMessage] = useState();
   const [lastChatUpdate, setLastChatUpdate] = useState();
   const [intervalId, setIntervalId] = useState();
   const [isAILoading, setIsAILoading] = useState(false);
+  const [tryAgain, setTryAgain] = useState(false);
   const member = useSelector((state) => selectMember(state));
 
   const [addNote] = useAddNoteMutation();
 
-  const [getChatHistory, { data, isLoading }] = useGetChatHistoryMutation();
+  const [getChatHistory, { data: chatHistory, isLoading }] =
+    useGetChatHistoryMutation();
   const [sendMessage] = useSendMessageMutation();
   const [getLastChatUpdate] = useGetLastChatUpdateMutation();
 
   useEffect(() => {
-    if (member) {
+    if (Object.keys(member).length) {
       setIds({
         clientId: member.clientId,
         caseId: caseId,
@@ -71,7 +76,7 @@ const Chat = () => {
   }, [ids]);
 
   const scrollDown = () => {
-    chatRef.current.scrollIntoView({
+    chatRef.current?.scrollIntoView({
       behavior: "smooth",
     });
   };
@@ -83,10 +88,18 @@ const Chat = () => {
       },
       pageSize: 1000,
     });
-    setLastMessage();
-    setIsAILoading(false);
-    scrollDown();
   };
+
+  useEffect(() => {
+    if (chatHistory) {
+      setMessages(chatHistory?.chat?.messages);
+      setLastMessage();
+      setIsAILoading(false);
+      setTimeout(() => {
+        scrollDown();
+      }, [100]);
+    }
+  }, [chatHistory]);
 
   const handleGetLastChatUpdate = async () => {
     const { data } = await getLastChatUpdate({
@@ -94,7 +107,9 @@ const Chat = () => {
         ...ids,
       },
     });
-    return data?.lastChatUpdate;
+    if (data) {
+      return data.lastChatUpdate;
+    }
   };
 
   const onSubmit = async (value, type) => {
@@ -106,50 +121,73 @@ const Chat = () => {
     if (type === "Chat") {
       setLastMessage(value);
       setIsAILoading(true);
+      setTryAgain(false);
       setTimeout(() => {
         scrollDown();
       }, 100);
 
-      await sendMessage({
+      const { data, error } = await sendMessage({
         ids: {
           ...ids,
         },
         message: {
           showToUser: true,
-          actor: "USER",
+          actor: ACTOR.USER,
           msgId: `msg-${uuidv4()}`,
           dt_create: new Date().toISOString(),
           content: value,
         },
       });
-      const chatUpdate = await handleGetLastChatUpdate();
-      setLastChatUpdate(chatUpdate);
-      scrollDown();
+      if (data) {
+        const lastChatUpdateResponse = await handleGetLastChatUpdate();
+        setLastChatUpdate(lastChatUpdateResponse);
+        scrollDown();
+      } else if (error) {
+        setIsAILoading(false);
+        setTryAgain(true);
+      }
     } else if (type === "Note") {
       addNote(payload);
     }
   };
 
+  useEffect(() => {
+    if (lastChatUpdate && !intervalId) {
+      startVerifyLastChatUpdate();
+    } else if (!lastChatUpdate && intervalId) {
+      stopVerifyLastChatUpdate();
+    }
+  }, [lastChatUpdate]);
+
   const handleLastChatUpdate = async () => {
-    const chatUpdate = await handleGetLastChatUpdate();
-    if (chatUpdate && Date.parse(lastChatUpdate) !== Date.parse(chatUpdate)) {
+    const lastChatUpdateResponse = await handleGetLastChatUpdate();
+    if (
+      lastChatUpdateResponse &&
+      Date.parse(lastChatUpdate) !== Date.parse(lastChatUpdateResponse)
+    ) {
+      handleGetChatHistory();
       setLastChatUpdate();
-      setTimeout(() => {
-        handleGetChatHistory();
-      }, [1000]);
+      dispatch(refetch(true));
+    }
+  };
+
+  const startVerifyLastChatUpdate = () => {
+    if (!intervalId) {
+      const intervalLastChatUpdate = setInterval(handleLastChatUpdate, 3000);
+      setIntervalId(intervalLastChatUpdate);
+    }
+  };
+
+  const stopVerifyLastChatUpdate = () => {
+    if (intervalId) {
+      clearInterval(intervalId);
+      setIntervalId();
     }
   };
 
   useEffect(() => {
-    if (lastChatUpdate && !intervalId) {
-      const intervalLastChatUpdate = setInterval(handleLastChatUpdate, 3000);
-      setIntervalId(intervalLastChatUpdate);
-    } else if (intervalId) {
-      clearInterval(intervalId);
-      setIntervalId();
-    }
     return () => clearInterval(intervalId);
-  }, [lastChatUpdate]);
+  }, []);
 
   return (
     <StyledContainer>
@@ -162,10 +200,11 @@ const Chat = () => {
             <ChatDetails />
           </Box>
           <ChatConversation
-            chat={data?.chat}
+            messages={messages}
             isLoading={isLoading}
             lastMessage={lastMessage}
             isAILoading={isAILoading}
+            tryAgain={tryAgain}
           />
         </>
       </Box>

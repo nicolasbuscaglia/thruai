@@ -5,6 +5,7 @@ import {
 import { NextResponse } from "next/server";
 import prisma from "@/../lib/prisma";
 import axios from "axios";
+import { PREFIX_TYPE_ID } from "@/constants";
 
 const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
 
@@ -67,7 +68,7 @@ export async function POST(req, res) {
 
     await prisma.User.create({
       data: {
-        cognitoId: `user-${response.UserSub}`,
+        cognitoId: `${PREFIX_TYPE_ID.USER}${response.UserSub}`,
         name: googlePayload.email.split("@")[0],
         clientId: client.clientId,
       },

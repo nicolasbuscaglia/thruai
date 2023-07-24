@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import prisma from "../../../../../../lib/prisma";
 import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
+import { PREFIX_TYPE_ID } from "@/constants";
 
 export async function GET(req, { params }) {
   try {
@@ -34,7 +35,7 @@ export async function POST(req, { params }) {
     const note = await prisma.Note.create({
       data: {
         caseId: caseId,
-        userId: `user-${user.sub}`,
+        userId: `${PREFIX_TYPE_ID.USER}${user.sub}`,
         content: data,
       },
     });

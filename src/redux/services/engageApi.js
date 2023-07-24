@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getAccessToken } from "@/services/auth";
+import { casesApi } from "./casesApi";
 
 export const engageApi = createApi({
   reducerPath: "engageApi",
@@ -9,7 +10,6 @@ export const engageApi = createApi({
       headers.set("Authorization", getAccessToken());
     },
   }),
-  tagTypes: ["Chat"],
   endpoints: (builder) => ({
     getChatHistory: builder.mutation({
       query: (body) => ({
@@ -30,7 +30,6 @@ export const engageApi = createApi({
           },
         },
       }),
-      providesTags: ["Chat"],
     }),
     sendMessage: builder.mutation({
       query: (body) => ({
@@ -48,7 +47,9 @@ export const engageApi = createApi({
           },
         },
       }),
-      invalidatesTags: ["Chat"],
+      async onQueryStarted(_, { dispatch }) {
+        dispatch(casesApi.util.invalidateTags(["Cases"]));
+      },
     }),
     getLastChatUpdate: builder.mutation({
       query: (body) => ({

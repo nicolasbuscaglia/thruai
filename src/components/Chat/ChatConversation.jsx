@@ -1,7 +1,7 @@
-import { Box, CircularProgress, Grid, Typography, styled } from "@mui/material";
-import { ChatSummaryCard } from "./ChatSummaryCard";
+import { Box, Typography, styled } from "@mui/material";
 import { ACTOR } from "@/constants";
 import { useEffect, useState } from "react";
+import Typing from "../Typing";
 
 const StyledMainBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "actor",
@@ -11,7 +11,7 @@ const StyledMainBox = styled(Box, {
   alignItems: "center",
   padding: "1rem",
   marginBottom: "1rem",
-  marginLeft: "auto",
+  marginLeft: actor === ACTOR.AI ? 0 : "auto",
   width: "fit-content",
   borderRadius: "0.8rem",
   backgroundColor:
@@ -20,14 +20,19 @@ const StyledMainBox = styled(Box, {
       : theme.palette.secondary.main,
 }));
 
-const ChatConversation = ({ chat, isLoading, lastMessage, isAILoading }) => {
-  const [messages, setMessages] = useState();
+const ChatConversation = ({
+  messages = [],
+  lastMessage,
+  isAILoading,
+  tryAgain,
+}) => {
+  const [sortedMessages, setSortedMessages] = useState();
   useEffect(() => {
-    if (chat) {
-      const messageList = [...chat.messages];
-      setMessages(messageList.reverse());
+    if (messages.length > 0) {
+      const messageList = [...messages];
+      setSortedMessages(messageList.reverse());
     }
-  }, [chat]);
+  }, [messages]);
   return (
     <Box>
       {/* <Box mb={3}>
@@ -54,7 +59,7 @@ const ChatConversation = ({ chat, isLoading, lastMessage, isAILoading }) => {
         })}
       </Grid> */}
       <Box>
-        {messages?.map((message, index) => {
+        {sortedMessages?.map((message, index) => {
           return (
             <StyledMainBox key={index} actor={message.actor}>
               <Typography
@@ -80,9 +85,13 @@ const ChatConversation = ({ chat, isLoading, lastMessage, isAILoading }) => {
         )}
         {isAILoading && (
           <StyledMainBox actor={ACTOR.AI}>
-            <CircularProgress color="secondary" size={20} />
-            <Typography variant="body2" color="secondary" ml={2}>
-              Waiting ThruAi response...
+            <Typing />
+          </StyledMainBox>
+        )}
+        {tryAgain && (
+          <StyledMainBox actor={ACTOR.AI}>
+            <Typography variant="body2" color="secondary">
+              Please, try again later. The file is being processed.
             </Typography>
           </StyledMainBox>
         )}

@@ -28,16 +28,6 @@ const ChatList = () => {
 
   const { data, error, isLoading, isFetching } = useGetCaseByIdQuery(caseId);
 
-  useEffect(() => {
-    if (data) {
-      const sortedChats = [...data.chats];
-      sortedChats.sort(
-        (a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt)
-      );
-      setChats(sortedChats);
-    }
-  }, [data]);
-
   return (
     <Box p={2} width="100%">
       <Box mb={2}>
@@ -54,8 +44,8 @@ const ChatList = () => {
           <Box p={2} display="flex" alignItems="center" justifyContent="center">
             <CircularProgress color="secondary" size={20} />
           </Box>
-        ) : chats?.length > 0 ? (
-          chats.map((chat) => {
+        ) : data?.chats?.length > 0 ? (
+          data?.chats.map((chat) => {
             return (
               <Box mb={1} key={chat.chatId}>
                 <ChatCard thisCase={data} chat={chat} />

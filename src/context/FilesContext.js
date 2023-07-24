@@ -5,10 +5,13 @@ const FilesContext = createContext({});
 
 const FilesProvider = ({ children }) => {
   const [files, setFiles] = useState([]);
+  const [update, setUpdate] = useState(false);
 
   const context = {
     files,
     setFiles,
+    update,
+    setUpdate,
   };
   return (
     <FilesContext.Provider value={context}>{children}</FilesContext.Provider>

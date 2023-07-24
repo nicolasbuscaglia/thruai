@@ -6,6 +6,7 @@ const initialState = {
   isAuthSubmitting: false,
   authError: "",
   member: {},
+  refetch: false,
 };
 
 export const uiSlice = createSlice({
@@ -27,6 +28,9 @@ export const uiSlice = createSlice({
     updateFilter: (state, action) => {
       state.filter = action.payload;
     },
+    refetch: (state, action) => {
+      state.refetch = action.payload;
+    },
   },
 });
 
@@ -36,6 +40,7 @@ export const {
   setIsAuthenticated,
   setMember,
   updateFilter,
+  refetch,
 } = uiSlice.actions;
 
 export const selectAuthError = (state) => state.ui.authError;
@@ -47,5 +52,7 @@ export const selectIsAuthenticated = (state) => state.ui.isAuthenticated;
 export const selectMember = (state) => state.ui.member;
 
 export const selectFilter = (state) => state.ui.filter;
+
+export const selectRefetch = (state) => state.ui.refetch;
 
 export default uiSlice.reducer;

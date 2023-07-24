@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import prisma from "../../../../lib/prisma";
 import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
 import { v4 as uuidv4 } from "uuid";
+import { PREFIX_TYPE_ID } from "@/constants";
 
 export async function GET(req) {
   const headersList = headers();
@@ -12,7 +13,7 @@ export async function GET(req) {
 
     const user = await prisma.User.findUnique({
       where: {
-        cognitoId: `user-${cognitoUser.sub}`,
+        cognitoId: `${PREFIX_TYPE_ID.USER}${cognitoUser.sub}`,
       },
     });
 
@@ -42,7 +43,7 @@ export async function POST(req) {
 
     const user = await prisma.User.findUnique({
       where: {
-        cognitoId: `user-${cognitoUser.sub}`,
+        cognitoId: `${PREFIX_TYPE_ID.USER}${cognitoUser.sub}`,
       },
     });
 

@@ -7,9 +7,10 @@ import {
   useChatHandlerMutation,
   useGetChatHistoryMutation,
 } from "@/redux/services/engageApi";
-import { selectMember } from "@/redux/features/uiSlice";
+import { refetch, selectMember, selectRefetch } from "@/redux/features/uiSlice";
 import { useGetUserQuery } from "@/redux/services/casesApi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useFiles } from "@/context/FilesContext";
 
 const StyledCenteredBox = styled(Box)(() => ({
   display: "flex",
@@ -45,6 +46,7 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
   const { caseId, chatId: paramsChatId } = params;
   const ref = useRef();
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const { name, type, attachments } = thisCase;
   const { chatId } = chat;
@@ -53,9 +55,10 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
   const [ids, setIds] = useState();
   const [lastMessage, setLastMessage] = useState();
   const [getChatHistory, { data: chatHistory }] = useGetChatHistoryMutation();
+  const refetchState = useSelector((state) => selectRefetch(state));
 
   useEffect(() => {
-    if (member) {
+    if (Object.keys(member).length) {
       setIds({
         clientId: member.clientId,
         caseId: caseId,
@@ -69,7 +72,7 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
     if (ids) {
       handleGetChatHistory();
     }
-  }, [ids]);
+  }, [ids, refetchState]);
 
   const handleGetChatHistory = () => {
     getChatHistory({
@@ -82,6 +85,7 @@ const ChatCard = ({ thisCase = {}, chat = {} }) => {
 
   useEffect(() => {
     setLastMessage(chatHistory?.chat?.messages[0]);
+    dispatch(refetch(false));
   }, [chatHistory]);
 
   const handleClick = () => {

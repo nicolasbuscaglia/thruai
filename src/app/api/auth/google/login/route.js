@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import prisma from "../../../../../../lib/prisma";
 import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
 import axios from "axios";
+import { PREFIX_TYPE_ID } from "@/constants";
 
 const { COGNITO_REGION, COGNITO_APP_CLIENT_ID, COGNITO_USER_POOL_ID } =
   process.env;
@@ -54,7 +55,7 @@ export async function POST(req, res) {
     );
     await prisma.Session.create({
       data: {
-        userId: `user-${user.sub}`,
+        userId: `${PREFIX_TYPE_ID.USER}${user.sub}`,
       },
     });
     return NextResponse.json(

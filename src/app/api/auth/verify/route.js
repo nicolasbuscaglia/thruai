@@ -20,6 +20,7 @@ export async function GET(req, res) {
       expires: new Date(Date.now()),
       path: "/",
     });
-    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+    window.location.href = "/auth/login";
+    // return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 }

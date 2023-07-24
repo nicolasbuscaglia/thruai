@@ -12,3 +12,10 @@ export const ACTOR = {
   USER: "USER",
   SYSTEM: "SYSTEM",
 };
+
+export const PREFIX_TYPE_ID = {
+  CLIENT: "clnt-",
+  CASE: "case-",
+  CHAT: "chat-",
+  USER: "user-",
+};

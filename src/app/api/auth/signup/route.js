@@ -4,6 +4,7 @@ import {
   SignUpCommand,
 } from "@aws-sdk/client-cognito-identity-provider";
 import prisma from "../../../../../lib/prisma";
+import { PREFIX_TYPE_ID } from "@/constants";
 
 const { COGNITO_REGION, COGNITO_APP_CLIENT_ID } = process.env;
 
@@ -44,9 +45,9 @@ export async function POST(req, res) {
 
     await prisma.User.create({
       data: {
-        cognitoId: `user-${response.UserSub}`,
+        cognitoId: `${PREFIX_TYPE_ID.USER}${response.UserSub}`,
         name: username,
-        clientId: `clnt-${client.clientId}`,
+        clientId: `${PREFIX_TYPE_ID.CLIENT}${client.clientId}`,
       },
     });
     return NextResponse.json({ status: response["$metadata"].httpStatusCode });
