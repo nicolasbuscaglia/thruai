@@ -1,6 +1,13 @@
 "use client";
 import { CardContainer, Card } from "@/components/Card";
-import { Box, CircularProgress, Grid, styled } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Grid,
+  Typography,
+  styled,
+  useTheme,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { CardAdd } from "@/components/Card/CardAdd";
 import { Sidebar } from "@/components/Sidebar/Sidebar";
@@ -10,7 +17,7 @@ import {
   useGetCasesQuery,
 } from "@/redux/services/casesApi";
 import { useSelector } from "react-redux";
-import { selectFilter } from "@/redux/features/uiSlice";
+import { selectFilter, selectMember } from "@/redux/features/uiSlice";
 
 const StyledFetchingBox = styled(Box)(({ theme }) => ({
   minHeight: "12rem",
@@ -25,11 +32,19 @@ const StyledFetchingBox = styled(Box)(({ theme }) => ({
   cursor: "pointer",
 }));
 
+const StyledHeightContainer = styled(Box)(() => ({
+  height: "calc(100vh - 64px)",
+  overflow: "scroll",
+  width: "100%",
+}));
+
 const Dashboard = () => {
+  const theme = useTheme();
   const [openRightSidebar, setOpenRightSidebar] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [caseId, setCaseId] = useState();
 
+  const member = useSelector((state) => selectMember(state));
   const filter = useSelector((state) => selectFilter(state));
   const { data, error, isLoading, isFetching } = useGetCasesQuery();
   const [createNewCase, newCase] = useCreateNewCaseMutation();
@@ -58,38 +73,52 @@ const Dashboard = () => {
   };
 
   return (
-    <>
+    <StyledHeightContainer>
       <Box p={2} width="100%">
         {isLoading ? (
           <CircularProgress color="secondary" size={20} />
         ) : (
-          <CardContainer title="Cases">
-            <Grid container spacing={2}>
-              {filteredData?.map((card) => {
-                return (
-                  <Grid item xs={12} md={4} key={card.caseId}>
-                    <Card card={card} />
+          <>
+            <Box mb={2} display="flex" alignItems="center">
+              <Typography color="secondary" variant="h6">
+                Hi {member?.username}
+              </Typography>
+              <Typography
+                sx={{ color: theme.palette.gray.dark }}
+                variant="body2"
+                mt={0.5}
+              >
+                , here are your current cases:
+              </Typography>
+            </Box>
+            <CardContainer title="Cases">
+              <Grid container spacing={2}>
+                {filteredData?.map((card) => {
+                  return (
+                    <Grid item xs={12} md={4} key={card.caseId}>
+                      <Card card={card} />
+                    </Grid>
+                  );
+                })}
+                {isFetching && (
+                  <Grid item xs={12} md={4}>
+                    <StyledFetchingBox>
+                      <CircularProgress color="secondary" size={20} />
+                    </StyledFetchingBox>
                   </Grid>
-                );
-              })}
-              {isFetching && (
-                <Grid item xs={12} md={4}>
-                  <StyledFetchingBox>
-                    <CircularProgress color="secondary" size={20} />
-                  </StyledFetchingBox>
-                </Grid>
-              )}
-              <Grid item xs={12} md={4}>
-                {newCase.isLoading ? (
-                  <StyledFetchingBox>
-                    <CircularProgress color="secondary" size={20} />
-                  </StyledFetchingBox>
-                ) : (
-                  <CardAdd handleClick={handleCaseCreation} />
                 )}
+                <Grid item xs={12} md={4}>
+                  {newCase.isLoading ? (
+                    <StyledFetchingBox>
+                      <CircularProgress color="secondary" size={20} />
+                    </StyledFetchingBox>
+                  ) : (
+                    <CardAdd handleClick={handleCaseCreation} />
+                  )}
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContainer>
+            </CardContainer>
+          </>
         )}
       </Box>
       <Sidebar
@@ -101,7 +130,7 @@ const Dashboard = () => {
       >
         <Creation handleCancel={handleCloseRightSidebar} caseId={caseId} />
       </Sidebar>
-    </>
+    </StyledHeightContainer>
   );
 };
 
