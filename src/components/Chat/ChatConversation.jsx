@@ -65,7 +65,7 @@ const ChatConversation = ({
               <Typography
                 variant="body2"
                 color={message.actor === ACTOR.AI ? "secondary" : "primary"}
-                sx={{ overflowWrap: "anywhere" }}
+                sx={{ overflowWrap: "anywhere", whiteSpace: "pre-wrap" }}
               >
                 {message.content}
               </Typography>

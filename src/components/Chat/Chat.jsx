@@ -190,10 +190,6 @@ const Chat = () => {
     }
   };
 
-  useEffect(() => {
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
     <StyledContainer>
       <StyledStickyBox sticky="top">
