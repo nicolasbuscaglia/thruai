@@ -45,6 +45,10 @@ const theme = createTheme({
     warning: {
       main: "#FF974A",
     },
+    action: {
+      disabledBackground: "#292932",
+      disabled: "#92929D",
+    },
   },
   typography: {
     fontFamily: [

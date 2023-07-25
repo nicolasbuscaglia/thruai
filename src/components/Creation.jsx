@@ -1,8 +1,15 @@
-import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { FormInputText } from "./Forms/FormInputText";
 import { ModelSelection } from "./ModelSelection";
 import { DataSecurityPolicies } from "./DataSecurityPolicies";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { FormErrorMessage } from "./Forms/FormErrorMessage";
@@ -12,9 +19,15 @@ import {
   useCreateCaseMutation,
 } from "@/redux/services/casesApi";
 import { useFiles } from "@/context/FilesContext";
-import { selectMember } from "@/redux/features/uiSlice";
+import {
+  selectIsDisabledForm,
+  selectMember,
+  setIsDisabledForm,
+} from "@/redux/features/uiSlice";
+import { useState } from "react";
 
 const Creation = ({ handleCancel, caseId }) => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const {
     handleSubmit,
@@ -25,11 +38,13 @@ const Creation = ({ handleCancel, caseId }) => {
 
   const { files, setFiles } = useFiles();
   const member = useSelector((state) => selectMember(state));
+  const disabled = useSelector((state) => selectIsDisabledForm(state));
 
   const [createCase] = useCreateCaseMutation();
   const [addAWSFile] = useAddAWSFileMutation();
 
   const onSubmit = handleSubmit(async (data) => {
+    dispatch(setIsDisabledForm(true));
     try {
       // review fields and defaults
       const payload = {
@@ -65,6 +80,7 @@ const Creation = ({ handleCancel, caseId }) => {
     reset({ caseName: "" });
     setFiles([]);
     handleCancel();
+    dispatch(setIsDisabledForm(false));
   });
 
   return (
@@ -123,16 +139,26 @@ const Creation = ({ handleCancel, caseId }) => {
             variant="text"
             sx={{ borderRadius: "0.6rem", color: theme.palette.blue.main }}
             onClick={handleCancel}
+            disabled={disabled}
           >
             Cancel
           </Button>
           <Button
             color="blue"
             variant="contained"
-            sx={{ borderRadius: "0.6rem", color: theme.palette.secondary.main }}
+            sx={{
+              borderRadius: "0.6rem",
+              color: theme.palette.secondary.main,
+              minWidth: "8rem",
+            }}
             type="submit"
+            disabled={disabled}
           >
-            Create Case
+            {disabled ? (
+              <CircularProgress color="secondary" size={20} />
+            ) : (
+              "Create Case"
+            )}
           </Button>
         </Box>
       </form>

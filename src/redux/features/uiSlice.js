@@ -7,6 +7,7 @@ const initialState = {
   authError: "",
   member: {},
   refetch: false,
+  isDisabledForm: false,
 };
 
 export const uiSlice = createSlice({
@@ -31,6 +32,9 @@ export const uiSlice = createSlice({
     refetch: (state, action) => {
       state.refetch = action.payload;
     },
+    setIsDisabledForm: (state, action) => {
+      state.isDisabledForm = action.payload;
+    },
   },
 });
 
@@ -41,6 +45,7 @@ export const {
   setMember,
   updateFilter,
   refetch,
+  setIsDisabledForm,
 } = uiSlice.actions;
 
 export const selectAuthError = (state) => state.ui.authError;
@@ -54,5 +59,7 @@ export const selectMember = (state) => state.ui.member;
 export const selectFilter = (state) => state.ui.filter;
 
 export const selectRefetch = (state) => state.ui.refetch;
+
+export const selectIsDisabledForm = (state) => state.ui.isDisabledForm;
 
 export default uiSlice.reducer;

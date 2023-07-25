@@ -1,11 +1,11 @@
 import { useParams } from "next/navigation";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { ChatHeader } from "./ChatHeader";
 import styled from "@emotion/styled";
 import { ChatInput } from "./ChatInput";
 import { ChatDetails } from "./ChatDetails";
 import { ChatConversation } from "./ChatConversation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAddNoteMutation } from "@/redux/services/casesApi";
 import {
   useGetChatHistoryMutation,
@@ -14,7 +14,11 @@ import {
 } from "@/redux/services/engageApi";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
-import { refetch, selectMember, selectRefetch } from "@/redux/features/uiSlice";
+import {
+  refetch,
+  selectMember,
+  setIsDisabledForm,
+} from "@/redux/features/uiSlice";
 import { ACTOR } from "@/constants";
 
 const StyledStickyBox = styled(Box, {
@@ -43,6 +47,7 @@ const Chat = () => {
   const dispatch = useDispatch();
 
   const [ids, setIds] = useState();
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [messages, setMessages] = useState([]);
   const [lastMessage, setLastMessage] = useState();
   const [lastChatUpdate, setLastChatUpdate] = useState();
@@ -69,17 +74,20 @@ const Chat = () => {
   }, [member]);
 
   useEffect(() => {
+    dispatch(setIsDisabledForm(true));
     if (ids) {
-      getChatHistoryResponse();
+      getFirstChatHistory();
     }
   }, [ids]);
 
-  const getChatHistoryResponse = async () => {
+  const getFirstChatHistory = async () => {
     const chatHistoryResponse = await handleGetChatHistory();
     setMessages(chatHistoryResponse?.chat?.messages);
     setTimeout(() => {
       scrollDown();
     }, [100]);
+    setIsFirstLoad(false);
+    dispatch(setIsDisabledForm(false));
   };
 
   const scrollDown = () => {
@@ -116,6 +124,7 @@ const Chat = () => {
       content: value,
     };
     if (type === "Chat") {
+      dispatch(setIsDisabledForm(true));
       setLastMessage(value);
       setIsAILoading(true);
       setTryAgain(false);
@@ -142,10 +151,12 @@ const Chat = () => {
       } else if (error) {
         setIsAILoading(false);
         setTryAgain(true);
+        setLastMessage();
       }
     } else if (type === "Note") {
       addNote(payload);
     }
+    dispatch(setIsDisabledForm(false));
   };
 
   useEffect(() => {
@@ -204,18 +215,24 @@ const Chat = () => {
           <Box mb={2}>
             <ChatDetails />
           </Box>
-          <ChatConversation
-            messages={messages}
-            isLoading={isLoading}
-            lastMessage={lastMessage}
-            isAILoading={isAILoading}
-            tryAgain={tryAgain}
-          />
+          {isFirstLoad ? (
+            <Box display="flex" justifyContent="center">
+              <CircularProgress color="secondary" size={20} />
+            </Box>
+          ) : (
+            <ChatConversation
+              messages={messages}
+              isLoading={isLoading}
+              lastMessage={lastMessage}
+              isAILoading={isAILoading}
+              tryAgain={tryAgain}
+            />
+          )}
         </>
       </Box>
       <Box ref={chatRef} />
       <StyledStickyBox sticky="bottom">
-        <ChatInput onSubmit={onSubmit} disabled={!!lastMessage} />
+        <ChatInput onSubmit={onSubmit} />
       </StyledStickyBox>
     </StyledContainer>
   );

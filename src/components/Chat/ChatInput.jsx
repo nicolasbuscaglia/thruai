@@ -4,6 +4,8 @@ import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import SendIcon from "@mui/icons-material/Send";
 import { FormSelect } from "../Forms/FormSelect";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectIsDisabledForm } from "@/redux/features/uiSlice";
 
 const MESSAGE_TYPES = [
   { id: 1, label: "Chat" },
@@ -18,8 +20,9 @@ const StyledMainBox = styled(Box)(({ theme }) => ({
   borderRadius: "1rem",
 }));
 
-const ChatInput = ({ onSubmit, disabled = false }) => {
+const ChatInput = ({ onSubmit }) => {
   const theme = useTheme();
+  const disabled = useSelector((state) => selectIsDisabledForm(state));
   const [value, setValue] = useState("");
   const [messageType, setMessageType] = useState(MESSAGE_TYPES[0].label);
 
@@ -53,7 +56,6 @@ const ChatInput = ({ onSubmit, disabled = false }) => {
             value={value}
             onChange={handleChange}
             onKeyDown={handleSubmit}
-            disabled={disabled}
           />
         </Box>
         <Box display="flex" gap={1} p={1}>

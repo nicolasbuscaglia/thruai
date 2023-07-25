@@ -1,12 +1,14 @@
 import { Box, Typography, useTheme } from "@mui/material";
 import { FileUploader } from "react-drag-drop-files";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import { File } from "./File";
+import { useSelector } from "react-redux";
+import { selectIsDisabledForm } from "@/redux/features/uiSlice";
 
 const fileTypes = ["PDF", "DOCX", "XML"];
 
 const FileDropZone = ({ handleAddFiles }) => {
   const theme = useTheme();
+  const disabled = useSelector((state) => selectIsDisabledForm(state));
 
   const handleChange = (file) => {
     handleAddFiles(file);
@@ -18,6 +20,7 @@ const FileDropZone = ({ handleAddFiles }) => {
       name="file"
       types={fileTypes}
       multiple
+      disabled={disabled}
     >
       <Box
         display="flex"

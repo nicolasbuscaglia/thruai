@@ -1,9 +1,14 @@
+import { selectIsDisabledForm } from "@/redux/features/uiSlice";
 import { Box, TextField, Typography, styled, useTheme } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   "& fieldset": {
     borderRadius: "1rem",
     border: "none",
+  },
+  "& .Mui-disabled": {
+    WebkitTextFillColor: `${theme.palette.gray.main} !important`,
   },
   "& :before, & :after": {
     borderColor: `${theme.palette.border.main} !important`,
@@ -18,9 +23,9 @@ const FormInputText = ({
   onChange = () => {},
   onKeyDown = () => {},
   ref,
-  disabled = false,
 }) => {
   const theme = useTheme();
+  const disabled = useSelector((state) => selectIsDisabledForm(state));
 
   const handleChange = (e) => {
     onChange(e.target.value);

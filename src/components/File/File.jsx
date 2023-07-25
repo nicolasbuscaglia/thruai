@@ -11,6 +11,8 @@ import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { formatBytes } from "@/utils/bytes";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useFiles } from "@/context/FilesContext";
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsDisabledForm } from "@/redux/features/uiSlice";
 
 const StyledMainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -46,6 +48,7 @@ const File = ({
   skipReviewCheckbox = false,
   skipCleanCheckbox = false,
 }) => {
+  const disabled = useSelector((state) => selectIsDisabledForm(state));
   const { files, setFiles } = useFiles();
   const { fileId, rawFile, skipReview, skipClean } = file;
   const { name, type, size } = rawFile || file;
@@ -164,7 +167,7 @@ const File = ({
         </Box>
       </StyledMainContainer>
       {/* </a> */}
-      {remove && (
+      {remove && !disabled && (
         <StyledIconButton
           aria-label="remove file"
           color="icon"
