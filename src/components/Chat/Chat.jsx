@@ -146,7 +146,7 @@ const Chat = () => {
       });
       if (data) {
         const lastChatUpdateResponse = await handleGetLastChatUpdate();
-        setLastChatUpdate(lastChatUpdateResponse);
+        setLastChatUpdate(lastChatUpdateResponse || new Date().toISOString());
         scrollDown();
       } else if (error) {
         setIsAILoading(false);
