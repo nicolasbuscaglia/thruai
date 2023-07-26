@@ -4,6 +4,7 @@ import { SignUpLink } from "@/components/Auth/SignUpLink";
 import { GoogleButton } from "@/components/StyledComponents/StyledGoogleButton";
 import useAuth from "@/hooks/useAuth";
 import { setIsAuthSubmitting } from "@/redux/features/uiSlice";
+import styled from "@emotion/styled";
 import { Box, Typography, useTheme } from "@mui/material";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useSearchParams } from "next/navigation";
@@ -24,6 +25,14 @@ const formFields = [
     autoComplete: "on",
   },
 ];
+
+const SignedUpBox = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.green.main,
+  position: "relative",
+  top: 10,
+  padding: "1rem",
+  borderRadius: "1rem 1rem 0 0",
+}));
 
 const submitButtonLabel = "Log in";
 
@@ -53,9 +62,11 @@ const LogIn = () => {
   return (
     <Box p={2}>
       {confirmed === "true" && (
-        <Box mb={2}>
-          <Typography color="secondary">{"You're signed up!"}</Typography>
-        </Box>
+        <SignedUpBox>
+          <Typography color="secondary">
+            {"You're signed up! Please log in now."}
+          </Typography>
+        </SignedUpBox>
       )}
       <AuthForm
         title="Login to your account"

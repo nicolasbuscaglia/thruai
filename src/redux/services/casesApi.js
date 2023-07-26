@@ -95,6 +95,14 @@ export const casesApi = createApi({
       }),
       invalidatesTags: ["Cases", "Files"],
     }),
+    statusAWSFile: builder.mutation({
+      query: (file) => ({
+        url: "aws/fileStatus",
+        method: "POST",
+        body: JSON.stringify(file),
+      }),
+      invalidatesTags: ["Files"],
+    }),
   }),
 });
 
@@ -114,4 +122,5 @@ export const {
   useGetFilesByCaseIdQuery,
   useAddMoreFilesMutation,
   useAddAWSFileMutation,
+  useStatusAWSFileMutation,
 } = casesApi;

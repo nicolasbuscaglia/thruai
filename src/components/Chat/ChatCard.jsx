@@ -3,14 +3,9 @@ import { Avatar, Box, Grid, Typography, styled, useTheme } from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { useEffect, useRef, useState } from "react";
 import { getDatePart, getTimePart } from "@/utils/date";
-import {
-  useChatHandlerMutation,
-  useGetChatHistoryMutation,
-} from "@/redux/services/engageApi";
+import { useGetChatHistoryMutation } from "@/redux/services/engageApi";
 import { refetch, selectMember, selectRefetch } from "@/redux/features/uiSlice";
-import { useGetUserQuery } from "@/redux/services/casesApi";
 import { useDispatch, useSelector } from "react-redux";
-import { useFiles } from "@/context/FilesContext";
 
 const StyledCenteredBox = styled(Box)(() => ({
   display: "flex",

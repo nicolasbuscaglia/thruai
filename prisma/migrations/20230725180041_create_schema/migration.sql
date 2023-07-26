@@ -1,4 +1,18 @@
 -- CreateTable
+CREATE TABLE "NormalizedCaseId" (
+    "caseId" SERIAL NOT NULL,
+
+    CONSTRAINT "NormalizedCaseId_pkey" PRIMARY KEY ("caseId")
+);
+
+-- CreateTable
+CREATE TABLE "NormalizedChatId" (
+    "chatId" SERIAL NOT NULL,
+
+    CONSTRAINT "NormalizedChatId_pkey" PRIMARY KEY ("chatId")
+);
+
+-- CreateTable
 CREATE TABLE "NewCase" (
     "newCaseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

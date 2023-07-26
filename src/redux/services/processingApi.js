@@ -7,19 +7,26 @@ export const processingApi = createApi({
     baseUrl: `${process.env.NEXT_PUBLIC_AWS_PROCESSING_API_BASE_URL}/${process.env.NEXT_PUBLIC_AWS_PROCESSING_API_STAGE}/${process.env.NEXT_PUBLIC_AWS_PROCESSING_API_VERSION}`,
     prepareHeaders: (headers) => {
       headers.set("Authorization", getAccessToken());
+      headers.set("Authorization", getAccessToken());
     },
   }),
   tagTypes: ["Files"],
   endpoints: (builder) => ({
-    fileUpload: builder.mutation({
-      query: (newFile) => ({
+    fileUpload: builder.query({
+      query: () => ({
         url: "/fileUpload",
-        method: "post",
-        body: newFile,
+        method: "GET",
+      }),
+      invalidatesTags: ["Files"],
+    }),
+    fileStatus: builder.query({
+      query: () => ({
+        url: "/fileStatus",
+        method: "GET",
       }),
       invalidatesTags: ["Files"],
     }),
   }),
 });
 
-export const { useFileUploadMutation } = processingApi;
+export const { useFileUploadMutation, useFileStatusQuery } = processingApi;

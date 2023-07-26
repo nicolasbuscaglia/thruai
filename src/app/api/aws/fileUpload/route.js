@@ -9,13 +9,10 @@ export async function POST(req) {
   const data = await req.formData();
   const selectedFile = data.get("file");
   const metadata = JSON.parse(data.get("metadata"));
-  console.log(selectedFile);
-  console.log(metadata);
   const { name, type, size } = selectedFile;
   const { clientId, caseId, userId, skipReview, skipClean, cleaningStatus } =
     metadata;
 
-  console.log(`uploading [${selectedFile.name}] to AWS`);
   try {
     const getUploadUrlResponse = await axios.get(
       `${process.env.NEXT_PUBLIC_AWS_PROCESSING_API_BASE_URL}/${process.env.NEXT_PUBLIC_AWS_PROCESSING_API_STAGE}/${process.env.NEXT_PUBLIC_AWS_PROCESSING_API_VERSION}/fileUpload`,
@@ -34,10 +31,6 @@ export async function POST(req) {
     );
 
     const { uploadUrl, fileId } = getUploadUrlResponse.data;
-    console.log("uploadURL is: ", uploadUrl);
-    console.log("fileId is: ", fileId);
-
-    console.log("processing...");
 
     const uploadResponse = await fetch(uploadUrl, {
       method: "PUT",

@@ -11,13 +11,13 @@ import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import { formatBytes } from "@/utils/bytes";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { useFiles } from "@/context/FilesContext";
-import { useDispatch, useSelector } from "react-redux";
-import { selectIsDisabledForm } from "@/redux/features/uiSlice";
+import { useSelector } from "react-redux";
+import { selectIsDisabledForm, selectMember } from "@/redux/features/uiSlice";
+import { useStatusAWSFileMutation } from "@/redux/services/casesApi";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 
 const StyledMainContainer = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: 1,
   borderRadius: "1rem",
   backgroundColor: theme.palette.lightGray.dark,
   padding: "0.5rem",
@@ -42,17 +42,33 @@ const StyledIconButton = styled(IconButton)(() => ({
   right: -8,
 }));
 
-const File = ({
-  file,
-  remove = false,
-  skipReviewCheckbox = false,
-  skipCleanCheckbox = false,
-}) => {
+const File = ({ file, viewOnly = false }) => {
+  const params = useParams();
+  const { caseId } = params;
+  const theme = useTheme();
   const disabled = useSelector((state) => selectIsDisabledForm(state));
   const { files, setFiles } = useFiles();
   const { fileId, rawFile, skipReview, skipClean } = file;
   const { name, type, size } = rawFile || file;
-  const theme = useTheme();
+  const member = useSelector((state) => selectMember(state));
+  const [ids, setIds] = useState();
+
+  const [statusAWSFile, { data: fileStatus }] = useStatusAWSFileMutation();
+
+  useEffect(() => {
+    if (Object.keys(member).length) {
+      setIds({
+        clientId: member.clientId,
+        caseId: caseId,
+        userId: member.userId,
+        fileId: fileId,
+      });
+    }
+  }, [member]);
+
+  useEffect(() => {
+    if (ids && viewOnly) statusAWSFile(ids);
+  }, [ids]);
 
   const handleRemove = () => {
     const newFiles = files.filter((file) => file.fileId !== fileId);
@@ -75,99 +91,112 @@ const File = ({
 
   return (
     <Box sx={{ position: "relative" }}>
-      {/* <a href={fileURL} download> */}
       <StyledMainContainer>
-        <StyledIconContainer>
-          <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 16 }} />
-        </StyledIconContainer>
+        <Box
+          px={0.5}
+          display="flex"
+          justifyContent="flex-start"
+          alignItems="center"
+          gap={1}
+        >
+          <StyledIconContainer>
+            <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 16 }} />
+          </StyledIconContainer>
 
-        <Box overflow="hidden" p={1}>
-          <Typography
-            variant="body2"
-            color="secondary"
-            fontSize={12}
-            sx={{ textOverflow: "ellipsis", overflow: "hidden" }}
-            gutterBottom
-          >
-            {name}
-          </Typography>
-
-          <StyledCenteredBox>
+          <Box overflow="hidden" p={1}>
             <Typography
               variant="body2"
-              color={theme.palette.gray.light}
+              color="secondary"
               fontSize={12}
+              sx={{ textOverflow: "ellipsis", overflow: "hidden" }}
+              gutterBottom
             >
-              {formatBytes(Number(size))}
+              {name}
             </Typography>
-            <Typography
-              variant="body2"
-              color={theme.palette.gray.light}
-              fontSize={12}
-            >
-              {type}
-            </Typography>
-          </StyledCenteredBox>
-          {skipReviewCheckbox && (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name={fileId}
-                  checked={skipReview}
-                  onChange={handleReview}
-                  inputProps={{ "aria-label": "controlled" }}
-                  color="blue"
-                  size="small"
-                  sx={{
-                    color: theme.palette.gray.light,
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                  }}
-                />
-              }
-              label={
-                <Typography
-                  fontSize={12}
-                  color={theme.palette.gray.light}
-                  fontWeight={300}
-                >
-                  Skip Review
-                </Typography>
-              }
-            />
-          )}
-          {skipCleanCheckbox && (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name={fileId}
-                  checked={skipClean}
-                  onChange={handleClean}
-                  inputProps={{ "aria-label": "controlled" }}
-                  color="blue"
-                  size="small"
-                  sx={{
-                    color: theme.palette.gray.light,
-                    paddingTop: 0,
-                    paddingBottom: 0,
-                  }}
-                />
-              }
-              label={
-                <Typography
-                  fontSize={12}
-                  color={theme.palette.gray.light}
-                  fontWeight={300}
-                >
-                  Skip Clean
-                </Typography>
-              }
-            />
-          )}
+
+            <StyledCenteredBox>
+              <Typography
+                variant="body2"
+                color={theme.palette.gray.light}
+                fontSize={12}
+              >
+                {formatBytes(Number(size))}
+              </Typography>
+              <Typography
+                variant="body2"
+                color={theme.palette.gray.light}
+                fontSize={12}
+              >
+                {type}
+              </Typography>
+            </StyledCenteredBox>
+          </Box>
         </Box>
+        <Box px={1}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                name={fileId}
+                checked={skipReview}
+                disabled={viewOnly || disabled}
+                onChange={handleReview}
+                inputProps={{ "aria-label": "controlled" }}
+                color="blue"
+                size="small"
+                sx={{
+                  color: theme.palette.gray.light,
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                }}
+              />
+            }
+            label={
+              <Typography
+                fontSize={12}
+                color={theme.palette.gray.light}
+                fontWeight={300}
+              >
+                Skip Review
+              </Typography>
+            }
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                name={fileId}
+                checked={skipClean}
+                disabled={viewOnly || disabled}
+                onChange={handleClean}
+                inputProps={{ "aria-label": "controlled" }}
+                color="blue"
+                size="small"
+                sx={{
+                  color: theme.palette.gray.light,
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                }}
+              />
+            }
+            label={
+              <Typography
+                fontSize={12}
+                color={theme.palette.gray.light}
+                fontWeight={300}
+              >
+                Skip Clean
+              </Typography>
+            }
+          />
+        </Box>
+        {viewOnly && (
+          <Box p={1}>
+            <Typography color={theme.palette.gray.light} fontSize={12}>
+              Status: {fileStatus && fileStatus[0].last_step_complete}
+            </Typography>
+          </Box>
+        )}
       </StyledMainContainer>
-      {/* </a> */}
-      {remove && !disabled && (
+      {!viewOnly && !disabled && (
         <StyledIconButton
           aria-label="remove file"
           color="icon"

@@ -34,7 +34,7 @@ const ChatFileList = () => {
         </Box>
       ) : (
         <>
-          <FileList files={data} />
+          <FileList files={data} viewOnly />
           <Divider sx={{ backgroundColor: theme.palette.border.main }} />
           <FileCategories />
         </>

@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import prisma from "../../../../../lib/prisma";
 import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
-import { v4 as uuidv4 } from "uuid";
 import { PREFIX_TYPE_ID } from "@/constants";
+import { parseDigits } from "@/utils/parseDigits";
 
 export async function POST(req) {
   const headersList = headers();
@@ -11,9 +11,12 @@ export async function POST(req) {
   try {
     const user = await cognitoJwtVerifier(accessToken);
 
+    const normalized = await prisma.NormalizedCaseId.create();
+    const newCaseId = parseDigits(normalized.caseId);
+
     const thisCase = await prisma.NewCase.create({
       data: {
-        newCaseId: `${PREFIX_TYPE_ID.CASE}${uuidv4()}`,
+        newCaseId: `${PREFIX_TYPE_ID.CASE}${newCaseId}`,
         userId: `${PREFIX_TYPE_ID.USER}${user.sub}`,
       },
     });

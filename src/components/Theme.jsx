@@ -36,6 +36,9 @@ const theme = createTheme({
     blue: {
       main: "#0062FF",
     },
+    green: {
+      main: "#357A38",
+    },
     progress: {
       main: "#3DD598",
     },

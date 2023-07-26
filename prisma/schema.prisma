@@ -9,6 +9,14 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+model NormalizedCaseId {
+  caseId    Int  @id @default(autoincrement())
+}
+
+model NormalizedChatId {
+  chatId    Int  @id @default(autoincrement())
+}
+
 model NewCase {
   newCaseId    String  @id @default(uuid())
   createdAt    DateTime @default(now())

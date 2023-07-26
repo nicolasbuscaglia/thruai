@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import prisma from "../../../../lib/prisma";
 import { cognitoJwtVerifier } from "@/utils/cognitoJwtVerifier";
-import { v4 as uuidv4 } from "uuid";
 import { PREFIX_TYPE_ID } from "@/constants";
+import { parseDigits } from "@/utils/parseDigits";
 
 export async function GET(req) {
   const headersList = headers();
@@ -47,6 +47,9 @@ export async function POST(req) {
       },
     });
 
+    const normalized = await prisma.NormalizedChatId.create();
+    const newChatId = parseDigits(normalized.chatId);
+
     const data = await req.json();
     const {
       caseId,
@@ -73,7 +76,7 @@ export async function POST(req) {
         attachments: attachments,
         chats: {
           create: {
-            chatId: `chat-${uuidv4()}`,
+            chatId: `${PREFIX_TYPE_ID.CHAT}${newChatId}`,
           },
         },
       },

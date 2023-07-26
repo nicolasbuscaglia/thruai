@@ -24,7 +24,6 @@ import {
   selectMember,
   setIsDisabledForm,
 } from "@/redux/features/uiSlice";
-import { useState } from "react";
 
 const Creation = ({ handleCancel, caseId }) => {
   const dispatch = useDispatch();

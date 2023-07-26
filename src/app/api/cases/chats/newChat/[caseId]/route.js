@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../../../../lib/prisma";
-import { v4 as uuidv4 } from "uuid";
+import { parseDigits } from "@/utils/parseDigits";
+import { PREFIX_TYPE_ID } from "@/constants";
 
 export async function POST(req, { params }) {
   try {
     const { caseId } = params;
+
+    const normalized = await prisma.NormalizedChatId.create();
+    const newChatId = parseDigits(normalized.chatId);
+
     const chat = await prisma.Chat.create({
       data: {
         caseId: caseId,
-        chatId: `chat-${uuidv4()}`,
+        chatId: `${PREFIX_TYPE_ID.CHAT}${newChatId}`,
       },
     });
 
