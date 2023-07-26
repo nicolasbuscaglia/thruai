@@ -1,6 +1,7 @@
 import {
   Box,
   Checkbox,
+  CircularProgress,
   FormControlLabel,
   IconButton,
   Typography,
@@ -53,7 +54,8 @@ const File = ({ file, viewOnly = false }) => {
   const member = useSelector((state) => selectMember(state));
   const [ids, setIds] = useState();
 
-  const [statusAWSFile, { data: fileStatus }] = useStatusAWSFileMutation();
+  const [statusAWSFile, { data: fileStatus, isLoading }] =
+    useStatusAWSFileMutation();
 
   useEffect(() => {
     if (Object.keys(member).length) {
@@ -69,6 +71,14 @@ const File = ({ file, viewOnly = false }) => {
   useEffect(() => {
     if (ids && viewOnly) statusAWSFile(ids);
   }, [ids]);
+
+  useEffect(() => {
+    if (fileStatus?.t_total === "NULL") {
+      setTimeout(() => {
+        statusAWSFile(ids);
+      }, [10000]);
+    }
+  }, [fileStatus]);
 
   const handleRemove = () => {
     const newFiles = files.filter((file) => file.fileId !== fileId);
@@ -191,7 +201,16 @@ const File = ({ file, viewOnly = false }) => {
         {viewOnly && (
           <Box p={1}>
             <Typography color={theme.palette.gray.light} fontSize={12}>
-              Status: {fileStatus && fileStatus.last_step_complete}
+              Status:{" "}
+              {fileStatus ? (
+                fileStatus?.last_step_complete
+              ) : (
+                <CircularProgress
+                  color="gray"
+                  size={12}
+                  sx={{ marginLeft: "0.5rem" }}
+                />
+              )}
             </Typography>
           </Box>
         )}

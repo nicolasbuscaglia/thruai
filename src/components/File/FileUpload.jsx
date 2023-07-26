@@ -9,14 +9,10 @@ const FileUpload = () => {
   const { files, setFiles } = useFiles();
 
   const handleAddFiles = (data) => {
-    // Featured for single file uploading
-    // For multiple file uploadind add "multiple" param to <FileUploader />
-    // remove the fileList object and the [0] on files.
-    const fileList = { 0: data };
-    const filesArray = Object.keys(fileList).map((index) => {
+    const filesArray = Object.keys(data).map((index) => {
       return {
         fileId: uuidv4(),
-        rawFile: fileList[index],
+        rawFile: data[index],
         skipReview: false,
         skipClean: false,
         cleaningStatus: 100,

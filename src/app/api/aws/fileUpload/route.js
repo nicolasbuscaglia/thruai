@@ -62,6 +62,7 @@ export async function POST(req) {
             caseId: caseId,
           },
         });
+        console.log(thisCase);
         await prisma.Case.update({
           where: {
             caseId: caseId,

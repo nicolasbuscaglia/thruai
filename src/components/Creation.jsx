@@ -65,16 +65,18 @@ const Creation = ({ handleCancel, caseId }) => {
         caseId: caseId,
         userId: member.cognitoId,
       };
-      const formData = new FormData();
-      formData.append("file", files[0].rawFile, files[0].rawFile.name);
-      formData.append("metadata", JSON.stringify({ ...ids, ...files[0] }));
-      const fileResponse = await addAWSFile(formData);
-      if (fileResponse.error) {
-        throw new Error(fileResponse.error.data?.message);
-      }
+      files.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file.rawFile, file.rawFile.name);
+        formData.append("metadata", JSON.stringify({ ...ids, ...file }));
+        const fileResponse = await addAWSFile(formData);
+        if (fileResponse.error) {
+          throw new Error(fileResponse.error.data?.message);
+        }
+      });
       console.log("Case succesfully created");
-    } catch (error) {
-      console.log("Error creating case", error);
+    } catch (err) {
+      console.log("Error creating case", err);
     }
     reset({ caseName: "" });
     setFiles([]);

@@ -36,16 +36,26 @@ const ChatFileUpload = () => {
   const [addAWSFile, response] = useAddAWSFileMutation();
 
   const onSubmit = () => {
-    const ids = {
-      clientId: user.clientId,
-      caseId: caseId,
-      userId: user.cognitoId,
-    };
-    const formData = new FormData();
-    formData.append("file", files[0].rawFile, files[0].rawFile.name);
-    formData.append("metadata", JSON.stringify({ ...ids, ...files[0] }));
-    addAWSFile(formData);
-    setFiles([]);
+    try {
+      const ids = {
+        clientId: user.clientId,
+        caseId: caseId,
+        userId: user.cognitoId,
+      };
+      files.map(async (file) => {
+        const formData = new FormData();
+        formData.append("file", file.rawFile, file.rawFile.name);
+        formData.append("metadata", JSON.stringify({ ...ids, ...file }));
+        const fileResponse = await addAWSFile(formData);
+        if (fileResponse.error) {
+          throw new Error(fileResponse.error.data?.message);
+        }
+      });
+      setFiles([]);
+      console.log("Files uploaded successfully");
+    } catch (err) {
+      console.log("Error uploading files", err);
+    }
   };
 
   return (

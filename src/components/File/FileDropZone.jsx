@@ -19,6 +19,7 @@ const FileDropZone = ({ handleAddFiles }) => {
       handleChange={handleChange}
       name="file"
       types={fileTypes}
+      multiple
       disabled={disabled}
     >
       <Box
