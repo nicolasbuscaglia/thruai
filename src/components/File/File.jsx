@@ -191,7 +191,7 @@ const File = ({ file, viewOnly = false }) => {
         {viewOnly && (
           <Box p={1}>
             <Typography color={theme.palette.gray.light} fontSize={12}>
-              Status: {fileStatus && fileStatus[0].last_step_complete}
+              Status: {fileStatus && fileStatus.last_step_complete}
             </Typography>
           </Box>
         )}
