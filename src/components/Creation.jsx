@@ -14,33 +14,27 @@ import { Controller, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { FormErrorMessage } from "./Forms/FormErrorMessage";
 import { FileUpload } from "./File/FileUpload";
-import {
-  useAddAWSFileMutation,
-  useCreateCaseMutation,
-} from "@/redux/services/casesApi";
-import { useFiles } from "@/context/FilesContext";
+import { useCreateCaseMutation } from "@/redux/services/casesApi";
 import {
   selectIsDisabledForm,
   selectMember,
   setIsDisabledForm,
 } from "@/redux/features/uiSlice";
+import { useFiles } from "@/context/FilesContext";
 
 const Creation = ({ handleCancel, caseId }) => {
   const dispatch = useDispatch();
   const theme = useTheme();
+  const disabled = useSelector((state) => selectIsDisabledForm(state));
+  const [createCase] = useCreateCaseMutation();
+  const { processFiles } = useFiles();
+  const member = useSelector((state) => selectMember(state));
   const {
     handleSubmit,
     reset,
     control,
     formState: { errors },
   } = useForm();
-
-  const { files, setFiles } = useFiles();
-  const member = useSelector((state) => selectMember(state));
-  const disabled = useSelector((state) => selectIsDisabledForm(state));
-
-  const [createCase] = useCreateCaseMutation();
-  const [addAWSFile] = useAddAWSFileMutation();
 
   const onSubmit = handleSubmit(async (data) => {
     dispatch(setIsDisabledForm(true));
@@ -49,37 +43,23 @@ const Creation = ({ handleCancel, caseId }) => {
       const payload = {
         caseId: caseId,
         name: data.caseName,
-        type: "Test - Dev",
+        type: "Healthcare",
         filesCount: 0,
         daysLeft: 14,
-        uploadStatus: 10,
-        team: ["Test"],
+        uploadStatus: 100,
+        team: [member?.username],
         attachments: false,
       };
       const caseResponse = await createCase(payload);
       if (caseResponse.error) {
         throw new Error(caseResponse.error.data?.message);
       }
-      const ids = {
-        clientId: member.clientId,
-        caseId: caseId,
-        userId: member.cognitoId,
-      };
-      files.map(async (file) => {
-        const formData = new FormData();
-        formData.append("file", file.rawFile, file.rawFile.name);
-        formData.append("metadata", JSON.stringify({ ...ids, ...file }));
-        const fileResponse = await addAWSFile(formData);
-        if (fileResponse.error) {
-          throw new Error(fileResponse.error.data?.message);
-        }
-      });
+      await processFiles({ caseId });
       console.log("Case succesfully created");
     } catch (err) {
       console.log("Error creating case", err);
     }
     reset({ caseName: "" });
-    setFiles([]);
     handleCancel();
     dispatch(setIsDisabledForm(false));
   });

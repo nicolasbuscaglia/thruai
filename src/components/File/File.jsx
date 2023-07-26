@@ -21,7 +21,6 @@ import { useParams } from "next/navigation";
 const StyledMainContainer = styled(Box)(({ theme }) => ({
   borderRadius: "1rem",
   backgroundColor: theme.palette.lightGray.dark,
-  padding: "0.5rem",
 }));
 
 const StyledCenteredBox = styled(Box)(() => ({
@@ -76,7 +75,7 @@ const File = ({ file, viewOnly = false }) => {
     if (fileStatus?.t_total === "NULL") {
       setTimeout(() => {
         statusAWSFile(ids);
-      }, [10000]);
+      }, [20000]);
     }
   }, [fileStatus]);
 
@@ -92,18 +91,18 @@ const File = ({ file, viewOnly = false }) => {
     setFiles(newFiles);
   };
 
-  const handleReview = (e) => {
-    const newFiles = files.map((file) =>
-      file.fileId === fileId ? { ...file, skipReview: e.target.checked } : file
-    );
-    setFiles(newFiles);
-  };
+  // const handleReview = (e) => {
+  //   const newFiles = files.map((file) =>
+  //     file.fileId === fileId ? { ...file, skipReview: e.target.checked } : file
+  //   );
+  //   setFiles(newFiles);
+  // };
 
   return (
     <Box sx={{ position: "relative" }}>
       <StyledMainContainer>
         <Box
-          px={0.5}
+          p={1}
           display="flex"
           justifyContent="flex-start"
           alignItems="center"
@@ -113,7 +112,7 @@ const File = ({ file, viewOnly = false }) => {
             <AttachFileOutlinedIcon color="secondary" sx={{ fontSize: 16 }} />
           </StyledIconContainer>
 
-          <Box overflow="hidden" p={1}>
+          <Box overflow="hidden" p={0.5}>
             <Typography
               variant="body2"
               color="secondary"
@@ -140,10 +139,8 @@ const File = ({ file, viewOnly = false }) => {
                 {type}
               </Typography>
             </StyledCenteredBox>
-          </Box>
-        </Box>
-        <Box px={1}>
-          <FormControlLabel
+            <Box>
+              {/* <FormControlLabel
             control={
               <Checkbox
                 name={fileId}
@@ -169,37 +166,45 @@ const File = ({ file, viewOnly = false }) => {
                 Skip Review
               </Typography>
             }
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                name={fileId}
-                checked={skipClean}
-                disabled={viewOnly || disabled}
-                onChange={handleClean}
-                inputProps={{ "aria-label": "controlled" }}
-                color="blue"
-                size="small"
-                sx={{
-                  color: theme.palette.gray.light,
-                  paddingTop: 0,
-                  paddingBottom: 0,
-                }}
+          /> */}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name={fileId}
+                    checked={skipClean}
+                    disabled={viewOnly || disabled}
+                    onChange={handleClean}
+                    inputProps={{ "aria-label": "controlled" }}
+                    color="blue"
+                    size="small"
+                    sx={{
+                      color: theme.palette.gray.light,
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                    }}
+                  />
+                }
+                label={
+                  <Typography
+                    fontSize={12}
+                    color={theme.palette.gray.light}
+                    fontWeight={300}
+                  >
+                    Skip Clean
+                  </Typography>
+                }
               />
-            }
-            label={
-              <Typography
-                fontSize={12}
-                color={theme.palette.gray.light}
-                fontWeight={300}
-              >
-                Skip Clean
-              </Typography>
-            }
-          />
+            </Box>
+          </Box>
         </Box>
         {viewOnly && (
-          <Box p={1}>
+          <Box
+            p={1}
+            sx={{
+              borderTop: "1px solid",
+              borderColor: theme.palette.gray.main,
+            }}
+          >
             <Typography color={theme.palette.gray.light} fontSize={12}>
               Status:{" "}
               {fileStatus ? (

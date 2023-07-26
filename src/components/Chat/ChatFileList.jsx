@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
 import { FileList } from "../File/FileList";
 import { useParams } from "next/navigation";
 import { ChatFileUpload } from "./ChatFileUpload";
-import { FileCategories } from "../File/FileCategories";
+// import { FileCategories } from "../File/FileCategories";
 import {
   Box,
   CircularProgress,
@@ -36,7 +35,7 @@ const ChatFileList = () => {
         <>
           <FileList files={data} viewOnly />
           <Divider sx={{ backgroundColor: theme.palette.border.main }} />
-          <FileCategories />
+          {/* <FileCategories /> */}
         </>
       )}
     </>

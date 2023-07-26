@@ -128,7 +128,9 @@ const Dashboard = () => {
         hidden={true}
         openSidebar={openRightSidebar}
       >
-        <Creation handleCancel={handleCloseRightSidebar} caseId={caseId} />
+        {openRightSidebar && (
+          <Creation handleCancel={handleCloseRightSidebar} caseId={caseId} />
+        )}
       </Sidebar>
     </StyledHeightContainer>
   );

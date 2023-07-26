@@ -103,7 +103,7 @@ const Card = ({ card }) => {
             alignItems: "center",
             gap: 1,
           }}
-          mt={1}
+          my={1}
         >
           <CardFiles filesCount={filesCount} />
           <CardDaysLeft daysLeft={daysLeft} />

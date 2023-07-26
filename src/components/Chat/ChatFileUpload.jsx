@@ -1,17 +1,21 @@
-import { useEffect, useState } from "react";
-import { Box, Button, IconButton, styled } from "@mui/material";
+import { useState } from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  styled,
+} from "@mui/material";
 import AttachFileOutlinedIcon from "@mui/icons-material/AttachFileOutlined";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import { FileUpload } from "../File/FileUpload";
-import {
-  useAddAWSFileMutation,
-  useGetUserQuery,
-} from "@/redux/services/casesApi";
 import { useFiles } from "@/context/FilesContext";
-import { useSelector } from "react-redux";
-import { selectMember } from "@/redux/features/uiSlice";
-import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectIsDisabledForm,
+  setIsDisabledForm,
+} from "@/redux/features/uiSlice";
 
 const StyledUploadButtonBox = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -27,31 +31,17 @@ const StyledUploadButtonBox = styled(Box)(({ theme }) => ({
 
 const ChatFileUpload = () => {
   const params = useParams();
-  const [showFileUpload, setShowFileUpload] = useState(false);
-  const { files, setFiles } = useFiles();
   const { caseId } = params;
-  const member = useSelector((state) => selectMember(state));
-  const { data: user } = useGetUserQuery(member.sub);
+  const [showFileUpload, setShowFileUpload] = useState(false);
+  const { files, processFiles } = useFiles();
+  const dispatch = useDispatch();
+  const disabled = useSelector((state) => selectIsDisabledForm(state));
 
-  const [addAWSFile, response] = useAddAWSFileMutation();
-
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    dispatch(setIsDisabledForm(true));
     try {
-      const ids = {
-        clientId: user.clientId,
-        caseId: caseId,
-        userId: user.cognitoId,
-      };
-      files.map(async (file) => {
-        const formData = new FormData();
-        formData.append("file", file.rawFile, file.rawFile.name);
-        formData.append("metadata", JSON.stringify({ ...ids, ...file }));
-        const fileResponse = await addAWSFile(formData);
-        if (fileResponse.error) {
-          throw new Error(fileResponse.error.data?.message);
-        }
-      });
-      setFiles([]);
+      await processFiles({ caseId });
+      dispatch(setIsDisabledForm(false));
       console.log("Files uploaded successfully");
     } catch (err) {
       console.log("Error uploading files", err);
@@ -85,6 +75,11 @@ const ChatFileUpload = () => {
         </Box>
       </Box>
       {showFileUpload && <FileUpload />}
+      {disabled && (
+        <Box display="flex" justifyContent="center" my={1}>
+          <CircularProgress color="secondary" size={20} />
+        </Box>
+      )}
       {files.length > 0 && (
         <StyledUploadButtonBox>
           <Button
@@ -92,6 +87,7 @@ const ChatFileUpload = () => {
             color="blue"
             onClick={onSubmit}
             endIcon={<FileUploadOutlinedIcon />}
+            disabled={disabled}
           >
             Upload
           </Button>
